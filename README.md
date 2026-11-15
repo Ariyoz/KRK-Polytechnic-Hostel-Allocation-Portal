@@ -1,113 +1,152 @@
 # KRK Polytechnic — Hostel Allocation Portal
-**CSC 445 Group 2 Project**
-Submission Deadline: 25th November 2026
 
----
+> **CSC 445 Group 2 Project** · Submission Deadline: 25 November 2026
 
-## Project Overview
-A web-based hostel allocation portal for KRK Polytechnic, Lagos.
-Built with **HTML/CSS, PHP, MySQL, and JavaScript**.
+A fully digital hostel room allocation system for KRK Polytechnic, Lagos.  
+Built with **PHP · MySQL · HTML/CSS · JavaScript** — no external frameworks.
 
 ---
 
 ## Features
-- Student registration with faculty/department selection
-- Email account activation
-- School fees eligibility check before hostel application
-- Room selection from available rooms (max 200 bed spaces)
-- DSA/Registrar dashboard: Grant or Revoke room allocations
-- Email notifications on grant/revoke
-- ICT staff room upload panel
-- Hostel fee payment confirmation
-- Admin email logs
 
----
-
-## Roles
-| Role       | Access                                      |
-|------------|---------------------------------------------|
-| DSA        | Full admin: applications, fees, rooms       |
-| Registrar  | Applications, Fee verification              |
-| ICT Staff  | Upload rooms                                |
-| Student    | Register, Apply, Pay hostel fee             |
+| Area | Capability |
+|------|-----------|
+| Students | Register, email activation, school-fee eligibility check, room application, hostel fee payment, allocation letter download |
+| DSA Admin | Grant / revoke room allocations, view all applications, manage students |
+| Registrar | Verify student school-fee payment status |
+| ICT Staff | Upload / manage hostel room records |
+| System | Email notifications (PHPMailer), role-based access control, CSRF protection, responsive UI |
 
 ---
 
 ## Project Structure
+
 ```
-/
-├── index.php                  → Homepage
+hostel_portal/
+├── index.php                   ← Public landing page
 ├── .htaccess
-├── config/
-│   ├── db.php                 → Database connection
-│   ├── mailer.php             → Email utility
-│   └── session.php            → Session helpers
-├── includes/
-│   ├── header.php
-│   └── footer.php
-├── student/
-│   ├── register.php           → Student registration
+├── .gitignore
+│
+├── admin/                      ← Admin portal (DSA / Registrar / ICT)
 │   ├── login.php
-│   ├── activate.php           → Email activation
-│   ├── dashboard.php
-│   ├── application.php        → Apply for hostel
-│   ├── payment.php            → Pay hostel fee
-│   ├── profile.php
-│   └── logout.php
-├── admin/
-│   ├── login.php
+│   ├── logout.php
 │   ├── dashboard.php
 │   ├── sidebar.php
-│   ├── applications.php       → Grant/Revoke rooms
+│   ├── applications.php
 │   ├── students.php
+│   ├── student_detail.php
 │   ├── rooms.php
-│   ├── upload_rooms.php       → ICT room upload
-│   ├── fees.php               → Fee verification
+│   ├── upload_rooms.php
+│   ├── fees.php
+│   ├── reports.php
 │   ├── email_logs.php
-│   └── logout.php
+│   ├── settings.php
+│   └── auth_guard.php
+│
+├── student/                    ← Student portal
+│   ├── register.php
+│   ├── login.php
+│   ├── logout.php
+│   ├── activate.php
+│   ├── dashboard.php
+│   ├── application.php
+│   ├── payment.php
+│   ├── profile.php
+│   ├── allocation_letter.php
+│   ├── forgot_password.php
+│   ├── reset_password.php
+│   ├── resend_activation.php
+│   └── sidebar.php
+│
 ├── ajax/
-│   └── get_departments.php    → Dynamic dept loading
+│   ├── get_departments.php     ← Dynamic department loader
+│   └── room_count.php
+│
+├── config/
+│   ├── db.php                  ← Database connection & settings helpers
+│   ├── mailer.php              ← PHPMailer SMTP setup
+│   ├── session.php
+│   └── phpmailer/              ← PHPMailer library (bundled)
+│
+├── includes/
+│   ├── header.php              ← Global HTML head + navbar
+│   └── footer.php             ← Global footer + JS
+│
 ├── assets/
-│   ├── css/style.css
-│   └── js/main.js
+│   ├── css/style.css           ← All styles (custom, no Bootstrap)
+│   ├── js/main.js
+│   └── images/
+│
 └── database/
-    └── hostel_db.sql          → Database schema & seed data
+    └── hostel_db.sql           ← Full schema + seed data
 ```
 
 ---
 
-## Setup Instructions
+## Setup (XAMPP / WAMP)
 
 ### Requirements
-- XAMPP / WAMP / LAMP (PHP 7.4+ and MySQL 5.7+)
+- PHP **7.4+**
+- MySQL **5.7+** / MariaDB **10.3+**
 
 ### Steps
-1. Copy the entire project folder into `htdocs/` (XAMPP) or `www/` (WAMP).
-2. Open **phpMyAdmin** and import `database/hostel_db.sql`.
-3. Edit `config/db.php` with your MySQL username/password if needed.
-4. Visit `http://localhost/CSC 445 G2/` in your browser.
+
+```bash
+# 1. Place the folder inside htdocs
+cp -r hostel_portal/ /xampp/htdocs/hostel_portal/
+
+# 2. Import the database
+# Open phpMyAdmin → create database → import database/hostel_db.sql
+
+# 3. Edit SMTP credentials (optional — only needed for email)
+# Open config/mailer.php and set MAIL_USERNAME and MAIL_PASS
+
+# 4. Visit in browser
+http://localhost/hostel_portal/
+```
+
+> `config/db.php` defaults to `localhost / root / (no password) / krk_hostel_db` — standard XAMPP settings.  
+> Change `DB_USER` and `DB_PASS` if your MySQL uses different credentials.
 
 ---
 
-## Default Admin Logins (change after setup)
-| Role       | Email                        | Password   |
-|------------|------------------------------|------------|
-| DSA        | dsa@krkpoly.edu.ng           | password   |
-| Registrar  | registrar@krkpoly.edu.ng     | password   |
-| ICT        | ict@krkpoly.edu.ng           | password   |
+## Default Admin Logins
 
-> **Note:** Default passwords use the hash for `password`.
-> To generate a correct hash run: `echo password_hash('YourPassword', PASSWORD_DEFAULT);`
+| Role | Email | Password |
+|------|-------|----------|
+| DSA | `dsa@krkpoly.edu.ng` | `password` |
+| Registrar | `registrar@krkpoly.edu.ng` | `password` |
+| ICT Staff | `ict@krkpoly.edu.ng` | `password` |
 
----
-
-## Email Configuration
-Edit `config/mailer.php` to set your SMTP credentials.
-If PHPMailer is not available, the system falls back to PHP `mail()`.
+> **Change these passwords immediately after first login in a production environment.**
 
 ---
 
-## Team Members & Roles
+## Email (SMTP) Setup
+
+1. Open `config/mailer.php`
+2. Set `MAIL_USERNAME` to your Gmail address
+3. For `MAIL_PASS` — enable 2FA on your Google account then generate an **App Password** at  
+   <https://myaccount.google.com/apppasswords>
+4. If email is not configured, the system still functions — email logs are stored in the database
+
+---
+
+## Admin Roles & Permissions
+
+| Permission | DSA | Registrar | ICT |
+|------------|:---:|:---------:|:---:|
+| View dashboard | ✅ | ✅ | ✅ |
+| Grant / Revoke rooms | ✅ | ❌ | ❌ |
+| Fee verification | ✅ | ✅ | ❌ |
+| Upload rooms | ✅ | ❌ | ✅ |
+| View reports | ✅ | ✅ | ✅ |
+| System settings | ✅ | ❌ | ❌ |
+
+---
+
+## Team — CSC 445 Group 2
+
 | Name | Role |
 |------|------|
 | Member 1 | Project Lead / Backend Developer |
@@ -119,3 +158,5 @@ If PHPMailer is not available, the system falls back to PHP `mail()`.
 ---
 
 ## Academic Session: 2025/2026
+
+&copy; 2026 KRK Polytechnic, Lagos

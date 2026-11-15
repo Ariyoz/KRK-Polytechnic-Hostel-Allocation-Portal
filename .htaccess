@@ -1,0 +1,25 @@
+Options -Indexes
+DirectoryIndex index.php index.html
+
+# Prevent direct access to config files (Apache 2.4 syntax)
+<FilesMatch "^(db|session|mailer)\.php$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
+
+# Block sensitive dev files
+<FilesMatch "^(setup|debug_login)\.php$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
+
+RewriteEngine On
+
+# Serve existing files and directories directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Route all other requests to index.php
+RewriteRule ^(.*)$ index.php [QSA,L]

@@ -1,0 +1,32 @@
+# ── Environment / secrets (create these locally, never commit) ──
+.env
+.env.local
+
+# ── OS / editor junk ─────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.code-workspace
+
+# ── Debug / one-time scripts ──────────────────────────────────
+debug_*.php
+fix_*.php
+setup.php
+test_*.php
+
+# ── Logs ──────────────────────────────────────────────────────
+*.log
+error_log
+
+# ── Uploaded files ────────────────────────────────────────────
+assets/uploads/
+uploads/
+
+# ── Node / package (if frontend tooling added later) ──────────
+node_modules/
+package-lock.json
