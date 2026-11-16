@@ -3,10 +3,10 @@
 // KRK Polytechnic Hostel Portal — Database Configuration
 // ============================================================
 
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');       // Change to your MySQL username
-define('DB_PASS', '');           // Change to your MySQL password
-define('DB_NAME', 'krk_hostel_db');
+define('DB_HOST', 'sql105.infinityfree.com');
+define('DB_USER', 'if0_43448913');
+define('DB_PASS', '159357Ayomikun');
+define('DB_NAME', 'if0_43448913_hostel_db');
 
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
@@ -21,7 +21,9 @@ if (!defined('BASE_URL')) {
     $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host   = $_SERVER['HTTP_HOST'];
     $script = $_SERVER['SCRIPT_NAME'];
-    $base   = (strpos($script, '/hostel_portal/') !== false) ? '/hostel_portal' : '';
+    // On localhost XAMPP the project lives at /hostel_portal/
+    // On InfinityFree (krkpolytechnic.rf.gd) files are at the htdocs root — no subfolder
+    $base = (strpos($script, '/hostel_portal/') !== false) ? '/hostel_portal' : '';
     define('BASE_URL', $scheme . '://' . $host . $base);
 }
 

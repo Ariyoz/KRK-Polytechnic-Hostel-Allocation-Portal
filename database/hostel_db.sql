@@ -3,8 +3,7 @@
 -- Full Database Setup — Paste this into phpMyAdmin SQL tab
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS krk_hostel_db DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE krk_hostel_db;
+
 
 -- Drop tables in correct FK order
 DROP TABLE IF EXISTS email_logs;
@@ -83,11 +82,12 @@ CREATE TABLE admins (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Passwords set by setup.php (default: Admin@2025)
+-- Default password for all admins: Admin@2025
+-- Hash generated with: password_hash('Admin@2025', PASSWORD_DEFAULT)
 INSERT INTO admins (full_name, email, password, role) VALUES
-('Dean of Student Affairs', 'dsa@krkpoly.edu.ng',       'setup_required', 'dsa'),
-('Registrar Office',        'registrar@krkpoly.edu.ng', 'setup_required', 'registrar'),
-('ICT Department',          'ict@krkpoly.edu.ng',       'setup_required', 'ict');
+('Dean of Student Affairs', 'dsa@krkpoly.edu.ng',       '$2y$10$.wL0w4LtmHqV95bvizHr6udtEfwoLpZnUxRHFK32lgokFqyQtvRvy', 'dsa'),
+('Registrar Office',        'registrar@krkpoly.edu.ng', '$2y$10$.wL0w4LtmHqV95bvizHr6udtEfwoLpZnUxRHFK32lgokFqyQtvRvy', 'registrar'),
+('ICT Department',          'ict@krkpoly.edu.ng',       '$2y$10$.wL0w4LtmHqV95bvizHr6udtEfwoLpZnUxRHFK32lgokFqyQtvRvy', 'ict');
 
 -- -------------------------------------------------------
 -- STUDENTS

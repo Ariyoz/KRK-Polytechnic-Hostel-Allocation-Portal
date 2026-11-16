@@ -1,4 +1,4 @@
-﻿﻿/* ============================================================
+﻿/* ============================================================
    KRK Polytechnic Hostel Portal
    Palette: Black · White · Accent Blue — Light & Dark Mode
    ============================================================ */
@@ -1856,508 +1856,209 @@ body.no-header .auth-screen{min-height:100vh;}
 /* Funaab responsive handled in main responsive block above */
 
 
-/* ════════════════════════════════════════════════════════════
-   MOBILE & TABLET RESPONSIVE IMPROVEMENTS
-   Full coverage for all pages — appended to main stylesheet
-   Breakpoints: 1200px · 992px · 768px · 576px · 400px
-   ════════════════════════════════════════════════════════════ */
 
-/* ── 1. BASE viewport safety ──────────────────────────────── */
-* { box-sizing: border-box; }
-html, body { overflow-x: hidden; width: 100%; }
+/* ============================================================
+   RESPONSIVE & PORTAL FIXES
+   One clean block — written last so it wins the cascade.
+   Covers: sidebar, navbar, topbar, auth, landing, dashboard.
+   ============================================================ */
+
+/* ── Reset / safety ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { overflow-x: hidden; }
 img { max-width: 100%; height: auto; }
+body { max-width: 100vw; }
 
-/* ── 2. Utility — responsive helpers ─────────────────────── */
-/* Hides content above 768 px */
-.show-mobile  { display: none !important; }
-@media (max-width: 768px) {
-  .show-mobile  { display: block !important; }
-  .hide-mobile  { display: none !important; }
+/* ── Topbar — always dark navy with white text ───────────── */
+.topbar {
+  background: #0f172a !important;
 }
-
-/* ── 3. Topbar — hide on small screens (already 768 handled,
-        add smooth display) ─────────────────────────────── */
-@media (max-width: 768px) {
-  .topbar { display: none; }
+.topbar-left span,
+.topbar-right a,
+.topbar-user {
+  color: rgba(255,255,255,.55);
 }
+.topbar-left i { color: #60a5fa; }
 
-/* ══════════════════════════════════════════════════════════
-   NAVBAR tweaks  (≤768 already exist — filling gaps ≤992)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 992px) and (min-width: 769px) {
-  .navbar { padding: 12px 20px; gap: 16px; }
-  .nav-links > li > a { padding: 8px 10px; font-size: 13px; }
-  .topbar-inner { padding: 0 20px; }
-  .topbar-left { gap: 14px; }
-  .topbar-left span:last-child { display: none; }   /* hide address, keep email */
+/* ── Site header base — transparent on hero (index.php) ─── */
+.site-header {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
 }
 
-/* Better mobile nav close affordance */
-@media (max-width: 768px) {
-  .nav-links { padding-top: 0; }
-  .nav-links > li > a {
-    padding: 15px 20px;
-    font-size: 15px;
-    border-bottom: 1px solid rgba(255,255,255,.06);
-  }
-  .nav-cta { margin: 16px 20px 8px !important; border-radius: 10px !important; }
+/* ── Solid header (all pages except index.php) ─────────── */
+.site-header.solid {
+  position: sticky !important;
+  top: 0 !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e2e5 !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08) !important;
 }
 
-/* ══════════════════════════════════════════════════════════
-   DASHBOARD LAYOUT  (sidebar + main)
-   ══════════════════════════════════════════════════════════ */
+/* Logo text on solid header */
+.site-header.solid .logo-wordmark strong,
+.site-header.scrolled .logo-wordmark strong { color: #0a0a0a; }
+.site-header.solid .logo-wordmark span,
+.site-header.scrolled .logo-wordmark span   { color: #6e6e73; }
+.site-header.solid .logo-portal-name,
+.site-header.scrolled .logo-portal-name     { color: #aeaeb2; }
 
-/* At 992px collapse sidebar to icon-rail */
-@media (max-width: 992px) and (min-width: 769px) {
-  .sidebar { width: 64px; }
-  .sidebar-logo-text,
-  .sidebar-section-title,
-  .sidebar-badge,
-  .sidebar-footer a span:not(.s-icon) { display: none; }
-  .sidebar a {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 4px;
-    font-size: 0;              /* hide text, keep icon */
-    gap: 0;
-    border-radius: 8px;
-    min-height: 48px;
-  }
-  .sidebar a .s-icon { width: 26px; height: 26px; font-size: 12px; }
-  .sidebar-logo {
-    justify-content: center;
-    padding: 14px 8px;
-  }
-  .sidebar-logo-icon { width: 36px; height: 36px; }
-  .sidebar-footer a {
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 4px;
-    font-size: 0;
-    gap: 0;
-  }
-  .main-content { padding: 20px 18px; }
+/* Nav links on solid header — dark text */
+.site-header.solid .nav-links > li > a,
+.site-header.scrolled .nav-links > li > a   { color: #3a3a3c; }
+.site-header.solid .nav-links > li > a:hover,
+.site-header.scrolled .nav-links > li > a:hover { color: #0a0a0a; background: #f0f0f2; }
+.site-header.solid .nav-links > li > a.active,
+.site-header.scrolled .nav-links > li > a.active { color: #1a56db; background: #ebf0ff; }
+.site-header.solid .nav-logout,
+.site-header.scrolled .nav-logout { color: #dc2626 !important; border-color: #e2e2e5 !important; }
+
+/* Hamburger on solid header */
+.site-header.solid .hamburger,
+.site-header.scrolled .hamburger { background: #f0f0f2; border-color: #e2e2e5; }
+.site-header.solid .hamburger span,
+.site-header.scrolled .hamburger span { background: #3a3a3c; }
+
+/* Nav links on transparent hero header — white text */
+.site-header:not(.solid):not(.scrolled) .nav-links > li > a {
+  color: rgba(255,255,255,.85);
 }
+.site-header:not(.solid):not(.scrolled) .nav-links > li > a:hover {
+  color: #fff;
+  background: rgba(255,255,255,.1);
+}
+.site-header:not(.solid):not(.scrolled) .logo-wordmark strong { color: #fff; }
+.site-header:not(.solid):not(.scrolled) .logo-wordmark span   { color: rgba(255,255,255,.65); }
+.site-header:not(.solid):not(.scrolled) .logo-portal-name     { color: rgba(255,255,255,.45); }
 
-/* ══════════════════════════════════════════════════════════
-   INLINE GRID / FLEX OVERRIDES  (pages use style="display:grid...")
-   We target the known inline patterns with contextual selectors
-   ══════════════════════════════════════════════════════════ */
-
-/* Admin dashboard — occupancy two-column grid */
-@media (max-width: 768px) {
-  /* Any direct-child grid inside .card-body with two columns */
-  .card-body > div[style*="grid-template-columns:1fr 1fr"],
-  .card-body > div[style*="grid-template-columns: 1fr 1fr"] {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0 !important;
-  }
-
-  /* Student dashboard two-column card grid */
-  div[style*="grid-template-columns:1fr 1fr"],
-  div[style*="grid-template-columns: 1fr 1fr"] {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 16px !important;
-  }
-
-  /* Page header right-side button cluster */
-  div[style*="display:flex;gap:8px"],
-  div[style*="display: flex; gap: 8px"] {
-    gap: 6px;
-  }
+/* ── Sidebar — always full dark navy panel ──────────────── */
+.sidebar {
+  width: 252px;
+  background: #1a2a4a !important;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: 2px 0 8px rgba(0,0,0,.12);
 }
 
-@media (max-width: 576px) {
-  /* collapse any inline flex row that might overflow */
-  .page-header > div[style*="display:flex"],
-  .page-header > div[style*="display: flex"] {
-    flex-wrap: wrap;
-  }
+/* Sidebar logo area */
+.sidebar-logo {
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sidebar-logo-text strong { color: #fff; font-size: 13.5px; font-weight: 700; display: block; }
+.sidebar-logo-text span   { color: rgba(255,255,255,.45); font-size: 11px; }
+
+/* Sidebar nav links */
+.sidebar-nav { padding: 10px; flex: 1; }
+.sidebar-section-title {
+  color: rgba(255,255,255,.3);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  padding: 10px 10px 5px;
+  margin-top: 6px;
+}
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: rgba(255,255,255,.65) !important;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 1px;
+  transition: background .18s, color .18s, padding-left .18s;
+}
+.sidebar a:hover {
+  background: rgba(255,255,255,.08) !important;
+  color: #fff !important;
+  padding-left: 14px;
+  text-decoration: none;
+}
+.sidebar a.active {
+  background: rgba(255,255,255,.14) !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+.sidebar a.active .s-icon { color: #60a5fa !important; }
+.s-icon {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+  color: rgba(255,255,255,.4);
 }
 
-/* ══════════════════════════════════════════════════════════
-   STATS GRID  (more granular across breakpoints)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 1200px) {
-  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+/* Sidebar footer */
+.sidebar-footer {
+  padding: 10px;
+  border-top: 1px solid rgba(255,255,255,.08);
 }
-@media (max-width: 992px) {
-  .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.sidebar-footer a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  color: rgba(255,255,255,.45) !important;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background .18s, color .18s;
 }
-@media (max-width: 768px) {
-  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .stat-card { padding: 16px; }
-  .stat-num { font-size: 22px; }
-}
-@media (max-width: 480px) {
-  .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .stat-card { padding: 14px 12px; }
-  .stat-num { font-size: 20px; }
-  .stat-icon { width: 30px; height: 30px; font-size: 13px; }
-}
-@media (max-width: 360px) {
-  .stats-grid { grid-template-columns: 1fr; }
+.sidebar-footer a:hover {
+  background: rgba(220,38,38,.2) !important;
+  color: #fca5a5 !important;
 }
 
-/* ══════════════════════════════════════════════════════════
-   TABLES  — better mobile handling
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--r); }
-  .table-wrap::after {
-    content: '';
-    position: absolute;
-    right: 0; top: 0; bottom: 0; width: 24px;
-    background: linear-gradient(to right, transparent, rgba(255,255,255,.8));
-    pointer-events: none;
-    border-radius: 0 var(--r) var(--r) 0;
-  }
-  .table-wrap { position: relative; }
-  table { min-width: 480px; font-size: 12.5px; }
-  thead th { padding: 9px 10px; font-size: 10.5px; }
-  tbody td { padding: 10px 10px; }
-  /* Make action column buttons wrap nicely */
-  td[style*="white-space:nowrap"] { white-space: normal !important; }
+/* ── Auth submit buttons — always blue ──────────────────── */
+.funaab-submit-btn {
+  background: #1a56db !important;
+  color: #fff !important;
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  box-shadow: 0 4px 16px rgba(26,86,219,.3);
+  transition: background .18s, transform .18s;
+  margin-bottom: 20px;
+}
+.funaab-submit-btn:hover {
+  background: #1447b0 !important;
+  color: #fff !important;
+  transform: translateY(-1px);
 }
 
-/* ══════════════════════════════════════════════════════════
-   CARDS
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .card { border-radius: var(--r); }
-  .card-body { padding: 16px; }
-  .card-header { padding: 12px 16px; }
-}
-@media (max-width: 480px) {
-  .card-body { padding: 12px; }
-  .card-header { padding: 10px 14px; }
-  .card-title { font-size: 13.5px; }
+.auth-btn-submit {
+  background: linear-gradient(135deg, #1a56db, #1447b0) !important;
+  color: #fff !important;
 }
 
-/* ══════════════════════════════════════════════════════════
-   FORMS
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .form-row { grid-template-columns: 1fr; gap: 0; }
-  .auth-reg-grid { grid-template-columns: 1fr; gap: 0; }
-}
-@media (max-width: 576px) {
-  .form-control { font-size: 16px; } /* prevents iOS zoom on focus */
-  .btn { font-size: 14px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   SPLIT-SCREEN AUTH  (login / register)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .split-screen { flex-direction: column; min-height: auto; }
-  .split-left {
-    flex: 0 0 auto;
-    min-height: 160px;
-    padding: 20px 16px;
-  }
-  .split-left-mid h2 { font-size: 20px; }
-  .split-left-features { display: none; }
-  .split-right { padding: 24px 16px; }
-  .split-right-form { max-width: 100%; }
-}
-
-/* funaab auth split */
-@media (max-width: 768px) {
-  .funaab-auth { flex-direction: column; min-height: 100vh; }
-  .funaab-left {
-    flex: 0 0 auto;
-    min-height: 160px;
-    max-height: 220px;
-  }
-  .funaab-left-inner { padding: 24px 20px; }
-  .funaab-school-abbr { font-size: 36px; }
-  .funaab-school-name { font-size: 13px; }
-  .funaab-portal-title h1 { font-size: 20px; }
-  .funaab-portal-title p, .funaab-features, .funaab-left-footer { display: none; }
-  .funaab-right { flex: 1; padding: 24px 16px; align-items: flex-start; }
-  .funaab-form-wrap { max-width: 100%; }
-}
-@media (max-width: 480px) {
-  .funaab-left { max-height: 180px; }
-  .funaab-left-inner { padding: 18px 16px; }
-  .funaab-school-abbr { font-size: 28px; }
-  .funaab-portal-title h1 { font-size: 17px; }
-  .funaab-right { padding: 18px 14px; }
-  .funaab-form-header h2 { font-size: 22px; }
-  .funaab-submit-btn { padding: 12px; font-size: 14px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   MAIN-CONTENT padding  (fine-tune per breakpoint)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .main-content { padding: 14px 12px; }
-}
-@media (max-width: 480px) {
-  .main-content { padding: 10px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   PAGE HEADER  (title + right-side buttons)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .page-header {
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .page-header-left h1 { font-size: 18px; }
-  .page-header-left p  { font-size: 12.5px; }
-}
-@media (max-width: 480px) {
-  .page-header-left h1 { font-size: 16px; }
-  .page-title { font-size: 16px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   SIDEBAR mobile tab bar  (≤768 — improve UX)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .dashboard-layout { flex-direction: column; }
-
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    overflow-x: auto;
-    overflow-y: hidden;
-    border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,.12);
-    /* custom scrollbar */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  .sidebar::-webkit-scrollbar { display: none; }
-
-  /* hide extras in mobile tab mode */
-  .sidebar-logo,
-  .sidebar-footer,
-  .sidebar-section-title { display: none; }
-
-  .sidebar-nav {
-    display: flex;
-    flex-direction: row;
-    padding: 4px 8px;
-    gap: 2px;
-    overflow-x: auto;
-    white-space: nowrap;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    flex: 1;
-  }
-  .sidebar-nav::-webkit-scrollbar { display: none; }
-
-  .sidebar a {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    padding: 8px 10px;
-    font-size: 9px;
-    min-width: 56px;
-    max-width: 72px;
-    text-align: center;
-    border-radius: 8px;
-    white-space: nowrap;
-    margin-bottom: 0;
-    flex-shrink: 0;
-  }
-  .sidebar a:hover { padding-left: 10px; }
-
-  /* icon inside tab */
-  .s-icon {
-    width: 22px;
-    height: 22px;
-    font-size: 11px;
-    margin-bottom: 1px;
-  }
-
-  /* hide badges in tab mode — too cramped */
-  .sidebar-badge { display: none; }
-}
-
-@media (max-width: 480px) {
-  .sidebar a { min-width: 50px; padding: 7px 8px; font-size: 8.5px; }
-  .s-icon { width: 20px; height: 20px; font-size: 10px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   PROGRESS / OCCUPANCY BARS  (admin dashboard inline grid)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .progress-wrap { margin-bottom: 14px; }
-  /* The inline grid in admin dashboard occupancy section */
-  .card-body [style*="grid-template-columns:1fr 1fr"],
-  .card-body [style*="grid-template-columns: 1fr 1fr"] {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0 !important;
-  }
-}
-
-/* ══════════════════════════════════════════════════════════
-   DETAIL TABLE  (student profile, room detail)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 480px) {
-  .detail-table td { font-size: 12.5px; padding: 9px 0; }
-  .detail-table td:first-child { width: 40%; font-size: 11.5px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   STATUS TIMELINE  (student dashboard)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 576px) {
-  .status-steps {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding-bottom: 8px;
-    gap: 0;
-  }
-  .status-steps::-webkit-scrollbar { display: none; }
-  .status-step { min-width: 70px; }
-  .step-dot { width: 26px; height: 26px; font-size: 10px; }
-  .step-label { font-size: 10px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   ROOM PICKER  (application.php)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .room-picker { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
-  .room-card { padding: 12px 10px; }
-  .room-card-num { font-size: 13px; }
-}
-@media (max-width: 480px) {
-  .room-picker { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-  .room-card { padding: 10px 8px; }
-  .room-card-icon { font-size: 18px; }
-  .room-card-num { font-size: 12px; }
-  .room-card-block { font-size: 10px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   ALLOCATION LETTER
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .allocation-letter { padding: 20px 16px; }
-  .letter-signature { flex-direction: column; gap: 16px; }
-  .letter-header { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .letter-meta { flex-direction: column; gap: 4px; }
-}
-@media (max-width: 480px) {
-  .allocation-letter { padding: 14px 12px; font-size: 13px; }
-  .letter-title { font-size: 13px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   FILTER TABS + SEARCH BAR  (admin pages)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .filter-tabs { gap: 4px; flex-wrap: wrap; }
-  .filter-tabs a { padding: 6px 12px; font-size: 12px; }
-  .search-bar { flex-wrap: wrap; gap: 8px; }
-  .search-input-wrap { max-width: 100%; width: 100%; }
-  .search-bar .btn { width: 100%; justify-content: center; }
-}
-@media (max-width: 480px) {
-  .filter-tabs a { padding: 5px 10px; font-size: 11.5px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   PAGINATION
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 480px) {
-  .pagination { gap: 3px; }
-  .pagination .btn { min-width: 32px; height: 32px; padding: 0 8px; font-size: 12px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   BUTTONS  (global touch targets)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .btn { min-height: 38px; }
-  .btn-sm { min-height: 32px; font-size: 12.5px; }
-  .btn-lg { padding: 12px 24px; font-size: 15px; }
-  .btn-block { width: 100%; display: flex; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   LANDING PAGE hero  (lp-* classes, filling coverage gaps)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 992px) and (min-width: 769px) {
-  .lp-hero-h1 { font-size: clamp(36px,5.5vw,56px); }
-  .lp-hero-cards { width: 220px; }
-  .lp-hero-inner { padding: 100px 32px 80px; gap: 32px; }
-  .lp-features-grid { grid-template-columns: repeat(2, 1fr); }
-  .lp-steps-grid { grid-template-columns: repeat(2, 1fr); }
-  .lp-stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .lp-about-inner { grid-template-columns: 1fr; gap: 40px; }
-  .lp-about-visual { display: block; }
-  .lp-footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
-  .lp-container { padding: 0 24px; }
-}
-
-/* ── landing strip on mobile (make sure it stacks) ── */
-@media (max-width: 768px) {
-  .lp-strip { display: flex; flex-direction: column; padding: 0; }
-  .lp-strip-divider { width: 100%; height: 1px; align-self: auto; }
-  .lp-strip-item { padding: 16px 20px; }
-}
-
-/* hero actions full-width on small screens */
-@media (max-width: 480px) {
-  .lp-hero-actions { flex-direction: column; align-items: stretch; }
-  .lp-btn-primary, .lp-btn-ghost { width: 100%; justify-content: center; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   FOOTER  (lp-footer)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .lp-footer-grid { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
-  .lp-footer { padding: 48px 0 20px; }
-  .lp-footer-bottom { flex-direction: column; text-align: center; gap: 4px; }
-}
-@media (max-width: 480px) {
-  .lp-footer-grid { grid-template-columns: 1fr; gap: 22px; }
-  .lp-footer-abbr { font-size: 28px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   NOTICE BANNER  (student dashboard warnings)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 480px) {
-  .notice-banner { flex-direction: column; gap: 8px; padding: 12px; }
-  .notice-banner i { font-size: 20px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   PROFILE / SETTINGS PAGES  (long forms)
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .split-right-form { max-width: 100%; width: 100%; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   PRINT  (keep existing, ensure no conflicts)
-   ══════════════════════════════════════════════════════════ */
+/* ── Print ───────────────────────────────────────────────── */
 @media print {
   .site-header, .sidebar, .btn, .page-title,
-  footer, .dashboard-layout > aside, .print-hide,
-  .notice-banner, .filter-tabs { display: none !important; }
+  footer, .dashboard-layout > aside,
+  .print-hide, .notice-banner, .filter-tabs { display: none !important; }
   .main-content { padding: 0 !important; }
   .dashboard-layout { display: block !important; }
   .allocation-letter {
@@ -2367,421 +2068,237 @@ img { max-width: 100%; height: auto; }
   body { background: #fff !important; }
 }
 
-/* ══════════════════════════════════════════════════════════
-   GLOBAL TOUCH TARGET  — minimum 44×44 px clickable area
-   for links in nav, sidebar, table actions
-   ══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .sidebar a, .nav-links > li > a, .btn {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-  }
-  /* table action buttons */
-  tbody td .btn { min-height: 36px; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   SCROLL PADDING  — prevents sticky header covering content
-   when navigating by anchor
-   ══════════════════════════════════════════════════════════ */
+/* ── Scroll padding ─────────────────────────────────────── */
 html { scroll-padding-top: 72px; }
-@media (max-width: 768px) { html { scroll-padding-top: 56px; } }
 
-/* ══════════════════════════════════════════════════════════
-   SAFE AREA  — notch / home bar on modern phones
-   ══════════════════════════════════════════════════════════ */
+/* ── Safe area insets (iPhone notch) ────────────────────── */
 .site-header { padding-top: env(safe-area-inset-top, 0); }
-.sidebar      { padding-bottom: env(safe-area-inset-bottom, 0); }
-footer        { padding-bottom: calc(28px + env(safe-area-inset-bottom, 0)); }
+footer       { padding-bottom: calc(28px + env(safe-area-inset-bottom, 0)); }
 
-/* ════════════════════════════════════════════════════════════
-   TARGETED INLINE-STYLE OVERRIDES  (profile, student dashboard)
-   These use broad descendant selectors inside known containers
-   ════════════════════════════════════════════════════════════ */
-
-/* Profile page — account info + edit form side-by-side */
-@media (max-width: 768px) {
-  /* Any direct-child div of .main-content that sets an inline grid */
-  .main-content > div[style*="grid-template-columns"],
-  .main-content > div[style*="grid-template-columns"] {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 16px !important;
-    max-width: 100% !important;
-  }
-
-  /* Student dashboard — personal details + room grid */
-  .main-content div[style*="1fr 1fr"] {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 14px !important;
-  }
-
-  /* Admin dashboard occupancy bars grid */
-  .card-body div[style*="grid"] {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0 !important;
-  }
-
-  /* Any two-col flex row inside card body that might overflow */
-  .card-body > div[style*="display:grid"],
-  .card-body > div[style*="display: grid"] {
-    display: flex !important;
-    flex-direction: column !important;
-  }
+/* =============================================================
+   PORTAL PAGES  (body.has-sidebar)
+   On admin/student dashboard pages the site-header gets the
+   .solid class from PHP, but we also enforce it here for safety.
+   ============================================================= */
+body.has-sidebar .site-header {
+  position: sticky !important;
+  top: 0 !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e2e5 !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08) !important;
+  z-index: 100;
 }
-
-/* ── Profile avatar row — keep it inline on small screens ── */
-@media (max-width: 480px) {
-  div[style*="display:flex"][style*="border-bottom"] {
-    gap: 12px !important;
-  }
+body.has-sidebar .logo-wordmark strong { color: #0a0a0a !important; }
+body.has-sidebar .logo-wordmark span   { color: #6e6e73 !important; }
+body.has-sidebar .logo-portal-name     { color: #aeaeb2 !important; }
+body.has-sidebar .nav-links > li > a   { color: #3a3a3c !important; }
+body.has-sidebar .nav-links > li > a:hover {
+  color: #0a0a0a !important;
+  background: #f0f0f2 !important;
 }
-
-/* ════════════════════════════════════════════════════════════
-   ADMIN TABLE COLUMNS  — hide less important ones on mobile
-   to keep the table scannable without horizontal scroll
-   ════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  /* Students table — hide Faculty, Semester, Email on small screens */
-  .table-wrap table thead th:nth-child(5),   /* Faculty */
-  .table-wrap table thead th:nth-child(6),   /* Dept */
-  .table-wrap table tbody td:nth-child(5),
-  .table-wrap table tbody td:nth-child(6)  { display: none; }
+body.has-sidebar .nav-links > li > a.active {
+  color: #1a56db !important;
+  background: #ebf0ff !important;
 }
+body.has-sidebar .nav-logout { color: #dc2626 !important; border-color: #e2e2e5 !important; }
+body.has-sidebar .hamburger  { background: #f0f0f2 !important; border-color: #e2e2e5 !important; }
+body.has-sidebar .hamburger span { background: #3a3a3c !important; }
+body.has-sidebar .topbar     { background: #0f172a !important; }
 
-/* Rooms table */
-@media (max-width: 576px) {
-  /* Keep #, Block, Room, Status, Action visible — hide extras */
-  .table-wrap table { min-width: 360px; }
-}
+/* =============================================================
+   RESPONSIVE  —  1024 → 768 → 576 → 480 → 360
+   ============================================================= */
 
-/* ════════════════════════════════════════════════════════════
-   NAVBAR LOGO  — better mobile display
-   ════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .navbar {
-    padding: 0 16px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo-wordmark strong { font-size: 17px; }
-  .logo-wordmark span { display: none; }
-  .logo-portal-name { display: none; }
-  .hamburger { display: flex; }
-}
-
-/* ════════════════════════════════════════════════════════════
-   MOBILE KEYBOARD  — prevent iOS viewport resize jump
-   ════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .funaab-auth,
-  .auth-screen,
-  .split-screen {
-    min-height: 100dvh; /* dynamic viewport height on iOS */
-  }
-}
-
-/* ════════════════════════════════════════════════════════════
-   FOCUS STATES  — better keyboard/touch accessibility
-   ════════════════════════════════════════════════════════════ */
-.btn:focus-visible,
-.form-control:focus-visible,
-.sidebar a:focus-visible,
-.nav-links > li > a:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-/* ════════════════════════════════════════════════════════════
-   HORIZONTAL SCROLL PREVENTION on body
-   ════════════════════════════════════════════════════════════ */
-body { max-width: 100vw; overflow-x: hidden; }
-
-/* ════════════════════════════════════════════════════════════
-   MOBILE IMPROVEMENTS FOR THE FOOTER in student/admin portals
-   (the lp-footer is used on the public landing page but
-   also loaded on portal pages via footer.php)
-   ════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .lp-footer .lp-container { padding: 0 16px; }
-  .lp-footer-col a { margin-bottom: 9px; }
-  .lp-footer-bottom { padding-top: 14px; }
-}
-
-/* ════════════════════════════════════════════════════════════
-   CTA BANNER  (landing)
-   ════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .lp-cta-inner { flex-direction: column; gap: 24px; }
-  .lp-cta-actions { width: 100%; }
-  .lp-cta-btn-primary,
-  .lp-cta-btn-ghost { width: 100%; justify-content: center; }
-  .lp-cta-banner { padding: 32px 20px; }
-}
-
-/* ════════════════════════════════════════════════════════════
-   ABOUT SECTION visual on medium screens  (992px tablet)
-   ════════════════════════════════════════════════════════════ */
-@media (max-width: 992px) {
-  .lp-about-inner { grid-template-columns: 1fr; }
-  .lp-about-visual { margin-bottom: 24px; }
-  .lp-about-img-main { height: 220px; }
-  .lp-about-img-sm { height: 110px; }
-}
-@media (max-width: 768px) {
-  .lp-about-visual { display: none; }
-  .lp-about-inner { grid-template-columns: 1fr; gap: 0; }
-  .lp-about { padding: 48px 0; }
-}
-
-/* ════════════════════════════════════════════════════════════
-   FEATURES + STEPS on tablet (between 768–992)
-   ════════════════════════════════════════════════════════════ */
-@media (max-width: 992px) and (min-width: 769px) {
-  .lp-features-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .lp-steps-grid    { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .lp-steps-grid::before { display: none; }
-}
-
-
-/* ════════════════════════════════════════════════════════════
-   CRITICAL MOBILE FIXES  — override cascade-order conflicts
-   The lp-* base styles were defined after the 768px media block,
-   so these !important rules ensure mobile layout always wins.
-   ════════════════════════════════════════════════════════════ */
-
-/* ── HOW IT WORKS (lp-steps-grid) ── */
+/* ── 1024px: sidebar slightly narrower ─────────────────── */
 @media (max-width: 1024px) {
-  .lp-steps-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
+  .sidebar { width: 220px; }
+  .main-content { padding: 20px; }
+
+  /* Landing grids */
+  .lp-features-grid { grid-template-columns: repeat(2,1fr) !important; }
+  .lp-steps-grid    { grid-template-columns: repeat(2,1fr) !important; }
   .lp-steps-grid::before { display: none !important; }
+  .lp-stats-grid    { grid-template-columns: repeat(2,1fr) !important; }
+  .lp-about-inner   { grid-template-columns: 1fr !important; }
+  .lp-footer-grid   { grid-template-columns: 1fr 1fr !important; gap: 32px !important; }
+  .lp-container     { padding: 0 24px !important; }
+  .lp-hero-cards    { width: 220px; }
+  .lp-hero-inner    { gap: 32px; padding: 100px 32px 80px; }
 }
 
-@media (max-width: 768px) {
-  /* Steps — single column, horizontal card layout */
-  .lp-steps-grid {
-    grid-template-columns: 1fr !important;
-    gap: 10px !important;
+/* ── 992px: sidebar collapses to icon+label rail ────────── */
+@media (max-width: 992px) and (min-width: 769px) {
+  .sidebar { width: 76px !important; }
+
+  /* Hide text, keep icon + tiny label */
+  .sidebar-logo-text,
+  .sidebar-section-title,
+  .sidebar-badge { display: none; }
+
+  .sidebar-logo { justify-content: center; padding: 14px 8px; }
+  .sidebar-logo-icon { width: 40px; height: 40px; font-size: 14px; }
+
+  .sidebar a {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 4px !important;
+    gap: 4px !important;
+    font-size: 8.5px !important;
+    color: rgba(255,255,255,.55) !important;
+    min-height: 54px;
   }
-  .lp-steps-grid::before { display: none !important; }
-  .lp-step-card {
+  .sidebar a:hover { padding-left: 4px !important; color: #fff !important; }
+  .s-icon { width: 26px; height: 26px; font-size: 12px; }
+
+  .sidebar-footer a {
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 10px 4px !important;
+    font-size: 8.5px !important;
+    gap: 4px !important;
+    min-height: 54px;
+  }
+
+  /* Hide hamburger — icon-rail is the nav */
+  body.has-sidebar .hamburger { display: none !important; }
+
+  .main-content { padding: 20px 18px; }
+
+  /* Stats */
+  .stats-grid { grid-template-columns: repeat(3,1fr); gap: 12px; }
+}
+
+/* ── 768px: mobile layout ───────────────────────────────── */
+@media (max-width: 768px) {
+  /* Header */
+  .topbar { display: none; }
+  .navbar { padding: 0 16px; height: 56px; }
+  .logo-wordmark span, .logo-portal-name { display: none; }
+  .logo-wordmark strong { font-size: 17px; }
+
+  /* Mobile menu */
+  .hamburger { display: flex; }
+  .nav-links {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(10,15,30,.97);
+    flex-direction: column;
+    padding: 0 0 24px;
+    overflow-y: auto;
+    z-index: 200;
+  }
+  .nav-links.open { display: flex; }
+  .nav-close-item { display: block; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .nav-links > li > a {
+    padding: 15px 20px !important;
+    color: rgba(255,255,255,.85) !important;
+    font-size: 15px !important;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .nav-links > li > a:hover { background: rgba(255,255,255,.07) !important; color: #fff !important; }
+  .nav-cta { margin: 16px 20px 8px !important; border-radius: 10px !important; }
+
+  /* Dashboard layout: sidebar becomes top tab bar */
+  .dashboard-layout { flex-direction: column; }
+
+  .sidebar {
+    width: 100% !important;
+    height: auto !important;
+    position: sticky !important;
+    top: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,.12) !important;
+    flex-direction: row !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+
+  /* Hide logo/footer/section-titles in tab mode */
+  .sidebar-logo,
+  .sidebar-footer,
+  .sidebar-section-title { display: none !important; }
+
+  .sidebar-nav {
     display: flex !important;
     flex-direction: row !important;
-    align-items: flex-start !important;
-    gap: 14px !important;
-    padding: 16px !important;
-    border-radius: 12px !important;
+    padding: 4px 8px !important;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex: 1;
   }
-  .lp-step-num {
-    width: 30px !important;
-    height: 30px !important;
-    min-width: 30px !important;
-    font-size: 13px !important;
+  .sidebar-nav::-webkit-scrollbar { display: none; }
+
+  .sidebar a {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    padding: 8px 10px !important;
+    font-size: 9px !important;
+    min-width: 56px !important;
+    max-width: 72px !important;
+    text-align: center !important;
+    border-radius: 8px !important;
+    white-space: nowrap !important;
     margin-bottom: 0 !important;
     flex-shrink: 0 !important;
   }
-  .lp-step-card h4 { font-size: 14px !important; margin-bottom: 4px !important; }
-  .lp-step-card p  { font-size: 12.5px !important; line-height: 1.5 !important; }
+  .sidebar a:hover { padding-left: 10px !important; }
+  .s-icon { width: 22px !important; height: 22px !important; font-size: 11px !important; }
+  .sidebar-badge { display: none; }
 
-  /* Footer — single column */
-  .lp-footer-grid {
-    grid-template-columns: 1fr !important;
-    gap: 22px !important;
-    margin-bottom: 28px !important;
+  /* On portal pages: header sticky at top, sidebar tab below it */
+  body.has-sidebar .site-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100;
   }
-  .lp-footer { padding: 40px 0 16px !important; }
-  .lp-footer-glow { display: none !important; }
-  .lp-footer-bottom {
-    flex-direction: column !important;
-    text-align: center !important;
-    gap: 6px !important;
-    padding-top: 14px !important;
-  }
+  body.has-sidebar .hamburger { display: none !important; }
+  body.has-sidebar .navbar    { height: 50px !important; padding: 0 16px !important; }
+  body.has-sidebar .sidebar   { top: 0 !important; z-index: 90 !important; }
 
-  /* Features — single column */
-  .lp-features-grid {
-    grid-template-columns: 1fr !important;
-    gap: 12px !important;
-  }
+  /* Main content */
+  .main-content { padding: 14px 12px; }
 
-  /* Stats — 2 col */
-  .lp-stats-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-  .lp-stats-section { padding: 36px 0 !important; }
-  .lp-stat-item { padding: 22px 10px !important; }
-  .lp-stat-desc { display: none !important; }
-  .lp-stat-num  { font-size: 28px !important; letter-spacing: -1px !important; }
-  .lp-stat-name { font-size: 11.5px !important; }
-  .lp-stat-icon-wrap { width: 40px !important; height: 40px !important; font-size: 16px !important; }
+  /* Stats */
+  .stats-grid { grid-template-columns: repeat(2,1fr) !important; gap: 10px; margin-bottom: 16px; }
+  .stat-card  { padding: 14px; }
+  .stat-num   { font-size: 20px; }
+  .stat-icon  { width: 32px; height: 32px; font-size: 14px; margin-bottom: 8px; }
+  .stat-label { font-size: 9.5px; }
 
-  /* Hero stat glass cards — hide on mobile (they overflow) */
-  .lp-hero-cards { display: none !important; }
-  .lp-stat-glass-2 { margin-left: 0 !important; }
+  /* Tables */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; position: relative; }
+  table { min-width: 480px; font-size: 12.5px; }
+  thead th { padding: 8px 10px; font-size: 10.5px; }
+  tbody td  { padding: 9px 10px; }
 
-  /* Hero section */
-  .lp-hero-inner {
-    padding: 70px 16px 40px !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-  }
-  .lp-hero-h1   { font-size: clamp(28px, 8vw, 42px) !important; }
-  .lp-hero-sub  { font-size: 14.5px !important; }
-  .lp-scroll-cue { display: none !important; }
-  .lp-orb-1, .lp-orb-2 { display: none !important; }
+  /* Cards */
+  .card-body  { padding: 16px; }
+  .card-header{ padding: 12px 16px; }
 
-  /* Hero CTA buttons */
-  .lp-hero-actions {
-    flex-direction: column !important;
-    width: 100% !important;
-    gap: 10px !important;
-    align-items: stretch !important;
-  }
-  .lp-btn-primary { width: 100% !important; justify-content: center !important; }
-  .lp-btn-ghost   { width: 100% !important; justify-content: center !important; }
+  /* Forms */
+  .form-row     { grid-template-columns: 1fr; }
+  .auth-reg-grid{ grid-template-columns: 1fr; gap: 0; }
+  .form-control { font-size: 16px; } /* prevent iOS zoom */
 
-  /* Strip */
-  .lp-strip {
-    display: flex !important;
-    flex-direction: column !important;
-  }
-  .lp-strip-divider {
-    width: 100% !important;
-    height: 1px !important;
-    align-self: auto !important;
-  }
+  /* Page header */
+  .page-header { flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .page-header-left h1 { font-size: 18px; }
+  .page-title { font-size: 17px; }
 
-  /* About */
-  .lp-about-inner  { grid-template-columns: 1fr !important; gap: 0 !important; }
-  .lp-about-visual { display: none !important; }
+  /* Room picker */
+  .room-picker { grid-template-columns: repeat(auto-fill, minmax(100px,1fr)); gap: 8px; }
 
-  /* CTA banner */
-  .lp-cta-inner   { flex-direction: column !important; align-items: flex-start !important; gap: 20px !important; }
-  .lp-cta-actions { flex-direction: column !important; width: 100% !important; gap: 10px !important; }
-  .lp-cta-btn-primary,
-  .lp-cta-btn-ghost { width: 100% !important; justify-content: center !important; }
-  .lp-cta-banner  { padding: 28px 16px !important; border-radius: 14px !important; }
-
-  /* Section typography */
-  .lp-section-title { font-size: clamp(22px, 6vw, 32px) !important; }
-  .lp-section-sub   { font-size: 14px !important; max-width: 100% !important; }
-  .lp-center        { text-align: left !important; }
-  .lp-center-sub    { margin: 0 !important; }
-
-  /* Container padding */
-  .lp-container { padding: 0 16px !important; }
-  .lp-section   { padding: 48px 0 !important; }
-}
-
-@media (max-width: 480px) {
-  /* Steps */
-  .lp-steps-grid { gap: 8px !important; }
-  .lp-step-card  { padding: 14px 12px !important; }
-
-  /* Footer */
-  .lp-footer { padding: 32px 0 14px !important; }
-  .lp-footer-abbr { font-size: 22px !important; }
-  .lp-footer-grid { gap: 18px !important; }
-
-  /* Stats — single column, horizontal rows */
-  .lp-stats-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .lp-stat-item {
-    border-right: none !important;
-    border-bottom: 1px solid rgba(255,255,255,.07) !important;
-    padding: 16px !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 14px !important;
-    text-align: left !important;
-  }
-  .lp-stat-item:last-child { border-bottom: none !important; }
-  .lp-stat-icon-wrap {
-    margin: 0 !important;
-    flex-shrink: 0 !important;
-    width: 36px !important;
-    height: 36px !important;
-    font-size: 14px !important;
-  }
-  .lp-stat-num  { font-size: 24px !important; letter-spacing: -1px !important; }
-  .lp-stat-name { font-size: 11px !important; margin-bottom: 0 !important; }
-
-  /* Features */
-  .lp-features-grid { gap: 8px !important; }
-  .lp-feature-card  { padding: 16px 14px !important; }
-
-  /* Hero */
-  .lp-hero-inner  { padding: 62px 14px 32px !important; }
-  .lp-hero-h1     { font-size: clamp(24px, 7.5vw, 34px) !important; }
-  .lp-hero-sub    { font-size: 13.5px !important; }
-  .lp-btn-primary,
-  .lp-btn-ghost   { padding: 12px 16px !important; font-size: 14px !important; }
-  .lp-eyebrow     { font-size: 9.5px !important; padding: 4px 10px !important; }
-
-  /* Container */
-  .lp-container { padding: 0 14px !important; }
-
-  /* Section typography */
-  .lp-section-title { font-size: clamp(20px, 5.5vw, 26px) !important; }
-  .lp-cta-banner    { padding: 22px 14px !important; }
-  .lp-cta-text h2   { font-size: 19px !important; }
-
-  /* Admin pill */
-  .lp-admin-pill { display: none !important; }
-}
-
-/* ── Tablet (768–1024px) lp-* fixes ── */
-@media (max-width: 1024px) and (min-width: 769px) {
-  .lp-footer-grid {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 32px !important;
-  }
-  .lp-features-grid { grid-template-columns: repeat(2, 1fr) !important; }
-  .lp-stats-grid    { grid-template-columns: repeat(2, 1fr) !important; }
-  .lp-about-inner   { grid-template-columns: 1fr !important; gap: 40px !important; }
-  .lp-about-visual  { display: block !important; }
-  .lp-container     { padding: 0 24px !important; }
-  .lp-hero-cards    { width: 220px !important; }
-  .lp-hero-inner    { gap: 32px !important; padding: 100px 32px 80px !important; }
-}
-
-
-/* ════════════════════════════════════════════════════════════
-   ADMIN & STUDENT PORTAL — INLINE GRID OVERRIDES
-   Covers all pages that use style="display:grid; grid-template-columns:1fr 1fr"
-   These are: admin/dashboard.php, admin/reports.php,
-   admin/student_detail.php, student/dashboard.php, student/profile.php
-   ════════════════════════════════════════════════════════════ */
-
-@media (max-width: 768px) {
-
-  /* ── Catch-all: any element with inline 1fr 1fr grid inside main-content ── */
+  /* Inline 2-col grids → stack */
   .main-content [style*="grid-template-columns:1fr 1fr"],
   .main-content [style*="grid-template-columns: 1fr 1fr"],
-  .main-content [style*="grid-template-columns:1fr 1fr;"],
-  .main-content [style*="grid-template-columns: 1fr 1fr;"] {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 16px !important;
-    max-width: 100% !important;
-  }
-
-  /* ── Catch-all: any element with inline grid inside .card-body ── */
-  .card-body [style*="grid-template-columns:1fr 1fr"],
-  .card-body [style*="grid-template-columns: 1fr 1fr"] {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0 !important;
-  }
-
-  /* ── Catch-all: any top-level grid in dashboard pages ── */
   div[style*="display:grid"][style*="1fr 1fr"],
   div[style*="display: grid"][style*="1fr 1fr"] {
     display: flex !important;
@@ -2789,163 +2306,149 @@ body { max-width: 100vw; overflow-x: hidden; }
     gap: 16px !important;
     max-width: 100% !important;
   }
-
-  /* Reports page export button row — keep flex, just allow wrap */
-  div[style*="display:flex"][style*="gap:10px"],
-  div[style*="display: flex"][style*="gap: 10px"] {
-    flex-wrap: wrap !important;
-  }
-
-  /* Page header right action buttons */
-  .page-header > div[style*="display:flex"],
-  .page-header > div[style*="display: flex"] {
-    flex-wrap: wrap !important;
-    gap: 6px !important;
-  }
-
-  /* Student dashboard — room & personal details section */
-  .main-content > div[style*="display:grid"],
-  .main-content > div[style*="display: grid"] {
+  .card-body [style*="grid-template-columns:1fr 1fr"],
+  .card-body [style*="grid-template-columns: 1fr 1fr"] {
     display: flex !important;
     flex-direction: column !important;
-    gap: 16px !important;
-    max-width: 100% !important;
+    gap: 0 !important;
   }
+
+  /* Search bar */
+  .search-bar { flex-wrap: wrap; gap: 8px; }
+  .search-input-wrap { max-width: 100%; width: 100%; }
+  .search-bar .btn { width: 100%; justify-content: center; }
+
+  /* Filter tabs */
+  .filter-tabs { gap: 4px; flex-wrap: wrap; }
+  .filter-tabs a { padding: 6px 12px; font-size: 12px; }
+
+  /* Status timeline */
+  .status-steps { overflow-x: auto; scrollbar-width: none; flex-wrap: nowrap; }
+  .status-steps::-webkit-scrollbar { display: none; }
+  .status-step { min-width: 70px; }
+
+  /* Allocation letter */
+  .allocation-letter { padding: 20px 16px !important; }
+  .letter-signature  { flex-direction: column !important; gap: 16px !important; }
+  .letter-header     { flex-wrap: wrap; gap: 10px; }
+
+  /* Auth pages */
+  .funaab-auth  { flex-direction: column; min-height: 100dvh; }
+  .funaab-left  { flex: 0 0 auto; max-height: 200px; }
+  .funaab-left-inner { padding: 24px 20px; }
+  .funaab-school-abbr { font-size: 32px; }
+  .funaab-portal-title h1 { font-size: 20px; }
+  .funaab-features, .funaab-left-footer, .funaab-portal-title p { display: none; }
+  .funaab-right { flex: 1; padding: 24px 16px; align-items: flex-start; }
+  .funaab-form-wrap { max-width: 100%; }
+
+  .split-screen { flex-direction: column; min-height: auto; }
+  .split-left   { flex: 0 0 auto; min-height: 160px; padding: 20px 16px; }
+  .split-left-features { display: none; }
+  .split-right  { padding: 24px 16px; }
+
+  /* Landing page — hero */
+  .lp-hero-cards, .lp-scroll-cue, .lp-orb-1, .lp-orb-2 { display: none !important; }
+  .lp-hero-inner {
+    padding: 70px 16px 40px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  .lp-hero-h1  { font-size: clamp(28px,8vw,42px) !important; }
+  .lp-hero-sub { font-size: 14.5px !important; }
+  .lp-hero-actions { flex-direction: column !important; width: 100% !important; align-items: stretch !important; }
+  .lp-btn-primary, .lp-btn-ghost { width: 100% !important; justify-content: center !important; }
+
+  /* Landing — strip */
+  .lp-strip { display: flex !important; flex-direction: column !important; padding: 0 !important; }
+  .lp-strip-divider { width: 100% !important; height: 1px !important; }
+  .lp-strip-item { padding: 16px 20px; }
+
+  /* Landing — sections */
+  .lp-section { padding: 48px 0 !important; }
+  .lp-container { padding: 0 16px !important; }
+  .lp-section-title { font-size: clamp(22px,6vw,32px) !important; }
+  .lp-section-sub   { font-size: 14px !important; max-width: 100% !important; }
+  .lp-section-head  { margin-bottom: 28px !important; }
+  .lp-center        { text-align: left !important; }
+  .lp-center-sub    { margin: 0 !important; }
+
+  /* Landing — stats */
+  .lp-stats-section { padding: 36px 0 !important; }
+  .lp-stats-grid  { grid-template-columns: repeat(2,1fr) !important; }
+  .lp-stat-item   { padding: 22px 10px !important; }
+  .lp-stat-num    { font-size: 28px !important; }
+  .lp-stat-name   { font-size: 11.5px !important; }
+  .lp-stat-desc   { display: none !important; }
+  .lp-stat-icon-wrap { width: 40px !important; height: 40px !important; }
+
+  /* Landing — about */
+  .lp-about-inner  { grid-template-columns: 1fr !important; gap: 0 !important; }
+  .lp-about-visual { display: none !important; }
+
+  /* Landing — features */
+  .lp-features-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+  .lp-feature-card  { padding: 20px 16px !important; }
+
+  /* Landing — steps */
+  .lp-steps-grid  { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .lp-steps-grid::before { display: none !important; }
+  .lp-step-card   {
+    display: flex !important; flex-direction: row !important;
+    align-items: flex-start !important; gap: 14px !important;
+    padding: 16px !important;
+  }
+  .lp-step-num    { margin-bottom: 0 !important; flex-shrink: 0 !important; min-width: 30px !important; width: 30px !important; height: 30px !important; }
+
+  /* Landing — CTA */
+  .lp-cta-banner  { padding: 28px 16px !important; border-radius: 14px !important; }
+  .lp-cta-inner   { flex-direction: column !important; gap: 20px !important; }
+  .lp-cta-actions { flex-direction: column !important; width: 100% !important; gap: 10px !important; }
+  .lp-cta-btn-primary,
+  .lp-cta-btn-ghost { width: 100% !important; justify-content: center !important; }
+
+  /* Landing — footer */
+  .lp-footer      { padding: 40px 0 16px !important; }
+  .lp-footer-glow { display: none !important; }
+  .lp-footer-grid { grid-template-columns: 1fr !important; gap: 22px !important; margin-bottom: 28px !important; }
+  .lp-footer-bottom { flex-direction: column !important; text-align: center !important; gap: 6px !important; }
 }
 
-/* ════════════════════════════════════════════════════════════
-   ADMIN SIDEBAR — ensure proper height calculation
-   The sidebar height is 100vh but needs to account for the
-   sticky navbar (68px) on non-hero pages
-   ════════════════════════════════════════════════════════════ */
-@media (min-width: 769px) {
-  .site-header.solid ~ .dashboard-layout .sidebar,
-  .site-header.scrolled ~ .dashboard-layout .sidebar {
-    height: calc(100vh - 68px);
-    top: 68px;
-  }
-}
-
-/* ════════════════════════════════════════════════════════════
-   MOBILE TABLE OVERFLOW INDICATOR
-   Add a subtle visual cue that the table scrolls horizontally
-   ════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .table-wrap {
-    position: relative;
-  }
-  /* Fade on the right edge shows there's more to scroll */
-  .card-body .table-wrap::after {
-    content: '';
-    position: absolute;
-    top: 0; right: 0; bottom: 0;
-    width: 28px;
-    background: linear-gradient(to right, transparent, rgba(255,255,255,.85));
-    pointer-events: none;
-    border-radius: 0 var(--r) var(--r) 0;
-  }
-}
-
-/* ════════════════════════════════════════════════════════════
-   ALLOCATION LETTER — full fix for small screens
-   ════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  .main-content .allocation-letter {
-    padding: 20px 14px !important;
-    font-size: 13px !important;
-  }
-  .letter-header { flex-wrap: wrap; gap: 10px; }
-  .letter-logo-circle { width: 54px; height: 54px; font-size: 16px; }
-  .letter-signature { flex-direction: column !important; gap: 16px !important; }
-  .letter-meta { flex-direction: column !important; gap: 2px !important; }
-}
-
-/* ════════════════════════════════════════════════════════════
-   ROOM PICKER — better grid on all mobile sizes
-   ════════════════════════════════════════════════════════════ */
+/* ── 480px ──────────────────────────────────────────────── */
 @media (max-width: 480px) {
-  .room-picker { grid-template-columns: repeat(3, 1fr) !important; }
+  .navbar { padding: 0 12px; height: 52px; }
+  .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 8px; }
+  .stat-num   { font-size: 18px; }
+  .main-content { padding: 10px; }
+
+  .sidebar a   { min-width: 50px !important; padding: 7px 8px !important; font-size: 8px !important; }
+  .s-icon      { width: 20px !important; height: 20px !important; font-size: 10px !important; }
+
+  .lp-hero-inner { padding: 62px 14px 32px !important; }
+  .lp-hero-h1    { font-size: clamp(24px,7.5vw,34px) !important; }
+  .lp-container  { padding: 0 14px !important; }
+  .lp-stats-grid { grid-template-columns: 1fr !important; }
+  .lp-stat-item  {
+    display: flex !important; align-items: center !important;
+    gap: 14px !important; text-align: left !important;
+    padding: 16px !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,.07) !important;
+  }
+  .lp-stat-item:last-child { border-bottom: none !important; }
+  .lp-stat-icon-wrap { margin: 0 !important; flex-shrink: 0 !important; }
+  .lp-footer-grid { gap: 18px !important; }
+  .lp-footer-abbr { font-size: 22px !important; }
+  .lp-admin-pill  { display: none !important; }
+  .room-picker    { grid-template-columns: repeat(3,1fr) !important; gap: 6px; }
+  .allocation-letter { padding: 14px 12px !important; font-size: 13px !important; }
+  .notice-banner  { flex-direction: column; gap: 8px; padding: 12px; }
+  .funaab-left    { max-height: 170px; }
+  .funaab-submit-btn { padding: 12px !important; font-size: 14px !important; }
 }
+
+/* ── 360px ──────────────────────────────────────────────── */
 @media (max-width: 360px) {
-  .room-picker { grid-template-columns: repeat(2, 1fr) !important; }
-}
-
-/* ════════════════════════════════════════════════════════════
-   GLOBAL — ensure no horizontal overflow anywhere
-   ════════════════════════════════════════════════════════════ */
-.lp-hero, .lp-strip-wrap, .lp-stats-section,
-.lp-about, .lp-features-section, .lp-steps-section,
-.lp-cta-section, .lp-footer {
-  overflow-x: hidden;
-}
-
-
-/* ════════════════════════════════════════════════════════════
-   HAS-SIDEBAR PAGES  (admin & student portal pages)
-   The sidebar IS the navigation — hide the top-navbar's
-   hamburger, nav-links, and redundant controls on mobile.
-   ════════════════════════════════════════════════════════════ */
-
-/* On ALL screen sizes: hide the mobile hamburger on sidebar pages
-   because the sidebar already provides all navigation */
-body.has-sidebar .hamburger {
-  display: none !important;
-}
-
-/* Hide nav links on sidebar pages — navigation is in the sidebar */
-body.has-sidebar .nav-links {
-  display: none !important;
-}
-
-/* On sidebar pages the navbar only needs to show the logo + user info.
-   Make it compact and clean. */
-body.has-sidebar .navbar {
-  padding: 10px 20px;
-  min-height: 52px;
-}
-
-/* On mobile, the top nav bar on sidebar pages becomes a slim branded bar */
-@media (max-width: 768px) {
-  body.has-sidebar .site-header {
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 100;
-  }
-
-  /* Slim the navbar height */
-  body.has-sidebar .navbar {
-    padding: 0 16px;
-    height: 48px;
-  }
-
-  /* Show logo text clearly */
-  body.has-sidebar .logo-wordmark strong { font-size: 16px; }
-  body.has-sidebar .logo-wordmark span   { display: none; }
-  body.has-sidebar .logo-portal-name     { display: none; }
-
-  /* Hide topbar on mobile (already hidden globally, just being explicit) */
-  body.has-sidebar .topbar { display: none; }
-
-  /* The dashboard-layout sidebar tab-bar should sit directly below
-     the sticky header — no gap */
-  body.has-sidebar .dashboard-layout {
-    padding-top: 0;
-  }
-
-  /* Sidebar tab bar sticks below the slim header */
-  body.has-sidebar .sidebar {
-    position: sticky;
-    top: 48px;   /* matches navbar height above */
-    z-index: 90;
-  }
-}
-
-/* Tablet — also hide hamburger since icon-rail sidebar is visible */
-@media (max-width: 992px) and (min-width: 769px) {
-  body.has-sidebar .hamburger {
-    display: none !important;
-  }
-  body.has-sidebar .nav-links {
-    display: none !important;
-  }
+  .stats-grid { grid-template-columns: 1fr !important; }
+  .room-picker { grid-template-columns: repeat(2,1fr) !important; }
 }
