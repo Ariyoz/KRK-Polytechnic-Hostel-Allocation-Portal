@@ -114,9 +114,9 @@ http://localhost/hostel_portal/
 
 | Role | Email | Password |
 |------|-------|----------|
-| DSA | `dsa@krkpoly.edu.ng` | `password` |
-| Registrar | `registrar@krkpoly.edu.ng` | `password` |
-| ICT Staff | `ict@krkpoly.edu.ng` | `password` |
+| DSA | `dsa@krkpoly.edu.ng` | `Admin@2025` |
+| Registrar | `registrar@krkpoly.edu.ng` | `Admin@2025` |
+| ICT Staff | `ict@krkpoly.edu.ng` | `Admin@2025` |
 
 > **Change these passwords immediately after first login in a production environment.**
 
