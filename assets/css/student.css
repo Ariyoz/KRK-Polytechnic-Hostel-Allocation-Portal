@@ -14,8 +14,7 @@
   margin-bottom: var(--sp-5);
 }
 .step-card-icon .icon { width: 18px; height: 18px; }
-@media (max-width: 860px) { .step-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 480px) { .step-card-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 860px) { .step-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); } }
 
 /* Dashboard two-column layout: application timeline + sidebar cards */
 .dash-columns { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--sp-5); align-items: start; }
@@ -28,14 +27,14 @@
 .notif-list { display: flex; flex-direction: column; gap: var(--sp-4); }
 .notif-item { padding-bottom: var(--sp-4); border-bottom: 1px solid var(--gray-200); }
 .notif-item:last-child { border-bottom: none; padding-bottom: 0; }
-.notif-item p { margin-top: 4px; font-size: 0.88rem; color: var(--gray-700); }
-.notif-item time { display: block; margin-top: 4px; font-size: 0.78rem; color: var(--gray-500); }
+.notif-item p { margin-top: 4px; font-size: var(--fs-sm); color: var(--gray-700); }
+.notif-item time { display: block; margin-top: 4px; font-size: var(--fs-xs); color: var(--gray-500); }
 
 /* Hostel / block / room / beds boxes used on My hostel and the allocation slip */
 .info-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-3); }
 .info-tile { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--sp-3) var(--sp-4); text-align: center; }
-.info-tile .tile-label { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gray-500); }
-.info-tile .tile-value { display: block; margin-top: 4px; font-family: var(--font-head); font-size: 1.1rem; color: var(--navy-900); }
+.info-tile .tile-label { display: block; font-size: var(--fs-2xs); text-transform: uppercase; letter-spacing: 0.04em; color: var(--gray-500); }
+.info-tile .tile-value { display: block; margin-top: 4px; font-family: var(--font-head); font-size: var(--fs-h3); color: var(--navy-900); }
 @media (max-width: 640px) { .info-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* Room picker on the application form */
@@ -73,13 +72,13 @@
   border: 1px dashed var(--border);
   border-radius: var(--radius-sm);
   display: flex; align-items: center; justify-content: center;
-  color: var(--gray-500); font-size: 0.72rem; text-align: center;
+  color: var(--gray-500); font-size: var(--fs-2xs); text-align: center;
 }
 .slip hr { border: none; border-top: 2px solid var(--navy-900); margin: var(--sp-4) 0; }
-.slip-conditions { padding-left: 1.1em; list-style: decimal; color: var(--gray-700); font-size: 0.9rem; display: flex; flex-direction: column; gap: 6px; }
-.slip-signatures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-5); margin-top: var(--sp-7); font-size: 0.85rem; color: var(--gray-700); }
+.slip-conditions { padding-left: 1.1em; list-style: decimal; color: var(--gray-700); font-size: var(--fs-nav); display: flex; flex-direction: column; gap: 6px; }
+.slip-signatures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-5); margin-top: var(--sp-7); font-size: var(--fs-sm); color: var(--gray-700); }
 .slip-signatures .sig-line { border-top: 1px solid var(--gray-500); margin-bottom: 8px; height: 1px; }
-.slip-footer { margin-top: var(--sp-5); display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--gray-500); flex-wrap: wrap; gap: var(--sp-2); }
+.slip-footer { margin-top: var(--sp-5); display: flex; justify-content: space-between; font-size: var(--fs-xs); color: var(--gray-500); flex-wrap: wrap; gap: var(--sp-2); }
 
 @media print {
   @page { size: A4; margin: 16mm; }

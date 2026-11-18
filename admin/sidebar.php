@@ -17,10 +17,15 @@ $_sbUnverified = $conn->query("SELECT COUNT(*) AS c FROM students WHERE school_f
 <div class="portal">
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">KRK</div>
+      <div class="sidebar-logo-icon">
+        <svg class="sidebar-logo-mark" viewBox="0 0 40 46" aria-hidden="true">
+          <path d="M20 2 4 8v14c0 12 7 19 16 22 9-3 16-10 16-22V8Z" fill="#102a4a" stroke="#e8a317" stroke-width="2"/>
+          <path d="M13 24l7-6 7 6M15 22v8h10v-8" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+      </div>
       <div class="sidebar-logo-text">
-        <strong><?= htmlspecialchars($adminName) ?></strong>
-        <span><?= htmlspecialchars($roleLabel) ?></span>
+        <strong>KRK Polytechnic</strong>
+        <span>Staff portal</span>
       </div>
     </div>
     <nav class="sidebar-nav">

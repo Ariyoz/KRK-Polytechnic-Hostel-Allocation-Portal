@@ -16,7 +16,7 @@
   grid-template-columns: 120px 1fr 44px;
   align-items: center;
   gap: var(--sp-3);
-  font-size: 0.85rem;
+  font-size: var(--fs-sm);
 }
 .bar-row .bar-name { color: var(--gray-700); }
 .bar-track { background: var(--gray-200); border-radius: var(--radius-pill); height: 10px; overflow: hidden; }
@@ -26,7 +26,7 @@
 .bar-fill.is-red   { background: var(--red-600); }
 .bar-row .bar-count { text-align: right; font-weight: 600; color: var(--navy-900); }
 @media (max-width: 560px) {
-  .bar-row { grid-template-columns: 90px 1fr 36px; font-size: 0.8rem; }
+  .bar-row { grid-template-columns: 90px 1fr 36px; font-size: var(--fs-xs); }
 }
 
 /* Report section spacing */
@@ -36,7 +36,7 @@
 /* Email log expandable preview row */
 .log-preview { background: var(--gray-100); padding: var(--sp-4); }
 .log-preview-head {
-  font-size: 0.8rem;
+  font-size: var(--fs-xs);
   color: var(--gray-500);
   margin-bottom: var(--sp-2);
 }
@@ -45,14 +45,14 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: var(--sp-4);
-  font-size: 0.9rem;
+  font-size: var(--fs-nav);
 }
 
 /* Inline action forms inside a table cell (rooms, fees) */
 .inline-form { display: inline-flex; gap: 6px; align-items: center; }
 .inline-form + .inline-form { margin-left: 6px; }
 .room-actions { white-space: nowrap; }
-.select-sm { width: auto; padding: 6px 8px; font-size: 0.8rem; }
+.select-sm { width: auto; padding: 6px 8px; font-size: var(--fs-xs); }
 
 /* Settings: toggle switch for a single boolean field */
 .switch { display: inline-flex; align-items: center; gap: var(--sp-3); cursor: pointer; }
@@ -69,7 +69,7 @@
 .switch input:checked + .switch-track { background: var(--green-600); }
 .switch input:checked + .switch-track .switch-thumb { transform: translateX(18px); }
 .switch input:focus-visible + .switch-track { outline: 2px solid var(--navy-600); outline-offset: 2px; }
-.switch-label { font-weight: 600; font-size: 0.9rem; }
+.switch-label { font-weight: 600; font-size: var(--fs-nav); }
 
 /* Settings: danger zone accent */
 .danger-card { border-color: var(--red-600); }

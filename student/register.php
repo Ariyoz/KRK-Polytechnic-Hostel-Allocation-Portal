@@ -73,55 +73,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 $pageCss  = ['auth.css'];
-$noHeader = true;
 include '../includes/header.php';
 ?>
 
-<div class="auth-split">
+<div class="container section auth-register-page">
 
-  <div class="auth-split-panel">
-    <a href="<?= BASE_URL ?>/index.php" class="brand">
-      <svg class="brand-mark" viewBox="0 0 40 46" aria-hidden="true">
-        <path d="M20 2 4 8v14c0 12 7 19 16 22 9-3 16-10 16-22V8Z" fill="#102a4a" stroke="#e8a317" stroke-width="2"/>
-        <path d="M13 24l7-6 7 6M15 22v8h10v-8" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>
-      </svg>
-      <span class="brand-text">
-        <strong>KRK Polytechnic, Lagos</strong>
-        <small>Hostel Allocation Portal</small>
-      </span>
-    </a>
-
-    <div>
-      <h1>Hostel registration</h1>
-      <p>Register for the <?= htmlspecialchars($currentSession) ?> session. We will send an activation link to your email once you submit the form.</p>
-
-      <div class="role-list">
-        <div class="role-list-item"><span class="badge badge-neutral">Fresh students</span> Application number</div>
-        <div class="role-list-item"><span class="badge badge-neutral">Returning students</span> Matric number</div>
-        <div class="role-list-item"><span class="badge badge-neutral">Levels</span> ND1 &middot; ND2 &middot; HND1 &middot; HND2</div>
-      </div>
-    </div>
-
-    <p class="auth-foot-note">&copy; <?= date('Y') ?> KRK Polytechnic, Lagos</p>
+  <div class="page-head">
+    <span class="eyebrow">KRK HALL &middot; <?= htmlspecialchars($currentSession) ?> SESSION</span>
+    <h1>Hostel registration</h1>
+    <p class="sub">Fill in your details, choose an available room, then click <strong>Register for the hostel</strong>. We will send an activation alert to your email once you submit the form.</p>
   </div>
 
-  <div class="auth-split-main is-wide">
-    <div class="auth-register-grid">
+  <div class="steps-row">
+    <div class="steps-row-item is-current"><span class="dot">1</span> Register</div>
+    <div class="steps-row-item"><span class="dot">2</span> Activate email</div>
+    <div class="steps-row-item"><span class="dot">3</span> Pay school fees</div>
+    <div class="steps-row-item"><span class="dot">4</span> Room granted</div>
+    <div class="steps-row-item"><span class="dot">5</span> Pay hostel fee</div>
+  </div>
 
-      <div class="auth-split-card is-wide stack">
+  <div class="auth-register-grid">
 
-        <div>
-          <h2>Create your account</h2>
-          <p class="muted">Hostel registration &mdash; <?= htmlspecialchars($currentSession) ?> session.</p>
-        </div>
-
-        <div class="steps-row">
-          <div class="steps-row-item is-current"><span class="dot">1</span> Register</div>
-          <div class="steps-row-item"><span class="dot">2</span> Activate email</div>
-          <div class="steps-row-item"><span class="dot">3</span> Pay school fees</div>
-          <div class="steps-row-item"><span class="dot">4</span> Room granted</div>
-          <div class="steps-row-item"><span class="dot">5</span> Pay hostel fee</div>
-        </div>
+      <div class="card stack">
 
         <?php if ($error): ?>
         <div class="alert alert-danger"><span><?= $error ?></span></div>
@@ -309,7 +282,6 @@ include '../includes/header.php';
         </div>
       </div>
 
-    </div>
   </div>
 
 </div>

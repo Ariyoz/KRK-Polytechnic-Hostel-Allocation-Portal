@@ -4,7 +4,7 @@
 .hero {
   background: var(--navy-900);
   color: var(--white);
-  padding-block: var(--sp-7);
+  padding-block: 56px;
 }
 .hero-inner {
   display: grid;
@@ -17,13 +17,14 @@
 }
 .hero-text h1 {
   color: var(--white);
-  font-size: 2.3rem;
+  font-size: var(--fs-hero);
+  line-height: 1.1;
   margin-bottom: var(--sp-4);
 }
 .hero-sub {
   color: #c9d4e2;
-  max-width: 54ch;
-  font-size: 1rem;
+  max-width: 65ch;
+  font-size: var(--fs-md);
 }
 .hero-actions {
   display: flex;
@@ -31,9 +32,13 @@
   gap: var(--sp-3);
   margin-top: var(--sp-5);
 }
+.hero-actions .btn {
+  min-height: 48px;
+  padding: 13px 24px;
+}
 .hero-note {
   margin-top: var(--sp-4);
-  font-size: 0.85rem;
+  font-size: var(--fs-sm);
   color: #9fb0c6;
   display: flex;
   align-items: center;
@@ -58,23 +63,25 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  font-size: 0.92rem;
+  font-size: var(--fs-nav);
   font-weight: 600;
 }
-.bed-row-top strong { font-family: var(--font-head); font-size: 1.1rem; }
-.bed-row-sub { font-size: 0.78rem; color: var(--gray-500); margin-top: 2px; }
+.bed-row-top strong { font-family: var(--font-head); font-size: var(--fs-h3); }
+.bed-row-sub { font-size: var(--fs-xs); color: var(--gray-500); margin-top: 2px; }
 
 .hero-card-foot {
   margin-top: var(--sp-4);
   padding-top: var(--sp-4);
   border-top: 1px solid var(--gray-200);
-  font-size: 0.82rem;
+  font-size: var(--fs-xs);
   color: var(--gray-500);
 }
 
 @media (max-width: 900px) {
   .hero-inner { grid-template-columns: minmax(0, 1fr); }
-  .hero-text h1 { font-size: 1.9rem; }
+}
+@media (max-width: 640px) {
+  .hero { padding-block: 32px; }
 }
 
 /* ---------- How it works ---------- */
@@ -98,19 +105,19 @@
   color: var(--navy-900);
   font-family: var(--font-head);
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: var(--fs-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: var(--sp-3);
 }
 .process-step h4 { margin-bottom: 4px; }
-.process-step p { font-size: 0.85rem; color: var(--gray-500); }
+.process-step p { font-size: var(--fs-sm); color: var(--gray-500); }
 
 /* ---------- Who can apply / rules ---------- */
 .rules-list { display: flex; flex-direction: column; gap: var(--sp-3); }
 .rules-list li {
-  font-size: 0.9rem;
+  font-size: var(--fs-nav);
   color: var(--gray-700);
   padding-left: var(--sp-4);
   position: relative;
@@ -139,7 +146,7 @@
   flex-wrap: wrap;
 }
 .cta-band h2 { color: var(--white); margin-bottom: 4px; }
-.cta-band p { color: #c9d4e2; font-size: 0.92rem; }
+.cta-band p { color: #c9d4e2; font-size: var(--fs-nav); }
 
 @media (max-width: 640px) {
   .cta-band { flex-direction: column; align-items: flex-start; }

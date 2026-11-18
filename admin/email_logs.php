@@ -34,28 +34,9 @@ $pageCss = ['admin.css','admin-extra.css'];
 include '../includes/header.php';
 ?>
 
-<div class="portal">
-    <?php include 'sidebar.php'; ?>
+<?php include 'sidebar.php'; ?>
 
-    <div class="portal-main">
-        <header class="portal-topbar">
-            <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-label="Toggle menu">
-                <svg class="icon"><use href="#icon-menu"></use></svg>
-            </button>
-            <span class="portal-topbar-session"><?= htmlspecialchars($roleLabel) ?></span>
-            <div class="portal-topbar-right">
-                <div class="portal-user">
-                    <div class="avatar"><?= htmlspecialchars(strtoupper(substr($_SESSION['admin_name'] ?? 'A', 0, 1))) ?></div>
-                    <div class="portal-user-text">
-                        <strong><?= htmlspecialchars($_SESSION['admin_name'] ?? 'Admin') ?></strong>
-                        <span><?= htmlspecialchars($roleLabel) ?></span>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <div class="portal-content">
-            <div class="page-head">
+<div class="page-head">
                 <span class="eyebrow">Analytics</span>
                 <h1>Email notification logs</h1>
                 <p class="sub">Every automated email the portal has sent to students and staff.</p>
@@ -135,10 +116,9 @@ include '../includes/header.php';
             </div>
             <?php endif; ?>
 
-        </div>
-    </div>
-    <div class="portal-overlay"></div>
-</div>
+    </div><!-- portal-content -->
+  </div><!-- portal-main -->
+</div><!-- portal -->
 
 <script>
 function showEmailBody(id) {

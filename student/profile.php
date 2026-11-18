@@ -11,6 +11,12 @@ $stmt = $conn->prepare("SELECT s.*,f.name AS faculty_name,d.name AS dept_name FR
 $stmt->bind_param("i",$sid); $stmt->execute();
 $student = $stmt->get_result()->fetch_assoc();
 
+$sName = $_SESSION['student_name'] ?? 'Student';
+$nameParts = preg_split('/\s+/', trim($sName));
+$initials = count($nameParts) > 1
+    ? strtoupper(substr($nameParts[0], 0, 1) . substr(end($nameParts), 0, 1))
+    : strtoupper(substr($sName, 0, 1));
+
 if ($_SERVER['REQUEST_METHOD']==='POST') {
     $phone  = trim($_POST['phone']??'');
     $newPwd = $_POST['new_password']??'';
@@ -51,7 +57,7 @@ include '../includes/header.php';
   <div class="card">
     <div class="card-head"><h3>Account</h3></div>
     <div class="profile-head">
-      <div class="avatar avatar-lg"><?= strtoupper(substr($student['firstname'],0,1)) ?></div>
+      <div class="avatar avatar-lg"><?= htmlspecialchars($initials) ?></div>
       <div>
         <strong><?= htmlspecialchars($student['surname'].', '.$student['firstname']) ?></strong>
         <div class="text-sm muted"><?= htmlspecialchars($student['matric_number']) ?></div>
