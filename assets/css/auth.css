@@ -36,7 +36,7 @@
 .auth-split-main.is-wide { align-items: flex-start; padding-block: var(--sp-7); }
 .auth-register-grid {
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
   gap: var(--sp-5);
   max-width: 980px;
   width: 100%;
@@ -44,7 +44,7 @@
 }
 .auth-split-card.is-wide { max-width: none; }
 @media (max-width: 900px) {
-  .auth-register-grid { grid-template-columns: 1fr; }
+  .auth-register-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 .auth-aside { display: flex; flex-direction: column; gap: var(--sp-4); }

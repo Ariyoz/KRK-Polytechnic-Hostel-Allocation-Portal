@@ -9,19 +9,19 @@
 /* Step cards row */
 .step-card-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--sp-4);
   margin-bottom: var(--sp-5);
 }
 .step-card-icon .icon { width: 18px; height: 18px; }
-@media (max-width: 860px) { .step-card-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .step-card-grid { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .step-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .step-card-grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* Dashboard two-column layout: application timeline + sidebar cards */
-.dash-columns { display: grid; grid-template-columns: 2fr 1fr; gap: var(--sp-5); align-items: start; }
+.dash-columns { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--sp-5); align-items: start; }
 .dash-columns .card + .card { margin-top: var(--sp-5); }
 .timeline-dot .icon { width: 14px; height: 14px; }
-@media (max-width: 960px) { .dash-columns { grid-template-columns: 1fr; } }
+@media (max-width: 960px) { .dash-columns { grid-template-columns: minmax(0, 1fr); } }
 
 .quick-actions { display: flex; flex-direction: column; gap: var(--sp-2); }
 
@@ -32,22 +32,22 @@
 .notif-item time { display: block; margin-top: 4px; font-size: 0.78rem; color: var(--gray-500); }
 
 /* Hostel / block / room / beds boxes used on My hostel and the allocation slip */
-.info-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-3); }
+.info-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-3); }
 .info-tile { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--sp-3) var(--sp-4); text-align: center; }
 .info-tile .tile-label { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gray-500); }
 .info-tile .tile-value { display: block; margin-top: 4px; font-family: var(--font-head); font-size: 1.1rem; color: var(--navy-900); }
-@media (max-width: 640px) { .info-tiles { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .info-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* Room picker on the application form */
-.room-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); }
+.room-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-3); }
 .room-option { position: relative; display: block; cursor: pointer; }
 .room-option input { position: absolute; top: 16px; left: 16px; }
 .room-option-card { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--sp-3) var(--sp-4) var(--sp-3) 38px; transition: border-color var(--ease), background var(--ease); }
 .room-option input:checked ~ .room-option-card { border-color: var(--navy-700); box-shadow: 0 0 0 1px var(--navy-700); background: var(--gray-100); }
 .room-option-card strong { font-family: var(--font-head); }
 .room-option-card .beds { margin: var(--sp-2) 0 6px; }
-@media (max-width: 760px) { .room-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .room-grid { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .room-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .room-grid { grid-template-columns: minmax(0, 1fr); } }
 
 .avail-badge { display: flex; align-items: center; gap: 8px; }
 
@@ -77,7 +77,7 @@
 }
 .slip hr { border: none; border-top: 2px solid var(--navy-900); margin: var(--sp-4) 0; }
 .slip-conditions { padding-left: 1.1em; list-style: decimal; color: var(--gray-700); font-size: 0.9rem; display: flex; flex-direction: column; gap: 6px; }
-.slip-signatures { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); margin-top: var(--sp-7); font-size: 0.85rem; color: var(--gray-700); }
+.slip-signatures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-5); margin-top: var(--sp-7); font-size: 0.85rem; color: var(--gray-700); }
 .slip-signatures .sig-line { border-top: 1px solid var(--gray-500); margin-bottom: 8px; height: 1px; }
 .slip-footer { margin-top: var(--sp-5); display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--gray-500); flex-wrap: wrap; gap: var(--sp-2); }
 

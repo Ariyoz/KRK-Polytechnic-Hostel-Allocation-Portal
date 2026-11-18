@@ -8,7 +8,7 @@
 }
 .hero-inner {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: var(--sp-7);
   align-items: start;
 }
@@ -73,7 +73,7 @@
 }
 
 @media (max-width: 900px) {
-  .hero-inner { grid-template-columns: 1fr; }
+  .hero-inner { grid-template-columns: minmax(0, 1fr); }
   .hero-text h1 { font-size: 1.9rem; }
 }
 

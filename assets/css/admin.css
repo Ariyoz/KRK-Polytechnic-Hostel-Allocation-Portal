@@ -7,8 +7,8 @@
 */
 
 /* ---------- Dashboard overview ---------- */
-.kv-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
-@media (max-width: 860px) { .kv-grid.cols-4 { grid-template-columns: repeat(2, 1fr); } }
+.kv-grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 860px) { .kv-grid.cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 .progress-row { margin-bottom: var(--sp-5); }
 .progress-row:last-child { margin-bottom: 0; }
@@ -33,7 +33,7 @@
 /* .pager is shared in app.css (used across admin.css and admin-extra.css pages) */
 
 /* ---------- Student detail ---------- */
-.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); margin-bottom: var(--sp-5); }
-@media (max-width: 860px) { .detail-grid { grid-template-columns: 1fr; } }
+.detail-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-5); margin-bottom: var(--sp-5); }
+@media (max-width: 860px) { .detail-grid { grid-template-columns: minmax(0, 1fr); } }
 .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; color: var(--navy-700); margin-bottom: var(--sp-4); }
 .back-link .icon { width: 14px; height: 14px; }
