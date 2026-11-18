@@ -1,56 +1,28 @@
 
-<footer class="lp-footer">
-  <div class="lp-footer-glow"></div>
-  <div class="lp-container">
-    <div class="lp-footer-grid">
-
-      <!-- Brand col -->
-      <div class="lp-footer-brand">
-        <div class="lp-footer-wordmark">
-          <span class="lp-footer-abbr">KRK</span>
-          <div>
-            <div class="lp-footer-name">KRK Polytechnic</div>
-            <div class="lp-footer-tagline">Hostel Allocation Portal</div>
-          </div>
-        </div>
-        <p>Seamless hostel registration and room allocation for students of KRK Polytechnic, Lagos.</p>
-        <div class="lp-footer-badges">
-          <span><i class="fa fa-shield-alt"></i> Secure</span>
-          <span><i class="fa fa-bolt"></i> Fast</span>
-          <span><i class="fa fa-mobile-alt"></i> Mobile Ready</span>
-        </div>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-row">
+      <div class="footer-brand">
+        <strong>KRK Polytechnic, Lagos</strong>
+        <p>Office of the Dean of Student Affairs &middot; KRK Hall</p>
+        <p>info@krkpoly.edu.ng</p>
       </div>
 
-      <!-- Student portal -->
-      <div class="lp-footer-col">
-        <h5>Student Portal</h5>
-        <a href="<?= defined('BASE_URL') ? BASE_URL : '' ?>/student/login.php"><i class="fa fa-sign-in-alt"></i> Student Login</a>
-        <a href="<?= defined('BASE_URL') ? BASE_URL : '' ?>/student/register.php"><i class="fa fa-user-plus"></i> Register</a>
-        <a href="<?= defined('BASE_URL') ? BASE_URL : '' ?>/student/forgot_password.php"><i class="fa fa-key"></i> Forgot Password</a>
-        <a href="<?= defined('BASE_URL') ? BASE_URL : '' ?>/student/resend_activation.php"><i class="fa fa-envelope"></i> Resend Activation</a>
-      </div>
+      <nav class="footer-links">
+        <a href="<?= defined('BASE_URL') ? BASE_URL : '' ?>/index.php">Home</a>
+        <a href="<?= defined('BASE_URL') ? BASE_URL : '' ?>/student/register.php">Hostel registration</a>
+        <a href="<?= defined('BASE_URL') ? BASE_URL : '' ?>/student/login.php">Student login</a>
+        <a href="<?= defined('BASE_URL') ? BASE_URL : '' ?>/admin/login.php">Admin login</a>
+      </nav>
 
-      <!-- Admin -->
-      <div class="lp-footer-col">
-        <h5>Admin Access</h5>
-        <a href="<?= defined('BASE_URL') ? BASE_URL : '' ?>/admin/login.php"><i class="fa fa-user-shield"></i> DSA Login</a>
-        <a href="<?= defined('BASE_URL') ? BASE_URL : '' ?>/admin/login.php"><i class="fa fa-user-tie"></i> Registrar Login</a>
-        <a href="<?= defined('BASE_URL') ? BASE_URL : '' ?>/admin/login.php"><i class="fa fa-laptop-code"></i> ICT Staff Login</a>
-      </div>
-
-      <!-- Quick links -->
-      <div class="lp-footer-col">
-        <h5>Quick Links</h5>
-        <a href="<?= defined('BASE_URL') ? BASE_URL : '' ?>/index.php"><i class="fa fa-home"></i> Home</a>
-        <a href="#"><i class="fa fa-bed"></i> 200 Bed Spaces</a>
-        <a href="#"><i class="fa fa-info-circle"></i> Eligibility Info</a>
-        <a href="#"><i class="fa fa-bell"></i> Notifications</a>
+      <div class="footer-meta">
+        <p>Session 2025/2026 &middot; First semester</p>
+        <p>CSC 445 Group 2</p>
       </div>
     </div>
 
-    <div class="lp-footer-bottom">
-      <p>&copy; <?= date('Y') ?> KRK Polytechnic, Lagos. All rights reserved.</p>
-      <p>Developed by CSC 445 Group 2 &middot; Secure · Transparent · Digital</p>
+    <div class="footer-bottom">
+      &copy; <?= date('Y') ?> KRK Polytechnic, Lagos. All rights reserved.
     </div>
   </div>
 </footer>

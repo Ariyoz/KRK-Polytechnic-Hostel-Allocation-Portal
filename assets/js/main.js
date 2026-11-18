@@ -1,8 +1,48 @@
-// KRK Polytechnic Hostel Portal — Main JS
+// KRK Hostel Portal — shared page script.
+// Only what pages actually need: nav/sidebar toggles, password show/hide,
+// and the two AJAX lookups used by the registration and application forms.
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ── Faculty → Department AJAX ────────────────────────────
+    // ---- Public site nav (off-canvas on small screens) ----
+    const navToggle = document.getElementById('navToggle');
+    const siteNav    = document.getElementById('siteNav');
+    const navOverlay = document.getElementById('navOverlay');
+    if (navToggle && siteNav) {
+        navToggle.addEventListener('click', () => {
+            const open = siteNav.classList.toggle('is-open');
+            navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (navOverlay) navOverlay.classList.toggle('is-open', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+        });
+        if (navOverlay) navOverlay.addEventListener('click', () => {
+            siteNav.classList.remove('is-open');
+            navOverlay.classList.remove('is-open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        });
+    }
+
+    // ---- Portal sidebar (off-canvas on small screens) ----
+    // Any element with [data-sidebar-toggle] opens/closes .sidebar.
+    // Add a .portal-overlay element in the page to close it on outside click.
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarOverlay = document.querySelector('.portal-overlay');
+    document.querySelectorAll('[data-sidebar-toggle]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (!sidebar) return;
+            const open = sidebar.classList.toggle('is-open');
+            if (sidebarOverlay) sidebarOverlay.classList.toggle('is-open', open);
+        });
+    });
+    if (sidebarOverlay && sidebar) {
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('is-open');
+            sidebarOverlay.classList.remove('is-open');
+        });
+    }
+
+    // ---- Faculty → Department AJAX (registration form) ----
     const facultySelect = document.getElementById('faculty_id');
     const deptSelect    = document.getElementById('department_id');
     if (facultySelect && deptSelect) {
@@ -10,12 +50,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const fid = this.value;
             deptSelect.innerHTML = '<option value="">Loading…</option>';
             deptSelect.disabled = true;
-            if (!fid) { deptSelect.innerHTML = '<option value="">— Select Faculty first —</option>'; return; }
+            if (!fid) { deptSelect.innerHTML = '<option value="">— Select faculty first —</option>'; return; }
             const base = document.querySelector('meta[name="base_url"]');
             fetch((base ? base.content : '') + '/ajax/get_departments.php?faculty_id=' + encodeURIComponent(fid))
                 .then(r => r.json())
                 .then(data => {
-                    deptSelect.innerHTML = '<option value="">— Select Department —</option>';
+                    deptSelect.innerHTML = '<option value="">— Select department —</option>';
                     data.forEach(d => {
                         const o = document.createElement('option');
                         o.value = d.id; o.textContent = d.name;
@@ -27,149 +67,31 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-// ── Password match ───────────────────────────────────────
+    // ---- Password match check (registration form) ----
     const pwd  = document.getElementById('password');
     const cpwd = document.getElementById('confirm_password');
     const form = document.getElementById('registerForm');
     if (form && pwd && cpwd) {
-        // Password strength bar
-        const strengthBar = document.createElement('div');
-        strengthBar.innerHTML = '<div style="margin-top:7px;"><div style="height:4px;border-radius:99px;background:var(--n200);overflow:hidden;"><div id="pwdStrengthFill" style="height:100%;border-radius:99px;width:0;transition:width .3s,background .3s;"></div></div><div id="pwdStrengthLabel" style="font-size:11px;margin-top:4px;color:var(--n400);"></div></div>';
-        pwd.closest('.input-pwd-wrap')?.after(strengthBar.firstElementChild) || pwd.after(strengthBar.firstElementChild);
-
-        pwd.addEventListener('input', () => {
-            const v = pwd.value;
-            let score = 0;
-            if (v.length >= 6)  score++;
-            if (v.length >= 10) score++;
-            if (/[A-Z]/.test(v)) score++;
-            if (/[0-9]/.test(v)) score++;
-            if (/[^A-Za-z0-9]/.test(v)) score++;
-            const fill  = document.getElementById('pwdStrengthFill');
-            const label = document.getElementById('pwdStrengthLabel');
-            if (!fill || !label) return;
-            const levels = [
-                {w:'0%',  c:'var(--n200)',   t:''},
-                {w:'25%', c:'var(--danger)', t:'Weak'},
-                {w:'50%', c:'var(--warning)',t:'Fair'},
-                {w:'75%', c:'var(--blue-500)',t:'Good'},
-                {w:'100%',c:'var(--success)',t:'Strong'},
-            ];
-            const l = levels[Math.min(score, 4)];
-            fill.style.width = l.w; fill.style.background = l.c; label.textContent = l.t; label.style.color = l.c;
-        });
-
         form.addEventListener('submit', e => {
             if (pwd.value !== cpwd.value) {
                 e.preventDefault();
-                cpwd.style.borderColor = 'var(--danger)';
+                cpwd.classList.add('has-error');
                 cpwd.setCustomValidity('Passwords do not match.');
                 cpwd.reportValidity();
             }
         });
-        cpwd.addEventListener('input', () => { cpwd.style.borderColor = ''; cpwd.setCustomValidity(''); });
-    }
-
-    // ── Auto-dismiss alerts ──────────────────────────────────
-    document.querySelectorAll('.alert').forEach(el => {
-        setTimeout(() => {
-            el.style.transition = 'opacity .5s, transform .5s';
-            el.style.opacity = '0'; el.style.transform = 'translateY(-8px)';
-            setTimeout(() => el.remove(), 500);
-        }, 6000);
-    });
-
-    // ── Stat counter animation (IntersectionObserver) ────────
-    // Only animate .counter-num and .stat-num inside the counter strip
-    // and admin/student stat cards — NOT hero glass cards or pills
-    const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-            if (!e.isIntersecting) return;
-            animateCount(e.target, 0, parseInt(e.target.dataset.target || e.target.textContent, 10), 900);
-            obs.unobserve(e.target);
-        });
-    }, { threshold: 0.3 });
-    document.querySelectorAll('.stat-num, .counter-num').forEach(el => {
-        // Skip any elements inside hero-cards-col, hero-stat-pills, or glass-card
-        if (el.closest('.hero-cards-col, .hero-stat-pills, .glass-card')) return;
-        const v = parseInt(el.textContent.trim(), 10);
-        if (!isNaN(v) && v > 0) { el.dataset.target = v; el.textContent = '0'; obs.observe(el); }
-    });
-
-    // ── Progress bar animation ───────────────────────────────
-    document.querySelectorAll('.progress-bar-fill').forEach(el => {
-        const w = el.style.width; el.style.width = '0';
-        setTimeout(() => { el.style.width = w; }, 300);
-    });
-
-    // ── Active nav link ──────────────────────────────────────
-    const cur = window.location.pathname.split('/').pop();
-    document.querySelectorAll('.nav-links a, .sidebar a').forEach(a => {
-        const h = (a.getAttribute('href') || '').split('/').pop().split('?')[0];
-        if (h && h === cur) a.classList.add('active');
-    });
-
-    // ── Close mobile nav on outside click ───────────────────
-    document.addEventListener('click', e => {
-        const nav     = document.getElementById('mainNavLinks');
-        const btn     = document.getElementById('hamburgerBtn');
-        const overlay = document.getElementById('navOverlay');
-        if (!nav || !btn) return;
-        if (!nav.contains(e.target) && !btn.contains(e.target)) {
-            nav.classList.remove('open');
-            btn.classList.remove('open');
-            if (overlay) overlay.classList.remove('open');
-            document.body.style.overflow = '';
-        }
-    });
-
-    // ── Scroll: make header solid once user scrolls on hero page ─
-    const header = document.querySelector('.site-header:not(.solid)');
-    if (header) {
-        window.addEventListener('scroll', () => {
-            header.classList.toggle('scrolled', window.scrollY > 80);
-        }, { passive: true });
+        cpwd.addEventListener('input', () => { cpwd.classList.remove('has-error'); cpwd.setCustomValidity(''); });
     }
 
 });
 
-// ── Mobile nav toggle ────────────────────────────────────────
-function toggleMobileNav() {
-    const nav     = document.getElementById('mainNavLinks');
-    const btn     = document.getElementById('hamburgerBtn');
-    const overlay = document.getElementById('navOverlay');
-    if (!nav || !btn) return;
-    const isOpen = nav.classList.toggle('open');
-    btn.classList.toggle('open', isOpen);
-    if (overlay) overlay.classList.toggle('open', isOpen);
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-}
-
-// ── Password show/hide ───────────────────────────────────────
+// ---- Password show/hide ----
+// Call with the input's id and the button element: onclick="togglePwd('password', this)"
 function togglePwd(id, btn) {
-    const inp = document.getElementById(id);
-    if (!inp) return;
-    const show = inp.type === 'password';
-    inp.type = show ? 'text' : 'password';
+    const input = document.getElementById(id);
+    if (!input) return;
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
     const icon = btn.querySelector('i');
     if (icon) { icon.classList.toggle('fa-eye', !show); icon.classList.toggle('fa-eye-slash', show); }
-}
-
-// ── Counter animation ────────────────────────────────────────
-function animateCount(el, start, end, dur) {
-    if (isNaN(end) || end === 0) return;
-    const t0 = performance.now();
-    function step(now) {
-        const p = Math.min((now - t0) / dur, 1);
-        const e = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.round(start + (end - start) * e);
-        if (p < 1) requestAnimationFrame(step); else el.textContent = end;
-    }
-    requestAnimationFrame(step);
-}
-
-// ── Email body viewer ────────────────────────────────────────
-function showEmailBody(id) {
-    const r = document.getElementById('body-' + id);
-    if (r) r.style.display = (r.style.display === 'none' || !r.style.display) ? 'table-row' : 'none';
 }
