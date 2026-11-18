@@ -1,4 +1,5 @@
 
+<?php if (empty($noHeader) && empty($hasSidebar)): ?>
 <footer class="site-footer">
   <div class="container">
     <div class="footer-row">
@@ -26,6 +27,7 @@
     </div>
   </div>
 </footer>
+<?php endif; ?>
 <script src="<?= defined('BASE_URL') ? BASE_URL : '' ?>/assets/js/main.js"></script>
 </body>
 </html>

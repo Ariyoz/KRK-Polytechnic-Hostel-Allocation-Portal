@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Hostel Application";
+$pageTitle = "My Hostel";
 require_once '../config/db.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!isset($_SESSION['student_id'])) { header("Location: login.php"); exit(); }
@@ -14,7 +14,7 @@ $student = $stmt->get_result()->fetch_assoc();
 if (!$student['school_fees_paid'])
     $error = 'Your school fees have not been verified yet. Visit the Registrar office to get verified before applying.';
 
-$appStmt = $conn->prepare("SELECT * FROM hostel_applications WHERE student_id=? AND status!='revoked' LIMIT 1");
+$appStmt = $conn->prepare("SELECT ha.*, hr.room_number, hr.block, hr.bed_space FROM hostel_applications ha LEFT JOIN hostel_rooms hr ON ha.room_id = hr.id WHERE ha.student_id=? AND ha.status!='revoked' LIMIT 1");
 $appStmt->bind_param("i",$sid); $appStmt->execute();
 $existing = $appStmt->get_result()->fetch_assoc();
 
@@ -42,92 +42,122 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && !$error && !$existing) {
         }
     }
 }
+$pageCss = ['student.css'];
 include '../includes/header.php';
 ?>
 
-<div class="dashboard-layout">
-  <?php include 'sidebar.php'; ?>
-  <main class="main-content">
+<?php include 'sidebar.php'; ?>
 
-    <div class="page-header">
-      <div class="page-header-left">
-        <h1><i class="fa fa-bed" style="color:var(--green-600);font-size:18px;margin-right:8px;"></i>Hostel Application</h1>
-        <p>Select an available room for the <?= htmlspecialchars($student['academic_session']) ?> session</p>
-      </div>
-    </div>
-
-    <?php if ($error): ?>
-    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i><?= $error ?></div>
-    <?php endif; ?>
-    <?php if ($success): ?>
-    <div class="alert alert-success"><i class="fa fa-check-circle"></i><?= $success ?></div>
-    <?php endif; ?>
-
-    <?php if ($existing && !$success): ?>
-    <div class="card" style="max-width:580px;">
-      <div class="card-header">
-        <div class="card-title"><i class="fa fa-info-circle"></i>Application Already Submitted</div>
-      </div>
-      <div class="card-body">
-        <p style="color:var(--n600);margin-bottom:16px;">
-          You have an active hostel application. Current status:
-          <span class="badge badge-<?= ['pending'=>'warning','granted'=>'success'][$existing['status']]??'secondary' ?>" style="margin-left:6px;"><?= ucfirst($existing['status']) ?></span>
-        </p>
-        <a href="dashboard.php" class="btn btn-primary btn-sm"><i class="fa fa-th-large"></i>Go to Dashboard</a>
-      </div>
-    </div>
-
-    <?php elseif (!$error): ?>
-
-    <!-- Availability badge -->
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:14px 18px;background:#fff;border-radius:var(--r-md);border:1px solid var(--n200);box-shadow:var(--sh-xs);">
-      <div style="width:36px;height:36px;border-radius:var(--r-sm);background:var(--green-50);color:var(--green-600);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">
-        <i class="fa fa-bed"></i>
-      </div>
-      <div id="roomAvailBadge" style="font-size:14px;color:var(--n500);">Checking available rooms…</div>
-    </div>
-
-    <div class="card" style="max-width:860px;">
-      <div class="card-header">
-        <div class="card-title"><i class="fa fa-list-ul"></i>Select Your Room</div>
-        <span style="font-size:12px;color:var(--n400);"><?= ucfirst($student['gender']) ?> rooms only</span>
-      </div>
-      <div class="card-body">
-        <?php if ($roomCount === 0): ?>
-        <div class="alert alert-warning" style="margin-bottom:0;"><i class="fa fa-exclamation-triangle"></i>No rooms are currently available for <?= ucfirst($student['gender']) ?> students. Please check back later.</div>
-        <?php else: ?>
-        <form method="POST" id="roomAppForm">
-          <div class="form-group">
-            <label>Available Rooms — <?= ucfirst($student['gender']) ?></label>
-            <!-- Room card picker -->
-            <div class="room-picker" id="roomPicker">
-              <?php
-              $availableRooms->data_seek(0);
-              while ($room = $availableRooms->fetch_assoc()): ?>
-              <label class="room-card-label">
-                <input type="radio" name="room_id" value="<?= $room['id'] ?>" required>
-                <div class="room-card">
-                  <div class="room-card-icon"><i class="fa fa-bed"></i></div>
-                  <div class="room-card-block">Block <strong><?= htmlspecialchars($room['block']) ?></strong></div>
-                  <div class="room-card-num">Room <?= htmlspecialchars($room['room_number']) ?></div>
-                  <div class="room-card-gender"><span class="badge badge-<?= $room['gender']==='male'?'info':'success' ?>"><?= ucfirst($room['gender']) ?></span></div>
-                </div>
-              </label>
-              <?php endwhile; ?>
-            </div>
-            <p class="form-hint"><i class="fa fa-info-circle"></i> Only <?= strtolower($student['gender']) ?> rooms are shown. Click a card to select.</p>
-          </div>
-          <button type="submit" class="btn btn-primary" onclick="return confirm('Submit hostel room application?')">
-            <i class="fa fa-check"></i> Submit Application
-          </button>
-        </form>
-        <?php endif; ?>
-      </div>
-    </div>
-    <?php endif; ?>
-
-  </main>
+<div class="page-head page-head-row">
+  <div>
+    <h1>My hostel</h1>
+    <p class="sub">KRK Hall &middot; <?= htmlspecialchars($student['academic_session']) ?> session</p>
+  </div>
+  <?php if ($existing && $existing['status']): $sc = ['pending'=>'warning','granted'=>'success'][$existing['status']] ?? 'neutral'; ?>
+  <span class="badge badge-<?= $sc ?>"><?= $existing['status']==='granted' ? ($existing['hostel_fee_paid']??false ? 'Confirmed' : 'Room granted') : ucfirst($existing['status']) ?></span>
+  <?php endif; ?>
 </div>
+
+<?php if ($error): ?>
+<div class="alert alert-danger mb-3"><svg class="alert-icon"><use href="#icon-alert"></use></svg><?= $error ?></div>
+<?php endif; ?>
+<?php if ($success): ?>
+<div class="alert alert-success mb-3"><svg class="alert-icon"><use href="#icon-check"></use></svg><?= $success ?></div>
+<?php endif; ?>
+
+<?php if ($existing && !$success): ?>
+
+  <?php if ($existing['status']==='granted'): ?>
+  <div class="alert alert-success mb-3">
+    <svg class="alert-icon"><use href="#icon-check"></use></svg>
+    <div>
+      <strong>Your room is active.</strong>
+      <p class="text-sm">The Dean of Student Affairs granted you Block <?= htmlspecialchars($existing['block']) ?> &middot; <?= htmlspecialchars($existing['room_number']) ?>. <?= $existing['hostel_fee_paid'] ? 'Your bed space is confirmed.' : 'Pay the hostel fee to confirm your bed space.' ?></p>
+    </div>
+  </div>
+  <?php else: ?>
+  <div class="alert alert-warning mb-3">
+    <svg class="alert-icon"><use href="#icon-clock"></use></svg>
+    <div>
+      <strong>Waiting for the Dean of Student Affairs.</strong>
+      <p class="text-sm">You applied for Block <?= htmlspecialchars($existing['block'] ?? '') ?> &middot; <?= htmlspecialchars($existing['room_number'] ?? '') ?>. We will email you once a room is granted.</p>
+    </div>
+  </div>
+  <?php endif; ?>
+
+  <div class="card">
+    <div class="card-head"><h3>Your room</h3></div>
+    <div class="info-tiles">
+      <div class="info-tile"><span class="tile-label">Hostel</span><span class="tile-value">KRK Hall</span></div>
+      <div class="info-tile"><span class="tile-label">Block</span><span class="tile-value">Block <?= htmlspecialchars($existing['block'] ?? '—') ?></span></div>
+      <div class="info-tile"><span class="tile-label">Room</span><span class="tile-value"><?= htmlspecialchars($existing['room_number'] ?? '—') ?></span></div>
+      <div class="info-tile"><span class="tile-label">Beds</span><span class="tile-value"><?= htmlspecialchars($existing['bed_space'] ?? '—') ?></span></div>
+    </div>
+
+    <h4 class="mt-5 mb-3">Checklist</h4>
+    <div class="kv">
+      <div class="kv-row"><span class="kv-label">Account activated</span><span class="kv-value"><?= $student['is_activated'] ? 'Done' : 'Pending' ?></span></div>
+      <div class="kv-row"><span class="kv-label">Minimum school fees</span><span class="kv-value"><?= $student['school_fees_paid'] ? 'Paid' : 'Not paid' ?></span></div>
+      <div class="kv-row"><span class="kv-label">Room granted by the DSA</span><span class="kv-value"><?= $existing['status']==='granted' && !empty($existing['updated_at']) ? date('d M Y', strtotime($existing['updated_at'])) : 'Pending' ?></span></div>
+      <div class="kv-row"><span class="kv-label">Hostel fee</span><span class="kv-value"><?= $existing['hostel_fee_paid'] ? 'Paid' : 'Not paid yet' ?></span></div>
+      <div class="kv-row"><span class="kv-label">Allocation slip</span><span class="kv-value"><?= $existing['hostel_fee_paid'] ? 'Ready' : 'After hostel fee' ?></span></div>
+    </div>
+
+    <?php if ($existing['status']==='granted' && !$existing['hostel_fee_paid']): ?>
+      <a href="payment.php" class="btn btn-dark mt-5">Pay hostel fee</a>
+    <?php elseif ($existing['hostel_fee_paid']): ?>
+      <a href="allocation_letter.php" class="btn btn-dark mt-5">View allocation slip</a>
+    <?php endif; ?>
+
+    <?php if ($existing['status']==='granted'): ?>
+      <p class="hint mt-4">Your preferred room can no longer be changed because a room has been granted.</p>
+    <?php endif; ?>
+  </div>
+
+<?php elseif (!$error): ?>
+
+  <p id="roomAvailBadge" class="avail-badge muted mb-4">Checking available rooms&hellip;</p>
+
+  <div class="card">
+    <div class="card-head">
+      <h3>Available rooms</h3>
+      <span class="text-sm muted"><?= ucfirst($student['gender']) ?> rooms only</span>
+    </div>
+
+    <?php if ($roomCount === 0): ?>
+    <div class="alert alert-warning">
+      <svg class="alert-icon"><use href="#icon-alert"></use></svg>
+      No rooms are currently available for <?= strtolower($student['gender']) ?> students. Please check back later.
+    </div>
+    <?php else: ?>
+    <form method="POST" id="roomAppForm">
+      <div class="room-grid">
+        <?php
+        $availableRooms->data_seek(0);
+        while ($room = $availableRooms->fetch_assoc()):
+        ?>
+        <label class="room-option">
+          <input type="radio" name="room_id" value="<?= $room['id'] ?>" required>
+          <div class="room-option-card">
+            <strong>Block <?= htmlspecialchars($room['block']) ?> &middot; <?= htmlspecialchars($room['room_number']) ?></strong>
+            <div class="beds">
+              <?php for ($b=0; $b<$room['bed_space']; $b++): ?><span class="bed bed-free"></span><?php endfor; ?>
+            </div>
+            <p class="text-sm muted"><?= $room['bed_space'] ?> of <?= $room['bed_space'] ?> beds free</p>
+          </div>
+        </label>
+        <?php endwhile; ?>
+      </div>
+      <p class="hint mt-4 mb-3">Only <?= strtolower($student['gender']) ?> rooms are shown. Click a card to select it, then submit.</p>
+      <button type="submit" class="btn btn-dark" onclick="return confirm('Submit hostel room application?')">Register for this room</button>
+    </form>
+    <?php endif; ?>
+  </div>
+<?php endif; ?>
+
+      </div><!-- /.portal-content -->
+    </div><!-- /.portal-main -->
+  </div><!-- /.portal -->
 
 <script>
 (function(){
@@ -139,9 +169,9 @@ include '../includes/header.php';
     .then(r=>r.json())
     .then(d=>{
       if(d.count>0){
-        badge.innerHTML='<strong style="color:var(--green-600)"><i class="fa fa-check-circle"></i> '+d.count+' room'+(d.count!==1?'s':'')+' available</strong><span style="color:var(--n400);margin-left:6px;">for '+gender+' students</span>';
+        badge.innerHTML='<span class="badge badge-success">'+d.count+' room'+(d.count!==1?'s':'')+' available</span><span>for '+gender+' students</span>';
       } else {
-        badge.innerHTML='<strong style="color:var(--danger)"><i class="fa fa-times-circle"></i> No rooms available</strong><span style="color:var(--n400);margin-left:6px;">for '+gender+' students at this time</span>';
+        badge.innerHTML='<span class="badge badge-danger">No rooms available</span><span>for '+gender+' students right now</span>';
       }
     }).catch(()=>{ badge.textContent=''; });
 })();

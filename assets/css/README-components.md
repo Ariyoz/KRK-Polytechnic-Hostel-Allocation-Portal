@@ -32,11 +32,15 @@ class already does; add a modifier class or a small rule in your own file.
 | Sidebar nav item | `.sidebar-nav a(.active) > svg.s-icon + text + .badge` |
 | Topbar user | `.portal-topbar-right > .icon-btn (bell) + .portal-user > .avatar + .portal-user-text` |
 | Sidebar mobile toggle | any element with `[data-sidebar-toggle]`; add a `.portal-overlay` div |
+| Filter row (admin lists) | `.filter-row > a(.is-active)` (bare tabs) or `.filter-row > a.btn...` (button tabs) + `.filter-spacer` |
+| Pagination | `.pager > a.btn...` |
+| Spacing utilities | `.mt-2/-3/-4/-5`, `.mb-0/-2/-3/-4/-5` |
+| Hide an element | `.is-hidden` (display:none), `.sprite` (for inline SVG symbol sprites) |
+| Narrow card | `.card.is-narrow` (max-width 520px) |
 
 Icons: inline SVG only (`<svg class="icon"><use href="#icon-x"/></svg>`,
-sprite is in header.php). Font Awesome is still loaded only because old
-pages hardcode `fa-*` classes — don't add new FA icons, add a `<symbol>`
-to the sprite instead.
+sprite is in header.php). No Font Awesome or any other icon font — add a
+`<symbol>` to the sprite instead.
 
 ## Anti-slop rules (non-negotiable)
 No gradient blobs/orbs/glassmorphism/backdrop-blur. No floating cards or

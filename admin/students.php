@@ -39,98 +39,96 @@ $sql = "
 ";
 $students = $conn->query($sql);
 
+$pageCss = ['admin.css'];
 include '../includes/header.php';
 ?>
 
-<div class="dashboard-layout">
-    <?php include 'sidebar.php'; ?>
+<?php include 'sidebar.php'; ?>
 
-    <main class="main-content">
-        <h2 class="page-title"><i class="fa fa-users"></i> Registered Students</h2>
-
-        <!-- Search -->
-        <form method="GET" class="search-bar" style="margin-bottom:20px;">
-            <div class="search-input-wrap">
-                <i class="fa fa-search"></i>
-                <input type="text" name="q" class="form-control"
-                       placeholder="Search by name, matric, email..." value="<?= htmlspecialchars($search) ?>">
-            </div>
-            <button type="submit" class="btn btn-primary">Search</button>
-            <?php if ($search): ?><a href="students.php" class="btn btn-light">Clear</a><?php endif; ?>
-        </form>
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title"><i class="fa fa-users"></i> Students List</div>
-                <span style="font-size:13px; color:var(--n500);">
-                    <?= $totalRows ?> student<?= $totalRows !== 1 ? 's' : '' ?>
-                </span>
-            </div>
-            <div class="card-body" style="padding:0;">
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Matric No.</th>
-                                <th>Name</th>
-                                <th>Gender</th>
-                                <th>Faculty</th>
-                                <th>Dept</th>
-                                <th>Level</th>
-                                <th>Email</th>
-                                <th>Activated</th>
-                                <th>Fees Paid</th>
-                                <th>View</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php $i = $offset + 1; while ($row = $students->fetch_assoc()): ?>
-                            <tr>
-                                <td><?= $i++ ?></td>
-                                <td><strong><?= htmlspecialchars($row['matric_number']) ?></strong></td>
-                                <td><?= htmlspecialchars($row['surname'] . ', ' . $row['firstname']) ?></td>
-                                <td><?= ucfirst($row['gender']) ?></td>
-                                <td style="font-size:12px;"><?= htmlspecialchars($row['faculty_name']) ?></td>
-                                <td style="font-size:12px;"><?= htmlspecialchars($row['dept_name']) ?></td>
-                                <td><?= htmlspecialchars($row['level']) ?></td>
-                                <td style="font-size:12px;"><?= htmlspecialchars($row['email']) ?></td>
-                                <td><?= $row['is_activated']
-                                    ? '<span class="badge badge-success">Yes</span>'
-                                    : '<span class="badge badge-danger">No</span>' ?></td>
-                                <td><?= $row['school_fees_paid']
-                                    ? '<span class="badge badge-success">Paid</span>'
-                                    : '<span class="badge badge-warning">Unpaid</span>' ?></td>
-                                <td>
-                                    <a href="student_detail.php?id=<?= $row['id'] ?>" class="btn btn-light btn-sm">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pagination -->
-        <?php if ($totalPages > 1): ?>
-        <div class="pagination" style="margin-top:20px;">
-            <?php if ($page > 1): ?>
-                <a href="?q=<?= urlencode($search) ?>&page=<?= $page-1 ?>" class="btn btn-light btn-sm">&laquo; Prev</a>
-            <?php endif; ?>
-            <?php for ($p = 1; $p <= $totalPages; $p++): ?>
-                <a href="?q=<?= urlencode($search) ?>&page=<?= $p ?>"
-                   class="btn btn-sm <?= $p === $page ? 'btn-primary' : 'btn-light' ?>"><?= $p ?></a>
-            <?php endfor; ?>
-            <?php if ($page < $totalPages): ?>
-                <a href="?q=<?= urlencode($search) ?>&page=<?= $page+1 ?>" class="btn btn-light btn-sm">Next &raquo;</a>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
-
-    </main>
+<div class="page-head">
+    <div class="eyebrow">Admin</div>
+    <h1>Registered students</h1>
+    <p class="sub">Search the student register and open a record for full detail.</p>
 </div>
+
+<form method="GET" class="search-row">
+    <input type="text" name="q" class="input" aria-label="Search students"
+           placeholder="Search by name, matric number, email&hellip;" value="<?= htmlspecialchars($search) ?>">
+    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+    <?php if ($search): ?><a href="students.php" class="btn btn-outline btn-sm">Clear</a><?php endif; ?>
+    <span class="count"><?= $totalRows ?> student<?= $totalRows !== 1 ? 's' : '' ?></span>
+</form>
+
+<div class="card">
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Matric no.</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Faculty</th>
+                    <th>Dept</th>
+                    <th>Level</th>
+                    <th>Email</th>
+                    <th>Activated</th>
+                    <th>Fees paid</th>
+                    <th>View</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php if ($totalRows === 0): ?>
+                <tr><td colspan="11">
+                    <div class="empty">
+                        <div class="empty-title">No students found</div>
+                        <p><?= $search ? 'No records match "' . htmlspecialchars($search) . '".' : 'No students have registered yet.' ?></p>
+                    </div>
+                </td></tr>
+            <?php endif; ?>
+            <?php $i = $offset + 1; while ($row = $students->fetch_assoc()): ?>
+                <tr>
+                    <td><?= $i++ ?></td>
+                    <td><strong><?= htmlspecialchars($row['matric_number']) ?></strong></td>
+                    <td><?= htmlspecialchars($row['surname'] . ', ' . $row['firstname']) ?></td>
+                    <td><?= ucfirst($row['gender']) ?></td>
+                    <td><?= htmlspecialchars($row['faculty_name']) ?></td>
+                    <td><?= htmlspecialchars($row['dept_name']) ?></td>
+                    <td><?= htmlspecialchars($row['level']) ?></td>
+                    <td><?= htmlspecialchars($row['email']) ?></td>
+                    <td><?= $row['is_activated']
+                        ? '<span class="badge badge-success">Yes</span>'
+                        : '<span class="badge badge-danger">No</span>' ?></td>
+                    <td><?= $row['school_fees_paid']
+                        ? '<span class="badge badge-success">Paid</span>'
+                        : '<span class="badge badge-warning">Unpaid</span>' ?></td>
+                    <td>
+                        <a href="student_detail.php?id=<?= $row['id'] ?>" class="btn btn-outline btn-sm">View</a>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<?php if ($totalPages > 1): ?>
+<div class="pager">
+    <?php if ($page > 1): ?>
+        <a href="?q=<?= urlencode($search) ?>&page=<?= $page-1 ?>" class="btn btn-outline btn-sm">&laquo; Prev</a>
+    <?php endif; ?>
+    <?php for ($p = 1; $p <= $totalPages; $p++): ?>
+        <a href="?q=<?= urlencode($search) ?>&page=<?= $p ?>"
+           class="btn btn-sm <?= $p === $page ? 'btn-primary' : 'btn-outline' ?>"><?= $p ?></a>
+    <?php endfor; ?>
+    <?php if ($page < $totalPages): ?>
+        <a href="?q=<?= urlencode($search) ?>&page=<?= $page+1 ?>" class="btn btn-outline btn-sm">Next &raquo;</a>
+    <?php endif; ?>
+</div>
+<?php endif; ?>
+
+    </div><!-- portal-content -->
+  </div><!-- portal-main -->
+</div><!-- portal -->
 
 <?php include '../includes/footer.php'; ?>

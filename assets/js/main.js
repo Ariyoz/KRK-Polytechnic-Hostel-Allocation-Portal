@@ -92,6 +92,6 @@ function togglePwd(id, btn) {
     if (!input) return;
     const show = input.type === 'password';
     input.type = show ? 'text' : 'password';
-    const icon = btn.querySelector('i');
-    if (icon) { icon.classList.toggle('fa-eye', !show); icon.classList.toggle('fa-eye-slash', show); }
+    btn.classList.toggle('is-shown', show);
+    btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
 }

@@ -34,15 +34,10 @@ if ($hasSidebar) $bodyClass .= ' has-sidebar';
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= isset($pageTitle) ? htmlspecialchars($pageTitle) . ' — ' : '' ?>KRK Polytechnic Hostel Portal</title>
 <meta name="base_url" content="<?= BASE_URL ?>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/app.css">
 <?php foreach ($pageCss as $cssFile): ?>
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/<?= htmlspecialchars($cssFile) ?>">
 <?php endforeach; ?>
-<!-- Font Awesome: several pages still reference fa-* icons directly; kept until those are migrated to inline SVG -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="<?= trim($bodyClass) ?>">
 
@@ -62,7 +57,7 @@ if ($hasSidebar) $bodyClass .= ' has-sidebar';
   <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
-<?php if (!$noHeader): ?>
+<?php if (!$noHeader && !$hasSidebar): ?>
 <header class="site-header">
   <div class="container site-header-inner">
 

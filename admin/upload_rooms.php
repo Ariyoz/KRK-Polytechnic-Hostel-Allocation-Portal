@@ -56,66 +56,90 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$roleLabel = ['dsa'=>'Dean of Student Affairs','registrar'=>'Registrar Office','ict'=>'ICT Department'][$_SESSION['admin_role'] ?? ''] ?? strtoupper($_SESSION['admin_role'] ?? '');
+$capacityPct = round(($totalRooms / 200) * 100);
+
+$pageCss = ['admin.css','admin-extra.css'];
 include '../includes/header.php';
 ?>
 
-<div class="dashboard-layout">
+<div class="portal">
     <?php include 'sidebar.php'; ?>
 
-    <main class="main-content">
-        <h2 class="page-title"><i class="fa fa-upload"></i> Upload / Add Hostel Rooms</h2>
+    <div class="portal-main">
+        <header class="portal-topbar">
+            <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-label="Toggle menu">
+                <svg class="icon"><use href="#icon-menu"></use></svg>
+            </button>
+            <span class="portal-topbar-session"><?= htmlspecialchars($roleLabel) ?></span>
+            <div class="portal-topbar-right">
+                <div class="portal-user">
+                    <div class="avatar"><?= htmlspecialchars(strtoupper(substr($_SESSION['admin_name'] ?? 'A', 0, 1))) ?></div>
+                    <div class="portal-user-text">
+                        <strong><?= htmlspecialchars($_SESSION['admin_name'] ?? 'Admin') ?></strong>
+                        <span><?= htmlspecialchars($roleLabel) ?></span>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-        <div class="alert alert-info">
-            <strong>Capacity:</strong> <?= $totalRooms ?>/200 rooms uploaded.
-            Remaining: <strong><?= $remaining ?></strong> bed space(s).
-        </div>
+        <div class="portal-content">
+            <div class="page-head">
+                <span class="eyebrow">Hostel management</span>
+                <h1>Add hostel rooms</h1>
+                <p class="sub">Generate a numbered block of rooms in one go, e.g. Block A, rooms 1–20.</p>
+            </div>
 
-        <?php if ($error): ?><div class="alert alert-danger"><?= $error ?></div><?php endif; ?>
-        <?php if ($success): ?><div class="alert alert-success"><?= $success ?></div><?php endif; ?>
+            <div class="card mb-5">
+                <p><strong><?= $totalRooms ?></strong> of 200 rooms on file &mdash; <strong><?= $remaining ?></strong> bed space<?= $remaining !== 1 ? 's' : '' ?> remaining.</p>
+                <div class="progress">
+                    <div class="progress-bar <?= $capacityPct > 90 ? 'is-danger' : ($capacityPct > 70 ? 'is-warning' : '') ?>" style="width:<?= $capacityPct ?>%;"></div>
+                </div>
+            </div>
 
-        <div class="card" style="max-width:500px;">
-            <div class="card-header">Add Room Block</div>
-            <div class="card-body">
+            <?php if ($error): ?><div class="alert alert-danger mb-4"><?= $error ?></div><?php endif; ?>
+            <?php if ($success): ?><div class="alert alert-success mb-4"><?= $success ?></div><?php endif; ?>
+
+            <div class="card is-narrow">
                 <form method="POST">
-                    <div class="form-group">
-                        <label>Block Name / Letter</label>
-                        <input type="text" name="block" class="form-control"
+                    <div class="field">
+                        <label class="label req">Block name / letter</label>
+                        <input type="text" name="block" class="input"
                                placeholder="e.g. A, B, C" maxlength="5"
                                value="<?= htmlspecialchars($_POST['block'] ?? '') ?>" required>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Starting Room Number</label>
-                            <input type="number" name="room_start" class="form-control"
+                    <div class="field-row">
+                        <div class="field">
+                            <label class="label req">Starting room number</label>
+                            <input type="number" name="room_start" class="input"
                                    placeholder="e.g. 1" min="1"
                                    value="<?= htmlspecialchars($_POST['room_start'] ?? '') ?>" required>
                         </div>
-                        <div class="form-group">
-                            <label>Number of Rooms to Add</label>
-                            <input type="number" name="room_count" class="form-control"
+                        <div class="field">
+                            <label class="label req">Number of rooms to add</label>
+                            <input type="number" name="room_count" class="input"
                                    placeholder="e.g. 10" min="1" max="<?= min(100, $remaining) ?>"
                                    value="<?= htmlspecialchars($_POST['room_count'] ?? '') ?>" required>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Gender</label>
-                        <select name="gender" class="form-control" required>
+                    <div class="field">
+                        <label class="label req">Gender</label>
+                        <select name="gender" class="select" required>
                             <option value="">-- Select --</option>
                             <option value="male"   <?= (($_POST['gender'] ?? '') === 'male')   ? 'selected' : '' ?>>Male</option>
                             <option value="female" <?= (($_POST['gender'] ?? '') === 'female') ? 'selected' : '' ?>>Female</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary" <?= $remaining <= 0 ? 'disabled' : '' ?>>
-                        <i class="fa fa-plus"></i> Add Rooms
-                    </button>
+                    <button type="submit" class="btn btn-primary" <?= $remaining <= 0 ? 'disabled' : '' ?>>Add rooms</button>
                 </form>
             </div>
-        </div>
 
-        <div style="margin-top:20px;">
-            <a href="rooms.php" class="btn btn-light"><i class="fa fa-list"></i> View All Rooms</a>
+            <p class="mt-4">
+                <a href="rooms.php" class="btn btn-outline btn-sm">View all rooms</a>
+            </p>
         </div>
-    </main>
+    </div>
+    <div class="portal-overlay"></div>
 </div>
 
 <?php include '../includes/footer.php'; ?>

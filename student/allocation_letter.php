@@ -29,151 +29,85 @@ $appStmt->bind_param("i", $sid);
 $appStmt->execute();
 $app = $appStmt->get_result()->fetch_assoc();
 
+$pageCss = ['student.css'];
 include '../includes/header.php';
 ?>
 
-<div class="dashboard-layout">
-    <?php include 'sidebar.php'; ?>
+<?php include 'sidebar.php'; ?>
 
-    <main class="main-content">
-        <h2 class="page-title"><i class="fa fa-file-alt"></i> Hostel Allocation Letter</h2>
-
-        <?php if (!$app): ?>
-            <div class="alert alert-warning">
-                <strong>Not Available:</strong> Your allocation letter is only available once your room has been granted
-                and your hostel fee payment confirmed.
-            </div>
-            <a href="dashboard.php" class="btn btn-primary">Back to Dashboard</a>
-        <?php else: ?>
-
-        <div style="margin-bottom:16px; display:flex; gap:10px; flex-wrap:wrap;">
-            <button class="btn btn-primary" onclick="window.print()">
-                <i class="fa fa-print"></i> Print Letter
-            </button>
-            <a href="dashboard.php" class="btn btn-light">
-                <i class="fa fa-arrow-left"></i> Back to Dashboard
-            </a>
-        </div>
-
-        <!-- Printable Letter -->
-        <div class="allocation-letter" id="allocationLetter">
-            <div class="letter-header">
-                <div class="letter-logo-area">
-                    <div class="letter-logo-circle">KRK</div>
-                </div>
-                <div class="letter-school-info">
-                    <h2>KRK POLYTECHNIC, LAGOS</h2>
-                    <p>Student Affairs Division &mdash; Hostel Allocation Unit</p>
-                    <p>Lagos, Nigeria &bull; hostelportal@krkpoly.edu.ng</p>
-                </div>
-            </div>
-
-            <hr class="letter-hr">
-
-            <div class="letter-title">
-                HOSTEL ROOM ALLOCATION LETTER
-                <div class="letter-subtitle">Academic Session: <?= htmlspecialchars($student['academic_session']) ?></div>
-            </div>
-
-            <div class="letter-meta">
-                <span>Ref: KRK/HOSTEL/<?= strtoupper(substr(md5($sid.$app['id']), 0, 8)) ?></span>
-                <span>Date: <?= date('d F Y') ?></span>
-            </div>
-
-            <div class="letter-address">
-                <p>To:</p>
-                <p><strong><?= htmlspecialchars(strtoupper($student['surname']) . ', ' . $student['firstname'] . ' ' . $student['othername']) ?></strong></p>
-                <p>Matric Number: <strong><?= htmlspecialchars($student['matric_number']) ?></strong></p>
-                <p><?= htmlspecialchars($student['faculty_name']) ?> &mdash; <?= htmlspecialchars($student['dept_name']) ?></p>
-            </div>
-
-            <div class="letter-body">
-                <p>Dear <strong><?= htmlspecialchars($student['firstname'] . ' ' . $student['surname']) ?></strong>,</p>
-
-                <p>
-                    Following your application for hostel accommodation for the
-                    <strong><?= htmlspecialchars($student['academic_session']) ?></strong> academic session,
-                    we are pleased to inform you that a room has been allocated to you in the KRK Polytechnic Student Hostel.
-                    Your hostel fee payment has also been received.
-                </p>
-
-                <table class="letter-table">
-                    <tr>
-                        <td>Student Name</td>
-                        <td><strong><?= htmlspecialchars($student['surname'] . ', ' . $student['firstname'] . ' ' . $student['othername']) ?></strong></td>
-                    </tr>
-                    <tr>
-                        <td>Matric Number</td>
-                        <td><strong><?= htmlspecialchars($student['matric_number']) ?></strong></td>
-                    </tr>
-                    <tr>
-                        <td>Faculty</td>
-                        <td><?= htmlspecialchars($student['faculty_name']) ?></td>
-                    </tr>
-                    <tr>
-                        <td>Department</td>
-                        <td><?= htmlspecialchars($student['dept_name']) ?></td>
-                    </tr>
-                    <tr>
-                        <td>Level</td>
-                        <td><?= htmlspecialchars($student['level']) ?></td>
-                    </tr>
-                    <tr>
-                        <td>Gender</td>
-                        <td><?= ucfirst($student['gender']) ?></td>
-                    </tr>
-                    <tr class="highlight-row">
-                        <td>Allocated Block</td>
-                        <td><strong>Block <?= htmlspecialchars($app['block']) ?></strong></td>
-                    </tr>
-                    <tr class="highlight-row">
-                        <td>Room Number</td>
-                        <td><strong><?= htmlspecialchars($app['room_number']) ?></strong></td>
-                    </tr>
-                    <tr>
-                        <td>Academic Session</td>
-                        <td><?= htmlspecialchars($student['academic_session']) ?></td>
-                    </tr>
-                    <tr>
-                        <td>Hostel Fee Status</td>
-                        <td><strong style="color:green;">PAID ✓</strong></td>
-                    </tr>
-                    <tr>
-                        <td>Date of Allocation</td>
-                        <td><?= date('d F Y', strtotime($app['updated_at'])) ?></td>
-                    </tr>
-                </table>
-
-                <p style="margin-top:20px;">
-                    Please present this letter along with a valid student ID at the hostel reception desk to collect your room key.
-                    Kindly note that this allocation is <strong>non-transferable</strong> and is valid for the academic
-                    session stated above only.
-                </p>
-
-                <p>Hostel rules and regulations will be provided at the reception. Any violation may lead to revocation of your
-                   accommodation without refund.</p>
-            </div>
-
-            <div class="letter-signature">
-                <div>
-                    <div class="sig-line"></div>
-                    <p><strong>Dean of Student Affairs (DSA)</strong></p>
-                    <p>KRK Polytechnic, Lagos</p>
-                </div>
-                <div>
-                    <div class="sig-line"></div>
-                    <p><strong>Student Signature / Acknowledgement</strong></p>
-                    <p>Date: __________________________</p>
-                </div>
-            </div>
-
-            <div class="letter-footer">
-                <em>This is a system-generated document. KRK Polytechnic &mdash; Hostel Allocation Portal &mdash; <?= date('Y') ?></em>
-            </div>
-        </div>
-
-        <?php endif; ?>
-    </main>
+<div class="page-head-row no-print mb-4">
+  <a href="dashboard.php" class="btn btn-outline btn-sm">&larr; Back to dashboard</a>
+  <?php if ($app): ?>
+  <button class="btn btn-dark btn-sm" onclick="window.print()">Print slip</button>
+  <?php endif; ?>
 </div>
 
+<?php if (!$app): ?>
+<div class="alert alert-warning mb-3">
+  <svg class="alert-icon"><use href="#icon-alert"></use></svg>
+  <div>
+    <strong>Not available yet.</strong>
+    <p class="text-sm">Your allocation slip unlocks once your room is granted and your hostel fee is paid.</p>
+  </div>
+</div>
+<a href="application.php" class="btn btn-dark">Go to my hostel</a>
+
+<?php else: ?>
+
+<div class="card slip" id="allocationLetter">
+  <div class="slip-head">
+    <div>
+      <h2>KRK Polytechnic, Lagos</h2>
+      <p class="text-sm muted">Office of the Dean of Student Affairs</p>
+      <span class="eyebrow mt-2">Hostel allocation slip &middot; <?= htmlspecialchars($student['academic_session']) ?></span>
+    </div>
+    <div class="slip-photo">Passport photo</div>
+  </div>
+
+  <hr>
+
+  <div class="info-tiles">
+    <div class="info-tile"><span class="tile-label">Hostel</span><span class="tile-value">KRK Hall</span></div>
+    <div class="info-tile"><span class="tile-label">Block</span><span class="tile-value">Block <?= htmlspecialchars($app['block']) ?></span></div>
+    <div class="info-tile"><span class="tile-label">Room</span><span class="tile-value"><?= htmlspecialchars($app['room_number']) ?></span></div>
+    <div class="info-tile"><span class="tile-label">Status</span><span class="tile-value is-positive">Confirmed</span></div>
+  </div>
+
+  <div class="kv-grid mt-5">
+    <div class="kv-grid-cell"><span class="kv-label">Name</span><span class="kv-value"><?= htmlspecialchars(strtoupper($student['surname']).', '.$student['firstname'].($student['othername']?' '.$student['othername']:'')) ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Matric number</span><span class="kv-value"><?= htmlspecialchars($student['matric_number']) ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Faculty</span><span class="kv-value"><?= htmlspecialchars($student['faculty_name']) ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Department</span><span class="kv-value"><?= htmlspecialchars($student['dept_name']) ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Level</span><span class="kv-value"><?= htmlspecialchars($student['level']) ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Gender</span><span class="kv-value"><?= ucfirst($student['gender']) ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Phone</span><span class="kv-value"><?= htmlspecialchars($student['phone']) ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Email</span><span class="kv-value"><?= htmlspecialchars($student['email']) ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Hostel fee</span><span class="kv-value">Paid &middot; Ref <?= htmlspecialchars($app['txn_ref'] ?: '—') ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Granted on</span><span class="kv-value"><?= date('d M Y', strtotime($app['updated_at'])) ?></span></div>
+  </div>
+
+  <h4 class="mt-5 mb-2">Conditions</h4>
+  <ol class="slip-conditions">
+    <li>Present this slip with your student ID card at the porter's lodge.</li>
+    <li>The allocation is personal and cannot be transferred or sold.</li>
+    <li>It may be revoked by the Dean of Student Affairs or the Registrar for breach of hostel rules.</li>
+  </ol>
+
+  <div class="slip-signatures">
+    <div><div class="sig-line"></div>Student's signature</div>
+    <div><div class="sig-line"></div>Hall warden</div>
+    <div><div class="sig-line"></div>Dean of Student Affairs</div>
+  </div>
+
+  <div class="slip-footer">
+    <span>Ref: KRK/HOSTEL/<?= strtoupper(substr(md5($sid.$app['id']), 0, 8)) ?></span>
+    <span>Generated <?= date('d M Y, g:i a') ?></span>
+  </div>
+</div>
+
+<?php endif; ?>
+
+      </div><!-- /.portal-content -->
+    </div><!-- /.portal-main -->
+  </div><!-- /.portal -->
 <?php include '../includes/footer.php'; ?>

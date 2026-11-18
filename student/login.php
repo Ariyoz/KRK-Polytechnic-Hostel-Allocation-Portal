@@ -21,105 +21,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else $error = 'Invalid email or password.';
     }
 }
+$pageCss  = ['auth.css'];
 $noHeader = true;
 include '../includes/header.php';
 ?>
 
-<div class="funaab-auth">
+<div class="auth-split">
 
-  <!-- ══ LEFT: School branding panel ══ -->
-  <div class="funaab-left">
-    <div class="funaab-left-bg"></div>
-    <div class="funaab-left-overlay"></div>
+  <div class="auth-split-panel">
+    <a href="<?= BASE_URL ?>/index.php" class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 46" aria-hidden="true">
+        <path d="M20 2 4 8v14c0 12 7 19 16 22 9-3 16-10 16-22V8Z" fill="#102a4a" stroke="#e8a317" stroke-width="2"/>
+        <path d="M13 24l7-6 7 6M15 22v8h10v-8" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand-text">
+        <strong>KRK Polytechnic, Lagos</strong>
+        <small>Hostel Allocation Portal</small>
+      </span>
+    </a>
 
-    <div class="funaab-left-inner">
+    <div>
+      <h1>Welcome back</h1>
+      <p>Log in to continue to your hostel portal &mdash; check your application, pay your fees and download your allocation slip.</p>
 
-      <!-- School identity — text only, no logo -->
-      <div class="funaab-school-id">
-        <div class="funaab-school-abbr">KRK</div>
-        <div class="funaab-school-name">KRK Polytechnic</div>
-        <div class="funaab-school-loc">Lagos, Nigeria</div>
-      </div>
-
-      <!-- Portal title -->
-      <div class="funaab-portal-title">
-        <h1>Hostel Management<br>Portal</h1>
-        <p>Secure &middot; Simple &middot; Efficient</p>
-      </div>
-
-      <!-- Feature bullets -->
-      <ul class="funaab-features">
-        <li><i class="fa fa-check-circle"></i> Real-time room allocation</li>
-        <li><i class="fa fa-check-circle"></i> Online hostel fee payment</li>
-        <li><i class="fa fa-check-circle"></i> Download allocation letter</li>
-        <li><i class="fa fa-check-circle"></i> Instant email notifications</li>
-      </ul>
-
-      <div class="funaab-left-footer">
-        &copy; <?= date('Y') ?> KRK Polytechnic &mdash; All rights reserved
+      <div class="role-list">
+        <div class="role-list-item"><span class="badge badge-neutral">Student</span> Dashboard, school fees, my hostel</div>
       </div>
     </div>
+
+    <p class="auth-foot-note">&copy; <?= date('Y') ?> KRK Polytechnic, Lagos</p>
   </div>
 
-  <!-- ══ RIGHT: Login form ══ -->
-  <div class="funaab-right">
-    <div class="funaab-form-wrap">
+  <div class="auth-split-main">
+    <div class="auth-split-card stack">
 
-      <!-- Back button -->
-      <a href="<?= BASE_URL ?>/index.php" class="funaab-back-btn">
-        <i class="fa fa-arrow-left"></i> Back to Home
-      </a>
-
-      <div class="funaab-form-header">
-        <h2>Welcome Back!</h2>
-        <p>Login to your student account</p>
+      <div>
+        <h2>Welcome back</h2>
+        <p class="muted">Log in to continue to your hostel portal.</p>
       </div>
 
-      <!-- Role tabs -->
-      <div class="funaab-role-tabs">
-        <a href="login.php" class="funaab-role-tab active">Student</a>
-        <a href="<?= BASE_URL ?>/admin/login.php" class="funaab-role-tab">Admin</a>
+      <div class="alert alert-info">
+        <span>Just activated your account? Log in with the email you registered with.</span>
       </div>
 
       <?php if ($error): ?>
-      <div class="funaab-alert funaab-alert-error">
-        <i class="fa fa-exclamation-circle"></i> <?= htmlspecialchars($error) ?>
+      <div class="alert alert-danger">
+        <span>
+          <?= htmlspecialchars($error) ?>
+          <?php if (strpos($error, 'not activated') !== false): ?>
+            <a href="resend_activation.php" class="sub-link">Resend link</a>
+          <?php endif; ?>
+        </span>
       </div>
       <?php endif; ?>
 
-      <form method="POST" class="funaab-form">
-        <div class="funaab-field">
-          <label for="email"><i class="fa fa-envelope"></i> Email Address</label>
-          <input type="email" id="email" name="email"
+      <form method="POST" class="stack">
+        <div class="field">
+          <label class="label" for="email">Email address</label>
+          <input class="input" type="email" id="email" name="email"
                  value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
                  placeholder="your@email.com" required autofocus autocomplete="email">
         </div>
 
-        <div class="funaab-field">
-          <div class="funaab-field-row">
-            <label for="loginPwd"><i class="fa fa-lock"></i> Password</label>
-            <a href="forgot_password.php" class="funaab-forgot">Forgot Password?</a>
+        <div class="field">
+          <div class="field-label-row">
+            <label class="label" for="loginPwd">Password</label>
+            <a href="forgot_password.php" class="sub-link">Forgot password?</a>
           </div>
-          <div class="funaab-pwd-wrap">
-            <input type="password" id="loginPwd" name="password"
-                   placeholder="Enter your password" required autocomplete="current-password">
-            <button type="button" onclick="togglePwd('loginPwd',this)" aria-label="Toggle">
-              <i class="fa fa-eye"></i>
+          <div class="pwd-field">
+            <input class="input" type="password" id="loginPwd" name="password"
+                   placeholder="Your password" required autocomplete="current-password">
+            <button type="button" class="pwd-toggle" onclick="togglePwd('loginPwd',this)" aria-label="Show password">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
             </button>
           </div>
         </div>
 
-        <div class="funaab-remember">
-          <label><input type="checkbox" name="remember"> Remember Me</label>
-        </div>
-
-        <button type="submit" class="funaab-submit-btn">
-          <i class="fa fa-sign-in-alt"></i> Login
-        </button>
+        <button type="submit" class="btn btn-dark btn-block">Log in</button>
       </form>
 
-      <p class="funaab-register-link">
-        Don't have an account? <a href="register.php">Register here</a>
+      <p class="text-sm muted">
+        Not registered for the hostel yet? <a href="register.php" class="sub-link">Start hostel registration</a>
       </p>
 
     </div>

@@ -108,50 +108,153 @@ if (isset($_GET['export'])) {
     exit;
 }
 
+$roleLabel = ['dsa'=>'Dean of Student Affairs','registrar'=>'Registrar Office','ict'=>'ICT Department'][$_SESSION['admin_role'] ?? ''] ?? strtoupper($_SESSION['admin_role'] ?? '');
+$totalApps = $pendingApps + $grantedApps + $revokedApps;
+$pct = function ($part, $whole) { return $whole ? round(($part / $whole) * 100) : 0; };
+
+$pageCss = ['admin.css','admin-extra.css'];
 include '../includes/header.php';
 ?>
 
-<div class="dashboard-layout">
+<div class="portal">
     <?php include 'sidebar.php'; ?>
 
-    <main class="main-content">
-        <h2 class="page-title"><i class="fa fa-chart-pie"></i> Reports &amp; Statistics</h2>
+    <div class="portal-main">
+        <header class="portal-topbar">
+            <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-label="Toggle menu">
+                <svg class="icon"><use href="#icon-menu"></use></svg>
+            </button>
+            <span class="portal-topbar-session"><?= htmlspecialchars($roleLabel) ?></span>
+            <div class="portal-topbar-right">
+                <div class="portal-user">
+                    <div class="avatar"><?= htmlspecialchars(strtoupper(substr($_SESSION['admin_name'] ?? 'A', 0, 1))) ?></div>
+                    <div class="portal-user-text">
+                        <strong><?= htmlspecialchars($_SESSION['admin_name'] ?? 'Admin') ?></strong>
+                        <span><?= htmlspecialchars($roleLabel) ?></span>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-        <!-- Export buttons -->
-        <div style="display:flex; gap:10px; margin-bottom:24px; flex-wrap:wrap;">
-            <a href="?export=students"     class="btn btn-light btn-sm"><i class="fa fa-download"></i> Export Students CSV</a>
-            <a href="?export=applications" class="btn btn-light btn-sm"><i class="fa fa-download"></i> Export Applications CSV</a>
-            <a href="?export=rooms"        class="btn btn-light btn-sm"><i class="fa fa-download"></i> Export Rooms CSV</a>
-        </div>
+        <div class="portal-content">
+            <div class="page-head page-head-row">
+                <div>
+                    <span class="eyebrow">Analytics</span>
+                    <h1>Reports &amp; statistics</h1>
+                    <p class="sub"><?= $totalStudents ?> registered students &middot; <?= $feePaidCount ?> fee-verified &middot; <?= $hostelFeePaid ?> hostel fee paid.</p>
+                </div>
+                <div class="filter-row mb-0">
+                    <a href="?export=students" class="btn btn-outline btn-sm">Export students CSV</a>
+                    <a href="?export=applications" class="btn btn-outline btn-sm">Export applications CSV</a>
+                    <a href="?export=rooms" class="btn btn-outline btn-sm">Export rooms CSV</a>
+                </div>
+            </div>
 
-        <!-- Summary cards -->
-        <div class="stats-grid" style="margin-bottom:30px;">
-            <div class="stat-card"><div class="stat-num"><?= $totalStudents ?></div><div class="stat-label">Total Students</div></div>
-            <div class="stat-card green"><div class="stat-num"><?= $feePaidCount ?></div><div class="stat-label">Fees Paid</div></div>
-            <div class="stat-card orange"><div class="stat-num"><?= $pendingApps ?></div><div class="stat-label">Pending Apps</div></div>
-            <div class="stat-card"><div class="stat-num"><?= $grantedApps ?></div><div class="stat-label">Granted</div></div>
-            <div class="stat-card red"><div class="stat-num"><?= $revokedApps ?></div><div class="stat-label">Revoked</div></div>
-            <div class="stat-card green"><div class="stat-num"><?= $hostelFeePaid ?></div><div class="stat-label">Hostel Fee Paid</div></div>
-            <div class="stat-card green"><div class="stat-num"><?= $availableRooms ?></div><div class="stat-label">Available Rooms</div></div>
-            <div class="stat-card red"><div class="stat-num"><?= $occupiedRooms ?></div><div class="stat-label">Occupied Rooms</div></div>
-        </div>
+            <div class="grid grid-2 mb-5">
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
+                <!-- Applications overview -->
+                <div class="card">
+                    <div class="card-head"><h3>Applications</h3><span class="text-sm muted"><?= $totalApps ?> total</span></div>
+                    <div class="bar-list">
+                        <div class="bar-row">
+                            <span class="bar-name">Pending</span>
+                            <div class="bar-track"><div class="bar-fill is-amber" style="width:<?= $pct($pendingApps, $totalApps) ?>%"></div></div>
+                            <span class="bar-count"><?= $pendingApps ?></span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-name">Granted</span>
+                            <div class="bar-track"><div class="bar-fill is-green" style="width:<?= $pct($grantedApps, $totalApps) ?>%"></div></div>
+                            <span class="bar-count"><?= $grantedApps ?></span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-name">Revoked</span>
+                            <div class="bar-track"><div class="bar-fill is-red" style="width:<?= $pct($revokedApps, $totalApps) ?>%"></div></div>
+                            <span class="bar-count"><?= $revokedApps ?></span>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- Gender breakdown -->
-            <div class="card">
-                <div class="card-header"><i class="fa fa-venus-mars"></i> Students by Gender</div>
-                <div class="card-body" style="padding:0;">
-                    <table>
-                        <thead><tr><th>Gender</th><th>Total</th><th>Fee Paid</th><th>Applied</th><th>Granted</th></tr></thead>
+                <!-- Rooms overview -->
+                <div class="card">
+                    <div class="card-head"><h3>Rooms</h3><span class="text-sm muted"><?= $totalRooms ?> total</span></div>
+                    <div class="bar-list">
+                        <div class="bar-row">
+                            <span class="bar-name">Available</span>
+                            <div class="bar-track"><div class="bar-fill is-green" style="width:<?= $pct($availableRooms, $totalRooms) ?>%"></div></div>
+                            <span class="bar-count"><?= $availableRooms ?></span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-name">Occupied</span>
+                            <div class="bar-track"><div class="bar-fill is-red" style="width:<?= $pct($occupiedRooms, $totalRooms) ?>%"></div></div>
+                            <span class="bar-count"><?= $occupiedRooms ?></span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-name">Maintenance</span>
+                            <div class="bar-track"><div class="bar-fill is-amber" style="width:<?= $pct($maintenanceRooms, $totalRooms) ?>%"></div></div>
+                            <span class="bar-count"><?= $maintenanceRooms ?></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="grid grid-2 mb-5">
+
+                <!-- Gender breakdown -->
+                <div class="card">
+                    <div class="card-head"><h3>Students by gender</h3></div>
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead><tr><th>Gender</th><th>Total</th><th>Fee paid</th><th>Applied</th><th>Granted</th></tr></thead>
+                            <tbody>
+                            <?php foreach ($genderStats as $g): ?>
+                            <tr>
+                                <td><?= ucfirst($g['gender']) ?></td>
+                                <td><?= $g['total'] ?></td>
+                                <td><?= $g['fee_paid'] ?></td>
+                                <td><?= $g['applied'] ?></td>
+                                <td><?= $g['granted'] ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Level breakdown -->
+                <div class="card">
+                    <div class="card-head"><h3>Students by level</h3></div>
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead><tr><th>Level</th><th>Total</th><th>Fee paid</th></tr></thead>
+                            <tbody>
+                            <?php foreach ($levelStats as $l): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($l['level']) ?></td>
+                                <td><?= $l['total'] ?></td>
+                                <td><?= $l['fee_paid'] ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Faculty breakdown -->
+            <div class="card report-section">
+                <div class="card-head"><h3>Students by faculty</h3></div>
+                <div class="table-wrap">
+                    <table class="table">
+                        <thead><tr><th>Faculty</th><th>Total students</th><th>Fee paid</th><th>Applied for hostel</th></tr></thead>
                         <tbody>
-                        <?php foreach ($genderStats as $g): ?>
+                        <?php foreach ($facultyStats as $f): ?>
                         <tr>
-                            <td><?= ucfirst($g['gender']) ?></td>
-                            <td><?= $g['total'] ?></td>
-                            <td><?= $g['fee_paid'] ?></td>
-                            <td><?= $g['applied'] ?></td>
-                            <td><?= $g['granted'] ?></td>
+                            <td><?= htmlspecialchars($f['faculty']) ?></td>
+                            <td><?= $f['total_students'] ?></td>
+                            <td><?= $f['fee_paid'] ?></td>
+                            <td><?= $f['applied'] ?></td>
                         </tr>
                         <?php endforeach; ?>
                         </tbody>
@@ -159,18 +262,28 @@ include '../includes/header.php';
                 </div>
             </div>
 
-            <!-- Level breakdown -->
+            <!-- Rooms by block -->
             <div class="card">
-                <div class="card-header"><i class="fa fa-layer-group"></i> Students by Level</div>
-                <div class="card-body" style="padding:0;">
-                    <table>
-                        <thead><tr><th>Level</th><th>Total</th><th>Fee Paid</th></tr></thead>
+                <div class="card-head"><h3>Rooms by block</h3></div>
+                <div class="table-wrap">
+                    <table class="table">
+                        <thead><tr><th>Block</th><th>Gender</th><th>Total</th><th>Available</th><th>Occupied</th><th>Maintenance</th><th>Occupancy</th></tr></thead>
                         <tbody>
-                        <?php foreach ($levelStats as $l): ?>
+                        <?php foreach ($blockStats as $bs): ?>
                         <tr>
-                            <td><?= htmlspecialchars($l['level']) ?></td>
-                            <td><?= $l['total'] ?></td>
-                            <td><?= $l['fee_paid'] ?></td>
+                            <td><strong>Block <?= htmlspecialchars($bs['block']) ?></strong></td>
+                            <td><?= ucfirst($bs['gender']) ?></td>
+                            <td><?= $bs['total'] ?></td>
+                            <td><span class="badge badge-success"><?= $bs['available'] ?></span></td>
+                            <td><span class="badge badge-danger"><?= $bs['occupied'] ?></span></td>
+                            <td><span class="badge badge-warning"><?= $bs['maintenance'] ?></span></td>
+                            <td>
+                                <?php $occPct = $pct($bs['occupied'], $bs['total']); ?>
+                                <div class="progress">
+                                    <div class="progress-bar <?= $occPct > 80 ? 'is-danger' : '' ?>" style="width:<?= $occPct ?>%;"></div>
+                                </div>
+                                <span class="text-sm muted"><?= $occPct ?>%</span>
+                            </td>
                         </tr>
                         <?php endforeach; ?>
                         </tbody>
@@ -179,57 +292,8 @@ include '../includes/header.php';
             </div>
 
         </div>
-
-        <!-- Faculty breakdown -->
-        <div class="card" style="margin-bottom:24px;">
-            <div class="card-header"><i class="fa fa-university"></i> Students by Faculty</div>
-            <div class="card-body" style="padding:0;">
-                <table>
-                    <thead><tr><th>Faculty</th><th>Total Students</th><th>Fee Paid</th><th>Applied for Hostel</th></tr></thead>
-                    <tbody>
-                    <?php foreach ($facultyStats as $f): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($f['faculty']) ?></td>
-                        <td><?= $f['total_students'] ?></td>
-                        <td><?= $f['fee_paid'] ?></td>
-                        <td><?= $f['applied'] ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Rooms by block -->
-        <div class="card">
-            <div class="card-header"><i class="fa fa-building"></i> Rooms by Block</div>
-            <div class="card-body" style="padding:0;">
-                <table>
-                    <thead><tr><th>Block</th><th>Gender</th><th>Total</th><th>Available</th><th>Occupied</th><th>Maintenance</th><th>Occupancy %</th></tr></thead>
-                    <tbody>
-                    <?php foreach ($blockStats as $bs): ?>
-                    <tr>
-                        <td><strong>Block <?= htmlspecialchars($bs['block']) ?></strong></td>
-                        <td><?= ucfirst($bs['gender']) ?></td>
-                        <td><?= $bs['total'] ?></td>
-                        <td><span class="badge badge-success"><?= $bs['available'] ?></span></td>
-                        <td><span class="badge badge-danger"><?= $bs['occupied'] ?></span></td>
-                        <td><span class="badge badge-warning"><?= $bs['maintenance'] ?></span></td>
-                        <td>
-                            <?php $pct = $bs['total'] ? round($bs['occupied']/$bs['total']*100) : 0; ?>
-                            <div class="progress-bar-wrap" style="min-width:80px;">
-                                <div class="progress-bar-fill" style="width:<?= $pct ?>%; background:<?= $pct > 80 ? 'var(--danger)' : 'var(--success)' ?>;"></div>
-                            </div>
-                            <small><?= $pct ?>%</small>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </main>
+    </div>
+    <div class="portal-overlay"></div>
 </div>
 
 <?php include '../includes/footer.php'; ?>

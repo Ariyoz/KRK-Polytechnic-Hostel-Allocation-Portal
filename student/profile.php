@@ -33,98 +33,89 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     // Refresh
     $stmt->execute(); $student=$stmt->get_result()->fetch_assoc();
 }
+$pageCss = ['student.css'];
 include '../includes/header.php';
 ?>
 
-<div class="dashboard-layout">
-  <?php include 'sidebar.php'; ?>
-  <main class="main-content">
+<?php include 'sidebar.php'; ?>
 
-    <div class="page-header">
-      <div class="page-header-left">
-        <h1><i class="fa fa-user-cog" style="color:var(--green-600);font-size:18px;margin-right:8px;"></i>My Profile</h1>
-        <p>Manage your account details and password</p>
-      </div>
-    </div>
-
-    <?php if ($error): ?><div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i><?= htmlspecialchars($error) ?></div><?php endif; ?>
-    <?php if ($success): ?><div class="alert alert-success"><i class="fa fa-check-circle"></i><?= htmlspecialchars($success) ?></div><?php endif; ?>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:900px;">
-
-      <!-- Account info -->
-      <div class="card">
-        <div class="card-header"><div class="card-title"><i class="fa fa-id-card"></i>Account Information</div></div>
-        <div class="card-body">
-          <div style="display:flex;align-items:center;gap:16px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--n100);">
-            <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--green-700),var(--green-500));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;flex-shrink:0;">
-              <?= strtoupper(substr($student['firstname'],0,1)) ?>
-            </div>
-            <div>
-              <div style="font-size:17px;font-weight:700;color:var(--n900);"><?= htmlspecialchars($student['surname'].', '.$student['firstname']) ?></div>
-              <div style="font-size:13px;color:var(--n500);"><?= htmlspecialchars($student['matric_number']) ?></div>
-            </div>
-          </div>
-          <table class="detail-table">
-            <tr><td>Faculty</td><td><?= htmlspecialchars($student['faculty_name']) ?></td></tr>
-            <tr><td>Department</td><td><?= htmlspecialchars($student['dept_name']) ?></td></tr>
-            <tr><td>Level</td><td><?= htmlspecialchars($student['level']) ?></td></tr>
-            <tr><td>Gender</td><td><?= ucfirst($student['gender']) ?></td></tr>
-            <tr><td>Email</td><td style="font-size:12.5px;"><?= htmlspecialchars($student['email']) ?></td></tr>
-            <tr><td>Session</td><td><?= htmlspecialchars($student['academic_session']) ?></td></tr>
-          </table>
-        </div>
-      </div>
-
-      <!-- Edit form -->
-      <div class="card">
-        <div class="card-header"><div class="card-title"><i class="fa fa-edit"></i>Edit Details</div></div>
-        <div class="card-body">
-          <form method="POST">
-            <div class="form-row">
-              <div class="form-group">
-                <label>Surname</label>
-                <input type="text" class="form-control" value="<?= htmlspecialchars($student['surname']) ?>" readonly>
-              </div>
-              <div class="form-group">
-                <label>First Name</label>
-                <input type="text" class="form-control" value="<?= htmlspecialchars($student['firstname']) ?>" readonly>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Phone Number</label>
-              <input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($student['phone']) ?>" placeholder="08012345678">
-            </div>
-            <div style="border-top:1px solid var(--n100);padding-top:18px;margin-top:4px;margin-bottom:18px;">
-              <div style="font-size:13px;font-weight:700;color:var(--n700);margin-bottom:14px;">Change Password <span style="font-weight:400;color:var(--n400);">(optional)</span></div>
-              <div class="form-group">
-                <label>Current Password</label>
-                <div class="input-pwd-wrap">
-                  <input type="password" name="current_password" id="curPwd" class="form-control" placeholder="Enter current password" autocomplete="current-password">
-                  <button type="button" class="pwd-toggle" onclick="togglePwd('curPwd',this)" aria-label="Show/hide"><i class="fa fa-eye"></i></button>
-                </div>
-              </div>
-              <div class="form-group">
-                <label>New Password</label>
-                <div class="input-pwd-wrap">
-                  <input type="password" name="new_password" id="newPwd" class="form-control" placeholder="Leave blank to keep current" autocomplete="new-password">
-                  <button type="button" class="pwd-toggle" onclick="togglePwd('newPwd',this)" aria-label="Show/hide"><i class="fa fa-eye"></i></button>
-                </div>
-              </div>
-              <div class="form-group">
-                <label>Confirm New Password</label>
-                <div class="input-pwd-wrap">
-                  <input type="password" name="confirm_new_password" id="cfmPwd" class="form-control" placeholder="Repeat new password" autocomplete="new-password">
-                  <button type="button" class="pwd-toggle" onclick="togglePwd('cfmPwd',this)" aria-label="Show/hide"><i class="fa fa-eye"></i></button>
-                </div>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-save"></i>Save Changes</button>
-          </form>
-        </div>
-      </div>
-    </div>
-
-  </main>
+<div class="page-head">
+  <h1>Profile</h1>
+  <p class="sub">Your account details and password</p>
 </div>
+
+<?php if ($error): ?><div class="alert alert-danger mb-3"><svg class="alert-icon"><use href="#icon-alert"></use></svg><?= htmlspecialchars($error) ?></div><?php endif; ?>
+<?php if ($success): ?><div class="alert alert-success mb-3"><svg class="alert-icon"><use href="#icon-check"></use></svg><?= htmlspecialchars($success) ?></div><?php endif; ?>
+
+<div class="grid grid-2">
+  <div class="card">
+    <div class="card-head"><h3>Account</h3></div>
+    <div class="profile-head">
+      <div class="avatar avatar-lg"><?= strtoupper(substr($student['firstname'],0,1)) ?></div>
+      <div>
+        <strong><?= htmlspecialchars($student['surname'].', '.$student['firstname']) ?></strong>
+        <div class="text-sm muted"><?= htmlspecialchars($student['matric_number']) ?></div>
+      </div>
+    </div>
+    <div class="kv">
+      <div class="kv-row"><span class="kv-label">Faculty</span><span class="kv-value"><?= htmlspecialchars($student['faculty_name']) ?></span></div>
+      <div class="kv-row"><span class="kv-label">Department</span><span class="kv-value"><?= htmlspecialchars($student['dept_name']) ?></span></div>
+      <div class="kv-row"><span class="kv-label">Level</span><span class="kv-value"><?= htmlspecialchars($student['level']) ?></span></div>
+      <div class="kv-row"><span class="kv-label">Gender</span><span class="kv-value"><?= ucfirst($student['gender']) ?></span></div>
+      <div class="kv-row"><span class="kv-label">Email</span><span class="kv-value"><?= htmlspecialchars($student['email']) ?></span></div>
+      <div class="kv-row"><span class="kv-label">Session</span><span class="kv-value"><?= htmlspecialchars($student['academic_session']) ?></span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h3>Edit details</h3></div>
+    <form method="POST">
+      <div class="field-row">
+        <div class="field">
+          <label class="label">Surname</label>
+          <input type="text" class="input" value="<?= htmlspecialchars($student['surname']) ?>" readonly>
+        </div>
+        <div class="field">
+          <label class="label">First name</label>
+          <input type="text" class="input" value="<?= htmlspecialchars($student['firstname']) ?>" readonly>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Phone number</label>
+        <input type="tel" name="phone" class="input" value="<?= htmlspecialchars($student['phone']) ?>" placeholder="08012345678">
+      </div>
+
+      <fieldset class="field-group">
+        <legend>Change password <span class="legend-note">(optional)</span></legend>
+        <div class="field">
+          <label class="label">Current password</label>
+          <div class="pwd-field">
+            <input type="password" name="current_password" id="curPwd" class="input" placeholder="Enter current password" autocomplete="current-password">
+            <button type="button" class="pwd-toggle" onclick="togglePwd('curPwd',this)" aria-label="Show password"><svg class="icon"><use href="#icon-eye"></use></svg></button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">New password</label>
+          <div class="pwd-field">
+            <input type="password" name="new_password" id="newPwd" class="input" placeholder="Leave blank to keep current" autocomplete="new-password">
+            <button type="button" class="pwd-toggle" onclick="togglePwd('newPwd',this)" aria-label="Show password"><svg class="icon"><use href="#icon-eye"></use></svg></button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Confirm new password</label>
+          <div class="pwd-field">
+            <input type="password" name="confirm_new_password" id="cfmPwd" class="input" placeholder="Repeat new password" autocomplete="new-password">
+            <button type="button" class="pwd-toggle" onclick="togglePwd('cfmPwd',this)" aria-label="Show password"><svg class="icon"><use href="#icon-eye"></use></svg></button>
+          </div>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="btn btn-primary btn-block">Save changes</button>
+    </form>
+  </div>
+</div>
+
+      </div><!-- /.portal-content -->
+    </div><!-- /.portal-main -->
+  </div><!-- /.portal -->
 <?php include '../includes/footer.php'; ?>

@@ -73,7 +73,13 @@ hostel_portal/
 │   └── footer.php             ← Global footer + JS
 │
 ├── assets/
-│   ├── css/style.css           ← All styles (custom, no Bootstrap)
+│   ├── css/app.css             ← Shared styles (vars, layout, components)
+│   ├── css/public.css          ← Landing page
+│   ├── css/auth.css            ← Login / register / password pages
+│   ├── css/student.css         ← Student portal pages
+│   ├── css/admin.css           ← Admin portal shell + shared admin pages
+│   ├── css/admin-extra.css     ← Rooms / fees / reports / settings pages
+│   ├── fonts/                  ← Self-hosted Inter & Space Grotesk (woff2)
 │   ├── js/main.js
 │   └── images/
 │
