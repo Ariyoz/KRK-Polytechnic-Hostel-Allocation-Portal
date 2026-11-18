@@ -88,170 +88,127 @@ $occupiedRooms    = $conn->query("SELECT COUNT(*) as c FROM hostel_rooms WHERE s
 $totalRooms       = $conn->query("SELECT COUNT(*) as c FROM hostel_rooms")->fetch_assoc()['c'];
 $feePaidHostel    = $conn->query("SELECT COUNT(*) as c FROM hostel_applications WHERE hostel_fee_paid=1")->fetch_assoc()['c'];
 
+$pageCss = ['admin.css'];
 include '../includes/header.php';
 ?>
 
-<div class="dashboard-layout">
-    <?php include 'sidebar.php'; ?>
+<?php include 'sidebar.php'; ?>
 
-    <main class="main-content">
-        <!-- Page Header -->
-        <div class="page-header">
-            <div class="page-header-left">
-                <h1>Dashboard</h1>
-                <p>Welcome back, <strong><?= htmlspecialchars($_SESSION['admin_name']) ?></strong> &mdash; <?= htmlspecialchars(strtoupper($_SESSION['admin_role'])) ?></p>
-            </div>
-            <div style="display:flex;gap:8px;">
-                <a href="applications.php?status=pending" class="btn btn-primary btn-sm">
-                    <i class="fa fa-clipboard-list"></i> <?= $pendingApps ?> Pending
-                </a>
-            </div>
-        </div>
-
-        <?php if ($message): ?>
-            <div class="alert alert-<?= $msgType ?>"><?= $message ?></div>
-        <?php endif; ?>
-
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card blue">
-                <div class="stat-icon"><i class="fa fa-users"></i></div>
-                <div class="stat-num"><?= $totalStudents ?></div>
-                <div class="stat-label">Registered Students</div>
-            </div>
-            <div class="stat-card green">
-                <div class="stat-icon"><i class="fa fa-user-check"></i></div>
-                <div class="stat-num"><?= $activatedStudents ?></div>
-                <div class="stat-label">Activated Accounts</div>
-            </div>
-            <div class="stat-card green">
-                <div class="stat-icon"><i class="fa fa-money-bill-wave"></i></div>
-                <div class="stat-num"><?= $feePaidStudents ?></div>
-                <div class="stat-label">School Fees Paid</div>
-            </div>
-            <div class="stat-card orange">
-                <div class="stat-icon"><i class="fa fa-clock"></i></div>
-                <div class="stat-num"><?= $pendingApps ?></div>
-                <div class="stat-label">Pending Applications</div>
-            </div>
-            <div class="stat-card blue">
-                <div class="stat-icon"><i class="fa fa-check-circle"></i></div>
-                <div class="stat-num"><?= $grantedApps ?></div>
-                <div class="stat-label">Rooms Granted</div>
-            </div>
-            <div class="stat-card red">
-                <div class="stat-icon"><i class="fa fa-times-circle"></i></div>
-                <div class="stat-num"><?= $revokedApps ?></div>
-                <div class="stat-label">Revoked</div>
-            </div>
-            <div class="stat-card green">
-                <div class="stat-icon"><i class="fa fa-door-open"></i></div>
-                <div class="stat-num"><?= $availableRooms ?></div>
-                <div class="stat-label">Available Rooms</div>
-            </div>
-            <div class="stat-card red">
-                <div class="stat-icon"><i class="fa fa-bed"></i></div>
-                <div class="stat-num"><?= $occupiedRooms ?></div>
-                <div class="stat-label">Occupied Rooms</div>
-            </div>
-        </div>
-
-        <!-- Occupancy Overview -->
-        <div class="card" style="margin-bottom:24px;">
-            <div class="card-header">
-                <div class="card-title"><i class="fa fa-chart-bar"></i> Occupancy Overview</div>
-                <a href="reports.php" class="card-header-action">Full Report →</a>
-            </div>
-            <div class="card-body">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;">
-                    <div class="progress-wrap">
-                        <div class="progress-label"><span>Room Capacity</span><span><?= $totalRooms ?>/200</span></div>
-                        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:<?= min(100,round($totalRooms/200*100)) ?>%;background:var(--p600);"></div></div>
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-label"><span>Rooms Occupied</span><span><?= $occupiedRooms ?>/<?= max(1,$totalRooms) ?></span></div>
-                        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:<?= $totalRooms ? min(100,round($occupiedRooms/$totalRooms*100)) : 0 ?>%;background:var(--danger);"></div></div>
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-label"><span>Hostel Fees Collected</span><span><?= $feePaidHostel ?>/<?= max(1,$grantedApps) ?></span></div>
-                        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:<?= $grantedApps ? min(100,round($feePaidHostel/$grantedApps*100)) : 0 ?>%;background:var(--success);"></div></div>
-                    </div>
-                    <div class="progress-wrap">
-                        <div class="progress-label"><span>Fee-Eligible Students</span><span><?= $feePaidStudents ?>/<?= max(1,$totalStudents) ?></span></div>
-                        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:<?= $totalStudents ? min(100,round($feePaidStudents/$totalStudents*100)) : 0 ?>%;background:var(--g400);"></div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recent Applications -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title"><i class="fa fa-clipboard-list"></i> Recent Applications</div>
-                <a href="applications.php" class="card-header-action">View All &rarr;</a>
-            </div>
-            <div class="card-body" style="padding:0;">
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Student</th>
-                                <th>Matric No.</th>
-                                <th>Room</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        $recent = $conn->query("
-                            SELECT ha.id, s.surname, s.firstname, s.matric_number,
-                                   hr.room_number, hr.block, ha.status, ha.applied_at
-                            FROM hostel_applications ha
-                            JOIN students s ON ha.student_id = s.id
-                            LEFT JOIN hostel_rooms hr ON ha.room_id = hr.id
-                            ORDER BY ha.applied_at DESC LIMIT 10
-                        ");
-                        $i = 1;
-                        while ($row = $recent->fetch_assoc()):
-                            $b = ['pending'=>'warning','granted'=>'success','revoked'=>'danger'][$row['status']] ?? 'secondary';
-                        ?>
-                            <tr>
-                                <td><?= $i++ ?></td>
-                                <td><?= htmlspecialchars($row['surname'] . ', ' . $row['firstname']) ?></td>
-                                <td><?= htmlspecialchars($row['matric_number']) ?></td>
-                                <td><?= $row['room_number'] ? 'Blk '.$row['block'].' Rm '.$row['room_number'] : '&mdash;' ?></td>
-                                <td><span class="badge badge-<?= $b ?>"><?= ucfirst($row['status']) ?></span></td>
-                                <td><?= date('d M Y', strtotime($row['applied_at'])) ?></td>
-                                <td style="white-space:nowrap;">
-                                    <?php if ($row['status'] !== 'granted'): ?>
-                                    <form method="POST" style="display:inline;" onsubmit="return confirm('Grant room to <?= htmlspecialchars(addslashes($row['firstname'])) ?>?');">
-                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
-                                        <input type="hidden" name="action" value="grant">
-                                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                        <button type="submit" class="btn btn-success btn-sm">Grant</button>
-                                    </form>
-                                    <?php endif; ?>
-                                    <?php if ($row['status'] !== 'revoked'): ?>
-                                    <form method="POST" style="display:inline;" onsubmit="return confirm('Revoke room for <?= htmlspecialchars(addslashes($row['firstname'])) ?>?');">
-                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
-                                        <input type="hidden" name="action" value="revoke">
-                                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm">Revoke</button>
-                                    </form>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-    </main>
+<div class="page-head page-head-row">
+    <div>
+        <div class="eyebrow">Admin</div>
+        <h1>Dashboard</h1>
+        <p class="sub">Welcome back, <strong><?= htmlspecialchars($_SESSION['admin_name']) ?></strong> &mdash; <?= htmlspecialchars(strtoupper($_SESSION['admin_role'])) ?></p>
+    </div>
+    <a href="applications.php?status=pending" class="btn btn-primary btn-sm"><?= $pendingApps ?> pending application<?= $pendingApps !== 1 ? 's' : '' ?></a>
 </div>
+
+<?php if ($message): ?>
+    <div class="alert alert-<?= $msgType ?>"><?= $message ?></div>
+<?php endif; ?>
+
+<div class="kv-grid cols-4 mb-5">
+    <div class="kv-grid-cell"><span class="kv-label">Registered students</span><span class="kv-value"><?= $totalStudents ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Activated accounts</span><span class="kv-value"><?= $activatedStudents ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">School fees paid</span><span class="kv-value"><?= $feePaidStudents ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Pending applications</span><span class="kv-value"><?= $pendingApps ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Rooms granted</span><span class="kv-value"><?= $grantedApps ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Revoked</span><span class="kv-value"><?= $revokedApps ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Available rooms</span><span class="kv-value"><?= $availableRooms ?></span></div>
+    <div class="kv-grid-cell"><span class="kv-label">Occupied rooms</span><span class="kv-value"><?= $occupiedRooms ?></span></div>
+</div>
+
+<div class="card mb-5">
+    <div class="card-head">
+        <h3>Occupancy overview</h3>
+        <a href="reports.php" class="card-action">Full report</a>
+    </div>
+    <div class="progress-row">
+        <div class="progress-row-label"><span>Room capacity</span><strong><?= $totalRooms ?>/200</strong></div>
+        <div class="progress"><div class="progress-bar" style="width:<?= min(100, round($totalRooms / 200 * 100)) ?>%"></div></div>
+    </div>
+    <div class="progress-row">
+        <div class="progress-row-label"><span>Rooms occupied</span><strong><?= $occupiedRooms ?>/<?= max(1, $totalRooms) ?></strong></div>
+        <div class="progress"><div class="progress-bar is-danger" style="width:<?= $totalRooms ? min(100, round($occupiedRooms / $totalRooms * 100)) : 0 ?>%"></div></div>
+    </div>
+    <div class="progress-row">
+        <div class="progress-row-label"><span>Hostel fees collected</span><strong><?= $feePaidHostel ?>/<?= max(1, $grantedApps) ?></strong></div>
+        <div class="progress"><div class="progress-bar" style="width:<?= $grantedApps ? min(100, round($feePaidHostel / $grantedApps * 100)) : 0 ?>%"></div></div>
+    </div>
+    <div class="progress-row">
+        <div class="progress-row-label"><span>Fee-eligible students</span><strong><?= $feePaidStudents ?>/<?= max(1, $totalStudents) ?></strong></div>
+        <div class="progress"><div class="progress-bar is-warning" style="width:<?= $totalStudents ? min(100, round($feePaidStudents / $totalStudents * 100)) : 0 ?>%"></div></div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-head">
+        <h3>Recent applications</h3>
+        <a href="applications.php" class="card-action">View all</a>
+    </div>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Student</th>
+                    <th>Matric no.</th>
+                    <th>Room</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            $recent = $conn->query("
+                SELECT ha.id, s.surname, s.firstname, s.matric_number,
+                       hr.room_number, hr.block, ha.status, ha.applied_at
+                FROM hostel_applications ha
+                JOIN students s ON ha.student_id = s.id
+                LEFT JOIN hostel_rooms hr ON ha.room_id = hr.id
+                ORDER BY ha.applied_at DESC LIMIT 10
+            ");
+            $i = 1;
+            while ($row = $recent->fetch_assoc()):
+                $b = ['pending'=>'warning','granted'=>'success','revoked'=>'danger'][$row['status']] ?? 'neutral';
+            ?>
+                <tr>
+                    <td><?= $i++ ?></td>
+                    <td><?= htmlspecialchars($row['surname'] . ', ' . $row['firstname']) ?></td>
+                    <td><?= htmlspecialchars($row['matric_number']) ?></td>
+                    <td><?= $row['room_number'] ? 'Blk '.htmlspecialchars($row['block']).' Rm '.htmlspecialchars($row['room_number']) : '&mdash;' ?></td>
+                    <td><span class="badge badge-<?= $b ?>"><?= ucfirst($row['status']) ?></span></td>
+                    <td><?= date('d M Y', strtotime($row['applied_at'])) ?></td>
+                    <td>
+                        <div class="row-actions">
+                        <?php if ($row['status'] !== 'granted'): ?>
+                        <form method="POST" onsubmit="return confirm('Grant room to <?= htmlspecialchars(addslashes($row['firstname'])) ?>?');">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
+                            <input type="hidden" name="action" value="grant">
+                            <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                            <button type="submit" class="btn btn-success btn-sm">Grant</button>
+                        </form>
+                        <?php endif; ?>
+                        <?php if ($row['status'] !== 'revoked'): ?>
+                        <form method="POST" onsubmit="return confirm('Revoke room for <?= htmlspecialchars(addslashes($row['firstname'])) ?>?');">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
+                            <input type="hidden" name="action" value="revoke">
+                            <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                            <button type="submit" class="btn btn-danger btn-sm">Revoke</button>
+                        </form>
+                        <?php endif; ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    </div><!-- portal-content -->
+  </div><!-- portal-main -->
+</div><!-- portal -->
 
 <?php include '../includes/footer.php'; ?>

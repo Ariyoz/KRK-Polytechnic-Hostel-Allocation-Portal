@@ -114,119 +114,125 @@ $sql = "
 ";
 $apps = $conn->query($sql);
 
+$pageCss = ['admin.css'];
 include '../includes/header.php';
 ?>
 
-<div class="dashboard-layout">
-    <?php include 'sidebar.php'; ?>
+<?php include 'sidebar.php'; ?>
 
-    <main class="main-content">
-        <h2 class="page-title"><i class="fa fa-clipboard-list"></i> Hostel Applications</h2>
-
-        <?php if ($message): ?>
-            <div class="alert alert-<?= $msgType ?>"><?= $message ?></div>
-        <?php endif; ?>
-
-        <!-- Filter tabs -->
-        <div class="filter-tabs">
-            <?php foreach (['all','pending','granted','revoked'] as $f): ?>
-                <a href="?status=<?= $f ?>" class="<?= $statusFilter === $f ? 'active' : '' ?>">
-                    <?= ucfirst($f) ?>
-                </a>
-            <?php endforeach; ?>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title"><i class="fa fa-clipboard-list"></i> Applications List</div>
-                <span style="font-size:13px; color:var(--n500);">
-                    <?= $totalRows ?> record<?= $totalRows !== 1 ? 's' : '' ?>
-                </span>
-            </div>
-            <div class="card-body" style="padding:0;">
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Matric No.</th>
-                                <th>Student Name</th>
-                                <th>Gender</th>
-                                <th>Faculty</th>
-                                <th>Fees Paid</th>
-                                <th>Room</th>
-                                <th>Status</th>
-                                <th>Hostel Fee</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php $i = $offset + 1; while ($row = $apps->fetch_assoc()):
-                            $b = ['pending'=>'warning','granted'=>'success','revoked'=>'danger'][$row['status']] ?? 'secondary';
-                        ?>
-                            <tr>
-                                <td><?= $i++ ?></td>
-                                <td><strong><?= htmlspecialchars($row['matric_number']) ?></strong></td>
-                                <td><?= htmlspecialchars($row['surname'] . ', ' . $row['firstname']) ?></td>
-                                <td><?= ucfirst($row['gender']) ?></td>
-                                <td style="font-size:12px;"><?= htmlspecialchars($row['faculty_name']) ?></td>
-                                <td><?= $row['school_fees_paid']
-                                    ? '<span class="badge badge-success">Paid</span>'
-                                    : '<span class="badge badge-danger">Unpaid</span>' ?></td>
-                                <td><?= $row['room_number'] ? 'Blk '.$row['block'].' Rm '.$row['room_number'] : '—' ?></td>
-                                <td><span class="badge badge-<?= $b ?>"><?= ucfirst($row['status']) ?></span></td>
-                                <td><?= $row['hostel_fee_paid']
-                                    ? '<span class="badge badge-success">Paid</span>'
-                                    : '<span class="badge badge-secondary">Pending</span>' ?></td>
-                                <td style="font-size:12px;"><?= date('d/m/Y', strtotime($row['applied_at'])) ?></td>
-                                <td style="white-space:nowrap;">
-                                    <?php if (admin_can(['dsa'])): ?>
-                                    <?php if ($row['status'] !== 'granted'): ?>
-                                    <form method="POST" style="display:inline;" onsubmit="return confirm('Grant room to <?= htmlspecialchars(addslashes($row['firstname'])) ?>?');">
-                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
-                                        <input type="hidden" name="action" value="grant">
-                                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                        <button type="submit" class="btn btn-success btn-sm">Grant</button>
-                                    </form>
-                                    <?php endif; ?>
-                                    <?php if ($row['status'] !== 'revoked'): ?>
-                                    <form method="POST" style="display:inline;" onsubmit="return confirm('Revoke room for <?= htmlspecialchars(addslashes($row['firstname'])) ?>?');">
-                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
-                                        <input type="hidden" name="action" value="revoke">
-                                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm">Revoke</button>
-                                    </form>
-                                    <?php endif; ?>
-                                    <?php else: ?>
-                                    <span style="font-size:12px;color:var(--tx-muted);">View only</span>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pagination -->
-        <?php if ($totalPages > 1): ?>
-        <div class="pagination" style="margin-top:20px;">
-            <?php if ($page > 1): ?>
-                <a href="?status=<?= $statusFilter ?>&page=<?= $page-1 ?>" class="btn btn-light btn-sm">&laquo; Prev</a>
-            <?php endif; ?>
-            <?php for ($p = 1; $p <= $totalPages; $p++): ?>
-                <a href="?status=<?= $statusFilter ?>&page=<?= $p ?>"
-                   class="btn btn-sm <?= $p === $page ? 'btn-primary' : 'btn-light' ?>"><?= $p ?></a>
-            <?php endfor; ?>
-            <?php if ($page < $totalPages): ?>
-                <a href="?status=<?= $statusFilter ?>&page=<?= $page+1 ?>" class="btn btn-light btn-sm">Next &raquo;</a>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
-
-    </main>
+<div class="page-head">
+    <div class="eyebrow">Admin</div>
+    <h1>Hostel applications</h1>
+    <p class="sub">Review applications and grant or revoke room allocations.</p>
 </div>
+
+<?php if ($message): ?>
+    <div class="alert alert-<?= $msgType ?>"><?= $message ?></div>
+<?php endif; ?>
+
+<div class="filter-row">
+    <?php foreach (['all','pending','granted','revoked'] as $f): ?>
+        <a href="?status=<?= $f ?>" class="<?= $statusFilter === $f ? 'is-active' : '' ?>"><?= ucfirst($f) ?></a>
+    <?php endforeach; ?>
+</div>
+
+<div class="card">
+    <div class="card-head">
+        <h3>Applications list</h3>
+        <span class="count"><?= $totalRows ?> record<?= $totalRows !== 1 ? 's' : '' ?></span>
+    </div>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Matric no.</th>
+                    <th>Student name</th>
+                    <th>Gender</th>
+                    <th>Faculty</th>
+                    <th>Fees paid</th>
+                    <th>Room</th>
+                    <th>Status</th>
+                    <th>Hostel fee</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php if ($totalRows === 0): ?>
+                <tr><td colspan="11">
+                    <div class="empty">
+                        <div class="empty-title">No applications found</div>
+                        <p>No records match this filter.</p>
+                    </div>
+                </td></tr>
+            <?php endif; ?>
+            <?php $i = $offset + 1; while ($row = $apps->fetch_assoc()):
+                $b = ['pending'=>'warning','granted'=>'success','revoked'=>'danger'][$row['status']] ?? 'neutral';
+            ?>
+                <tr>
+                    <td><?= $i++ ?></td>
+                    <td><strong><?= htmlspecialchars($row['matric_number']) ?></strong></td>
+                    <td><?= htmlspecialchars($row['surname'] . ', ' . $row['firstname']) ?></td>
+                    <td><?= ucfirst($row['gender']) ?></td>
+                    <td><?= htmlspecialchars($row['faculty_name']) ?></td>
+                    <td><?= $row['school_fees_paid']
+                        ? '<span class="badge badge-success">Paid</span>'
+                        : '<span class="badge badge-danger">Unpaid</span>' ?></td>
+                    <td><?= $row['room_number'] ? 'Blk '.htmlspecialchars($row['block']).' Rm '.htmlspecialchars($row['room_number']) : '&mdash;' ?></td>
+                    <td><span class="badge badge-<?= $b ?>"><?= ucfirst($row['status']) ?></span></td>
+                    <td><?= $row['hostel_fee_paid']
+                        ? '<span class="badge badge-success">Paid</span>'
+                        : '<span class="badge badge-neutral">Pending</span>' ?></td>
+                    <td><?= date('d/m/Y', strtotime($row['applied_at'])) ?></td>
+                    <td>
+                        <?php if (admin_can(['dsa'])): ?>
+                        <div class="row-actions">
+                        <?php if ($row['status'] !== 'granted'): ?>
+                        <form method="POST" onsubmit="return confirm('Grant room to <?= htmlspecialchars(addslashes($row['firstname'])) ?>?');">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
+                            <input type="hidden" name="action" value="grant">
+                            <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                            <button type="submit" class="btn btn-success btn-sm">Grant</button>
+                        </form>
+                        <?php endif; ?>
+                        <?php if ($row['status'] !== 'revoked'): ?>
+                        <form method="POST" onsubmit="return confirm('Revoke room for <?= htmlspecialchars(addslashes($row['firstname'])) ?>?');">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
+                            <input type="hidden" name="action" value="revoke">
+                            <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                            <button type="submit" class="btn btn-danger btn-sm">Revoke</button>
+                        </form>
+                        <?php endif; ?>
+                        </div>
+                        <?php else: ?>
+                        <span class="muted-note">View only</span>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<?php if ($totalPages > 1): ?>
+<div class="pager">
+    <?php if ($page > 1): ?>
+        <a href="?status=<?= $statusFilter ?>&page=<?= $page-1 ?>" class="btn btn-outline btn-sm">&laquo; Prev</a>
+    <?php endif; ?>
+    <?php for ($p = 1; $p <= $totalPages; $p++): ?>
+        <a href="?status=<?= $statusFilter ?>&page=<?= $p ?>"
+           class="btn btn-sm <?= $p === $page ? 'btn-primary' : 'btn-outline' ?>"><?= $p ?></a>
+    <?php endfor; ?>
+    <?php if ($page < $totalPages): ?>
+        <a href="?status=<?= $statusFilter ?>&page=<?= $page+1 ?>" class="btn btn-outline btn-sm">Next &raquo;</a>
+    <?php endif; ?>
+</div>
+<?php endif; ?>
+
+    </div><!-- portal-content -->
+  </div><!-- portal-main -->
+</div><!-- portal -->
 
 <?php include '../includes/footer.php'; ?>

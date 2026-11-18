@@ -73,7 +73,13 @@ hostel_portal/
 │   └── footer.php             ← Global footer + JS
 │
 ├── assets/
-│   ├── css/style.css           ← All styles (custom, no Bootstrap)
+│   ├── css/app.css             ← Shared styles (vars, layout, components)
+│   ├── css/public.css          ← Landing page
+│   ├── css/auth.css            ← Login / register / password pages
+│   ├── css/student.css         ← Student portal pages
+│   ├── css/admin.css           ← Admin portal shell + shared admin pages
+│   ├── css/admin-extra.css     ← Rooms / fees / reports / settings pages
+│   ├── fonts/                  ← Self-hosted Inter & Space Grotesk (woff2)
 │   ├── js/main.js
 │   └── images/
 │
@@ -114,9 +120,9 @@ http://localhost/hostel_portal/
 
 | Role | Email | Password |
 |------|-------|----------|
-| DSA | `dsa@krkpoly.edu.ng` | `password` |
-| Registrar | `registrar@krkpoly.edu.ng` | `password` |
-| ICT Staff | `ict@krkpoly.edu.ng` | `password` |
+| DSA | `dsa@krkpoly.edu.ng` | `Admin@2025` |
+| Registrar | `registrar@krkpoly.edu.ng` | `Admin@2025` |
+| ICT Staff | `ict@krkpoly.edu.ng` | `Admin@2025` |
 
 > **Change these passwords immediately after first login in a production environment.**
 

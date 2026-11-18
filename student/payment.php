@@ -42,97 +42,73 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && !$error && !$success) {
         $error = 'Payment failed. Please try again.';
     }
 }
+$pageCss = ['student.css'];
 include '../includes/header.php';
 ?>
 
-<div class="dashboard-layout">
-  <?php include 'sidebar.php'; ?>
-  <main class="main-content">
+<?php include 'sidebar.php'; ?>
 
-    <div class="page-header">
-      <div class="page-header-left">
-        <h1><i class="fa fa-credit-card" style="color:var(--green-600);font-size:18px;margin-right:8px;"></i>Hostel Fee Payment</h1>
-        <p>Secure your room by completing your hostel fee payment</p>
-      </div>
-    </div>
-
-    <?php if ($error): ?>
-    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i><?= $error ?></div>
-    <?php endif; ?>
-
-    <?php if ($success): ?>
-    <!-- Success state -->
-    <div style="max-width:540px;">
-      <div class="alert alert-success"><i class="fa fa-check-circle"></i><?= $success ?></div>
-      <div class="card">
-        <div class="card-body" style="text-align:center;padding:36px 24px;">
-          <div style="width:72px;height:72px;border-radius:50%;background:var(--green-50);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:30px;color:var(--green-600);">
-            <i class="fa fa-check"></i>
-          </div>
-          <h3 style="font-family:'DM Serif Display',serif;font-weight:400;font-size:22px;color:var(--n900);margin-bottom:8px;">Registration Complete!</h3>
-          <p style="color:var(--n500);font-size:14px;margin-bottom:24px;">Your room is confirmed. Download your allocation letter to collect your key.</p>
-          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-            <a href="allocation_letter.php" class="btn btn-primary"><i class="fa fa-file-alt"></i>Download Letter</a>
-            <a href="dashboard.php" class="btn btn-light"><i class="fa fa-th-large"></i>Dashboard</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <?php elseif (!$error && $app): ?>
-    <!-- Payment form -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:900px;">
-
-      <!-- Order summary -->
-      <div class="card">
-        <div class="card-header"><div class="card-title"><i class="fa fa-receipt"></i>Payment Summary</div></div>
-        <div class="card-body">
-          <table class="detail-table">
-            <tr><td>Student Name</td><td><strong><?= htmlspecialchars($student['firstname'].' '.$student['surname']) ?></strong></td></tr>
-            <tr><td>Matric No.</td><td><?= htmlspecialchars($student['matric_number']) ?></td></tr>
-            <tr><td>Block</td><td><strong>Block <?= htmlspecialchars($app['block']) ?></strong></td></tr>
-            <tr><td>Room</td><td><strong><?= htmlspecialchars($app['room_number']) ?></strong></td></tr>
-            <tr><td>Session</td><td><?= htmlspecialchars($student['academic_session']) ?></td></tr>
-          </table>
-          <div style="margin-top:20px;padding:16px;background:var(--green-50);border-radius:var(--r-md);border:1px solid var(--green-100);text-align:center;">
-            <div style="font-size:13px;color:var(--green-700);font-weight:600;margin-bottom:4px;">AMOUNT DUE</div>
-            <div style="font-size:36px;font-weight:900;color:var(--green-700);font-family:'Outfit',sans-serif;letter-spacing:-1px;"><?= $hostelFeeFormatted ?></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Payment method -->
-      <div class="card">
-        <div class="card-header"><div class="card-title"><i class="fa fa-lock"></i>Complete Payment</div></div>
-        <div class="card-body">
-          <form method="POST">
-            <div class="form-group">
-              <label>Payment Method</label>
-              <select name="payment_method" class="form-control">
-                <option>Bank Transfer / Remita</option>
-                <option>Debit Card (Online)</option>
-                <option>Mobile Banking</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Payer's Name</label>
-              <input type="text" class="form-control" value="<?= htmlspecialchars($student['firstname'].' '.$student['surname']) ?>" readonly>
-            </div>
-            <div style="padding:14px;background:var(--gold-100);border-radius:var(--r);border:1px solid var(--gold-300);margin-bottom:18px;">
-              <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--n700);font-weight:500;">
-                <i class="fa fa-shield-alt" style="color:var(--gold-500);"></i>
-                This is a simulated payment for the demo portal.
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block" style="font-size:15px;padding:13px;">
-              <i class="fa fa-lock"></i> Confirm &amp; Pay <?= $hostelFeeFormatted ?>
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-    <?php endif; ?>
-
-  </main>
+<div class="page-head">
+  <h1>Pay hostel fee</h1>
+  <p class="sub">KRK Hall &middot; <?= htmlspecialchars($student['academic_session']) ?> session</p>
 </div>
+
+<?php if ($error): ?>
+<div class="alert alert-danger"><svg class="alert-icon"><use href="#icon-alert"></use></svg><?= $error ?></div>
+<?php endif; ?>
+
+<?php if ($success): ?>
+<div class="card payment-success is-narrow">
+  <div class="success-badge"><svg class="icon"><use href="#icon-check"></use></svg></div>
+  <h3>Payment confirmed</h3>
+  <p class="text-sm muted mb-3"><?= $success ?></p>
+  <div class="btn-row is-center">
+    <a href="allocation_letter.php" class="btn btn-dark">View allocation slip</a>
+    <a href="dashboard.php" class="btn btn-outline">Dashboard</a>
+  </div>
+</div>
+
+<?php elseif (!$error && $app): ?>
+<div class="grid grid-2">
+  <div class="card">
+    <div class="card-head"><h3>Payment summary</h3></div>
+    <div class="kv">
+      <div class="kv-row"><span class="kv-label">Student</span><span class="kv-value"><?= htmlspecialchars($student['firstname'].' '.$student['surname']) ?></span></div>
+      <div class="kv-row"><span class="kv-label">Matric no.</span><span class="kv-value"><?= htmlspecialchars($student['matric_number']) ?></span></div>
+      <div class="kv-row"><span class="kv-label">Room</span><span class="kv-value">Block <?= htmlspecialchars($app['block']) ?> &middot; <?= htmlspecialchars($app['room_number']) ?></span></div>
+      <div class="kv-row"><span class="kv-label">Session</span><span class="kv-value"><?= htmlspecialchars($student['academic_session']) ?></span></div>
+    </div>
+    <div class="fee-amount">
+      <span class="tile-label">Hostel fee due</span>
+      <div class="amount"><?= $hostelFeeFormatted ?></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h3>Make payment</h3></div>
+    <form method="POST">
+      <div class="field">
+        <label class="label">Payment method</label>
+        <select name="payment_method" class="select">
+          <option>Bank transfer / Remita</option>
+          <option>Debit card (online)</option>
+          <option>Mobile banking</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="label">Payer's name</label>
+        <input type="text" class="input" value="<?= htmlspecialchars($student['firstname'].' '.$student['surname']) ?>" readonly>
+      </div>
+      <div class="alert alert-info mb-4">
+        KRK Pay demo gateway &mdash; this is a simulated payment, no real money moves.
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Confirm &amp; pay <?= $hostelFeeFormatted ?></button>
+    </form>
+  </div>
+</div>
+<?php endif; ?>
+
+      </div><!-- /.portal-content -->
+    </div><!-- /.portal-main -->
+  </div><!-- /.portal -->
 <?php include '../includes/footer.php'; ?>

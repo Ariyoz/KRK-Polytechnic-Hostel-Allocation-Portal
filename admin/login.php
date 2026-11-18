@@ -21,101 +21,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else $error = 'Invalid email or password.';
     }
 }
+$pageCss  = ['auth.css'];
 $noHeader = true;
 include '../includes/header.php';
 ?>
 
-<div class="funaab-auth">
+<div class="auth-split">
 
-  <!-- ══ LEFT: School branding panel ══ -->
-  <div class="funaab-left">
-    <div class="funaab-left-bg"></div>
-    <div class="funaab-left-overlay"></div>
+  <div class="auth-split-panel">
+    <a href="<?= BASE_URL ?>/index.php" class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 46" aria-hidden="true">
+        <path d="M20 2 4 8v14c0 12 7 19 16 22 9-3 16-10 16-22V8Z" fill="#102a4a" stroke="#e8a317" stroke-width="2"/>
+        <path d="M13 24l7-6 7 6M15 22v8h10v-8" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand-text">
+        <strong>KRK Polytechnic, Lagos</strong>
+        <small>Hostel Allocation Portal</small>
+      </span>
+    </a>
 
-    <div class="funaab-left-inner">
+    <div>
+      <h1>Staff login</h1>
+      <p>For the Dean of Student Affairs, hall representatives, Registrar and ICT staff who manage hostel applications and allocation.</p>
 
-      <div class="funaab-school-id">
-        <div class="funaab-school-abbr">KRK</div>
-        <div class="funaab-school-name">KRK Polytechnic</div>
-        <div class="funaab-school-loc">Lagos, Nigeria</div>
-      </div>
-
-      <div class="funaab-portal-title">
-        <h1>Admin<br>Control Panel</h1>
-        <p>Role-Based &middot; Secure &middot; Monitored</p>
-      </div>
-
-      <ul class="funaab-features">
-        <li><i class="fa fa-check-circle"></i> DSA — Grant &amp; revoke allocations</li>
-        <li><i class="fa fa-check-circle"></i> Registrar — Verify school fees</li>
-        <li><i class="fa fa-check-circle"></i> ICT — Manage rooms &amp; settings</li>
-        <li><i class="fa fa-check-circle"></i> All roles — Reports &amp; email logs</li>
-      </ul>
-
-      <div class="funaab-left-footer">
-        &copy; <?= date('Y') ?> KRK Polytechnic &mdash; Admin Access Only
+      <div class="role-list">
+        <div class="role-list-item"><span class="badge badge-neutral">DSA &middot; Rep &middot; Registrar</span> Applications and allocation</div>
+        <div class="role-list-item"><span class="badge badge-neutral">ICT Admin</span> Rooms, users, settings</div>
       </div>
     </div>
+
+    <p class="auth-foot-note">&copy; <?= date('Y') ?> KRK Polytechnic, Lagos &mdash; Staff access only</p>
   </div>
 
-  <!-- ══ RIGHT: Admin login form ══ -->
-  <div class="funaab-right">
-    <div class="funaab-form-wrap">
+  <div class="auth-split-main">
+    <div class="auth-split-card stack">
 
-      <!-- Back button -->
-      <a href="<?= BASE_URL ?>/index.php" class="funaab-back-btn">
-        <i class="fa fa-arrow-left"></i> Back to Home
-      </a>
-
-      <div class="funaab-form-header">
-        <h2>Welcome Back!</h2>
-        <p>Login to your admin account</p>
-      </div>
-
-      <!-- Role tabs -->
-      <div class="funaab-role-tabs">
-        <a href="<?= BASE_URL ?>/student/login.php" class="funaab-role-tab">Student</a>
-        <a href="login.php" class="funaab-role-tab active">Admin</a>
+      <div>
+        <h2>Welcome back</h2>
+        <p class="muted">Log in to the hostel admin portal.</p>
       </div>
 
       <?php if ($error): ?>
-      <div class="funaab-alert funaab-alert-error">
-        <i class="fa fa-exclamation-circle"></i> <?= htmlspecialchars($error) ?>
-      </div>
+      <div class="alert alert-danger"><span><?= htmlspecialchars($error) ?></span></div>
       <?php endif; ?>
 
-      <form method="POST" class="funaab-form">
-        <div class="funaab-field">
-          <label for="adminEmail"><i class="fa fa-envelope"></i> Admin Email</label>
-          <input type="email" id="adminEmail" name="email"
+      <form method="POST" class="stack">
+        <div class="field">
+          <label class="label" for="adminEmail">Staff email</label>
+          <input class="input" type="email" id="adminEmail" name="email"
                  value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
-                 placeholder="admin@krkpoly.edu.ng" required autofocus autocomplete="email">
+                 placeholder="you@krkpoly.edu.ng" required autofocus autocomplete="email">
         </div>
 
-        <div class="funaab-field">
-          <label for="adminPwd"><i class="fa fa-lock"></i> Password</label>
-          <div class="funaab-pwd-wrap">
-            <input type="password" id="adminPwd" name="password"
-                   placeholder="Enter your password" required autocomplete="current-password">
-            <button type="button" onclick="togglePwd('adminPwd',this)" aria-label="Toggle">
-              <i class="fa fa-eye"></i>
+        <div class="field">
+          <label class="label" for="adminPwd">Password</label>
+          <div class="pwd-field">
+            <input class="input" type="password" id="adminPwd" name="password"
+                   placeholder="Your password" required autocomplete="current-password">
+            <button type="button" class="pwd-toggle" onclick="togglePwd('adminPwd',this)" aria-label="Show password">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
             </button>
           </div>
         </div>
 
-        <button type="submit" class="funaab-submit-btn">
-          <i class="fa fa-sign-in-alt"></i> Login
-        </button>
+        <button type="submit" class="btn btn-dark btn-block">Log in</button>
       </form>
 
-      <div class="funaab-info-hint">
-        <i class="fa fa-info-circle"></i>
-        <span>Default: <code>dsa@krkpoly.edu.ng</code> / <code>Admin@2025</code></span>
-      </div>
-
-      <p class="funaab-register-link">
-        Not an admin? <a href="<?= BASE_URL ?>/student/login.php">Student Login</a>
-      </p>
+      <p class="text-sm muted">Not staff? <a href="<?= BASE_URL ?>/student/login.php" class="sub-link">Student login</a></p>
 
     </div>
   </div>

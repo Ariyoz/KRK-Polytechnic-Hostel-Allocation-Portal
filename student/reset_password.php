@@ -54,108 +54,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $validToken && $studentId) {
     }
 }
 
+$pageCss  = ['auth.css'];
 $noHeader = true;
 include '../includes/header.php';
 ?>
 
-<div class="funaab-auth">
+<div class="auth-plain">
 
-  <!-- LEFT panel -->
-  <div class="funaab-left">
-    <div class="funaab-left-bg"></div>
-    <div class="funaab-left-overlay"></div>
-    <div class="funaab-left-inner">
-      <div class="funaab-school-id">
-        <div class="funaab-school-abbr">KRK</div>
-        <div class="funaab-school-name">KRK Polytechnic</div>
-        <div class="funaab-school-loc">Lagos, Nigeria</div>
-      </div>
-      <div class="funaab-portal-title">
-        <h1>Create a New<br>Password</h1>
-        <p>Secure &middot; Simple &middot; Instant</p>
-      </div>
-      <ul class="funaab-features">
-        <li><i class="fa fa-check-circle"></i> Use at least 6 characters</li>
-        <li><i class="fa fa-check-circle"></i> Mix letters, numbers and symbols</li>
-        <li><i class="fa fa-check-circle"></i> Your password is securely hashed</li>
-        <li><i class="fa fa-check-circle"></i> Log in immediately after resetting</li>
-      </ul>
-      <div class="funaab-left-footer">&copy; <?= date('Y') ?> KRK Polytechnic &mdash; All rights reserved</div>
+  <a href="<?= BASE_URL ?>/index.php" class="brand">
+    <svg class="brand-mark" viewBox="0 0 40 46" aria-hidden="true">
+      <path d="M20 2 4 8v14c0 12 7 19 16 22 9-3 16-10 16-22V8Z" fill="#102a4a" stroke="#e8a317" stroke-width="2"/>
+      <path d="M13 24l7-6 7 6M15 22v8h10v-8" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>
+    </svg>
+    <span class="brand-text">
+      <strong>KRK Polytechnic</strong>
+      <small>Hostel Allocation Portal</small>
+    </span>
+  </a>
+
+  <div class="card auth-plain-card stack">
+
+    <a href="login.php" class="back-link">&larr; Back to login</a>
+
+    <div>
+      <h1>Set new password</h1>
+      <p class="muted">Enter and confirm your new password below.</p>
     </div>
+
+    <?php if ($success): ?>
+    <div class="alert alert-success"><span><?= htmlspecialchars($success) ?></span></div>
+    <a href="login.php" class="btn btn-dark btn-block">Go to login</a>
+
+    <?php elseif ($error && !$validToken): ?>
+    <div class="alert alert-danger"><span><?= htmlspecialchars($error) ?></span></div>
+    <a href="forgot_password.php" class="btn btn-dark btn-block">Request new reset link</a>
+
+    <?php elseif ($validToken): ?>
+    <?php if ($error): ?>
+    <div class="alert alert-danger"><span><?= htmlspecialchars($error) ?></span></div>
+    <?php endif; ?>
+    <form method="POST" class="stack">
+      <input type="hidden" name="token" value="<?= htmlspecialchars($rawToken) ?>">
+      <div class="field">
+        <label class="label" for="password">New password</label>
+        <div class="pwd-field">
+          <input class="input" type="password" id="password" name="password"
+                 placeholder="At least 6 characters" required minlength="6" autocomplete="new-password">
+          <button type="button" class="pwd-toggle" onclick="togglePwd('password',this)" aria-label="Show password">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label" for="confirm_password">Confirm password</label>
+        <div class="pwd-field">
+          <input class="input" type="password" id="confirm_password" name="confirm_password"
+                 placeholder="Repeat your new password" required autocomplete="new-password">
+          <button type="button" class="pwd-toggle" onclick="togglePwd('confirm_password',this)" aria-label="Show password">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Save new password</button>
+    </form>
+    <?php endif; ?>
+
+    <p class="text-sm muted text-center">Remembered it? <a href="login.php" class="sub-link">Log in</a></p>
+
   </div>
-
-  <!-- RIGHT panel -->
-  <div class="funaab-right">
-    <div class="funaab-form-wrap">
-
-      <a href="login.php" class="funaab-back-btn">
-        <i class="fa fa-arrow-left"></i> Back to Login
-      </a>
-
-      <div class="funaab-form-header">
-        <h2>Set New Password</h2>
-        <p>Enter and confirm your new password below.</p>
-      </div>
-
-      <?php if ($success): ?>
-      <div style="text-align:center;padding:32px 20px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;margin-bottom:20px;">
-        <div style="width:60px;height:60px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px;">
-          <i class="fa fa-check"></i>
-        </div>
-        <h3 style="font-size:18px;color:#15803d;margin-bottom:8px;">Password Reset!</h3>
-        <p style="font-size:14px;color:#166534;"><?= htmlspecialchars($success) ?></p>
-      </div>
-      <a href="login.php" class="funaab-submit-btn" style="text-decoration:none;">
-        <i class="fa fa-sign-in-alt"></i> <span>Go to Login</span>
-      </a>
-
-      <?php elseif ($error && !$validToken): ?>
-      <div class="funaab-alert funaab-alert-error">
-        <i class="fa fa-exclamation-circle"></i> <?= htmlspecialchars($error) ?>
-      </div>
-      <a href="forgot_password.php" class="funaab-submit-btn" style="text-decoration:none;">
-        <i class="fa fa-paper-plane"></i> <span>Request New Reset Link</span>
-      </a>
-
-      <?php elseif ($validToken): ?>
-      <?php if ($error): ?>
-      <div class="funaab-alert funaab-alert-error">
-        <i class="fa fa-exclamation-circle"></i> <?= htmlspecialchars($error) ?>
-      </div>
-      <?php endif; ?>
-      <form method="POST" id="registerForm" class="funaab-form">
-        <input type="hidden" name="token" value="<?= htmlspecialchars($rawToken) ?>">
-        <div class="funaab-field">
-          <label for="password"><i class="fa fa-lock"></i> New Password</label>
-          <div class="funaab-pwd-wrap">
-            <input type="password" id="password" name="password"
-                   placeholder="At least 6 characters" required minlength="6" autocomplete="new-password">
-            <button type="button" onclick="togglePwd('password',this)" aria-label="Toggle">
-              <i class="fa fa-eye"></i>
-            </button>
-          </div>
-        </div>
-        <div class="funaab-field">
-          <label for="confirm_password"><i class="fa fa-lock"></i> Confirm Password</label>
-          <div class="funaab-pwd-wrap">
-            <input type="password" id="confirm_password" name="confirm_password"
-                   placeholder="Repeat your new password" required autocomplete="new-password">
-            <button type="button" onclick="togglePwd('confirm_password',this)" aria-label="Toggle">
-              <i class="fa fa-eye"></i>
-            </button>
-          </div>
-        </div>
-        <button type="submit" class="funaab-submit-btn">
-          <i class="fa fa-save"></i> <span>Save New Password</span>
-        </button>
-      </form>
-      <?php endif; ?>
-
-      <p class="funaab-register-link" style="margin-top:16px;">
-        Remembered it? <a href="login.php">Sign in here</a>
-      </p>
-    </div>
-  </div>
-
 </div>
+
 <?php include '../includes/footer.php'; ?>

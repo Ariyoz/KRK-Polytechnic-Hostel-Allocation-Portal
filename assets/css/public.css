@@ -1,0 +1,153 @@
+/* Landing page (index.php) — hero, bed-space card, process steps, rules */
+
+/* ---------- Hero ---------- */
+.hero {
+  background: var(--navy-900);
+  color: var(--white);
+  padding-block: 56px;
+}
+.hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: var(--sp-7);
+  align-items: start;
+}
+.hero-text .eyebrow {
+  color: var(--amber-500);
+}
+.hero-text h1 {
+  color: var(--white);
+  font-size: var(--fs-hero);
+  line-height: 1.1;
+  margin-bottom: var(--sp-4);
+}
+.hero-sub {
+  color: #c9d4e2;
+  max-width: 65ch;
+  font-size: var(--fs-md);
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+.hero-actions .btn {
+  min-height: 48px;
+  padding: 13px 24px;
+}
+.hero-note {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-sm);
+  color: #9fb0c6;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hero-note .icon { width: 16px; height: 16px; flex: none; }
+
+/* Bed-space card sits on white, inside the navy hero */
+.hero-card {
+  color: var(--ink);
+}
+.hero-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-4);
+}
+.hero-card-head h3 { margin: 0; }
+
+.bed-row + .bed-row { margin-top: var(--sp-4); }
+.bed-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: var(--fs-nav);
+  font-weight: 600;
+}
+.bed-row-top strong { font-family: var(--font-head); font-size: var(--fs-h3); }
+.bed-row-sub { font-size: var(--fs-xs); color: var(--gray-500); margin-top: 2px; }
+
+.hero-card-foot {
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--gray-200);
+  font-size: var(--fs-xs);
+  color: var(--gray-500);
+}
+
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .hero { padding-block: 32px; }
+}
+
+/* ---------- How it works ---------- */
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-4);
+  margin-top: var(--sp-5);
+}
+.process-step {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+}
+.process-step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gray-200);
+  color: var(--navy-900);
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--sp-3);
+}
+.process-step h4 { margin-bottom: 4px; }
+.process-step p { font-size: var(--fs-sm); color: var(--gray-500); }
+
+/* ---------- Who can apply / rules ---------- */
+.rules-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+.rules-list li {
+  font-size: var(--fs-nav);
+  color: var(--gray-700);
+  padding-left: var(--sp-4);
+  position: relative;
+}
+.rules-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--navy-700);
+}
+
+/* ---------- Closing CTA band ---------- */
+.cta-band {
+  background: var(--navy-900);
+  color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+}
+.cta-band h2 { color: var(--white); margin-bottom: 4px; }
+.cta-band p { color: #c9d4e2; font-size: var(--fs-nav); }
+
+@media (max-width: 640px) {
+  .cta-band { flex-direction: column; align-items: flex-start; }
+}

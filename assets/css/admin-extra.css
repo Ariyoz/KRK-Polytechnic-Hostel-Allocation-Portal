@@ -1,0 +1,77 @@
+/*
+  admin-extra.css — styles specific to: rooms, upload_rooms, fees,
+  reports, email_logs, settings. Loaded after admin.css. Uses the
+  app.css variables (--navy-*, --gray-*, --sp-*, --radius*).
+*/
+
+/* .filter-row + .pager are shared in app.css */
+
+/* Table-cell progress bar needs a floor width so it doesn't collapse (reports: rooms by block) */
+.table-wrap .progress { min-width: 90px; }
+
+/* Horizontal bar rows — reports page breakdowns */
+.bar-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+.bar-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 44px;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-sm);
+}
+.bar-row .bar-name { color: var(--gray-700); }
+.bar-track { background: var(--gray-200); border-radius: var(--radius-pill); height: 10px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--navy-700); border-radius: var(--radius-pill); }
+.bar-fill.is-amber { background: var(--amber-500); }
+.bar-fill.is-green { background: var(--green-600); }
+.bar-fill.is-red   { background: var(--red-600); }
+.bar-row .bar-count { text-align: right; font-weight: 600; color: var(--navy-900); }
+@media (max-width: 560px) {
+  .bar-row { grid-template-columns: 90px 1fr 36px; font-size: var(--fs-xs); }
+}
+
+/* Report section spacing */
+.report-section { margin-bottom: var(--sp-5); }
+.report-section h3 { margin-bottom: var(--sp-3); }
+
+/* Email log expandable preview row */
+.log-preview { background: var(--gray-100); padding: var(--sp-4); }
+.log-preview-head {
+  font-size: var(--fs-xs);
+  color: var(--gray-500);
+  margin-bottom: var(--sp-2);
+}
+.log-preview-body {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-4);
+  font-size: var(--fs-nav);
+}
+
+/* Inline action forms inside a table cell (rooms, fees) */
+.inline-form { display: inline-flex; gap: 6px; align-items: center; }
+.inline-form + .inline-form { margin-left: 6px; }
+.room-actions { white-space: nowrap; }
+.select-sm { width: auto; padding: 6px 8px; font-size: var(--fs-xs); }
+
+/* Settings: toggle switch for a single boolean field */
+.switch { display: inline-flex; align-items: center; gap: var(--sp-3); cursor: pointer; }
+.switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.switch-track {
+  width: 40px; height: 22px; border-radius: var(--radius-pill);
+  background: var(--gray-300); position: relative; flex: none;
+  transition: background var(--ease);
+}
+.switch-thumb {
+  position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+  border-radius: 50%; background: var(--white); transition: transform var(--ease);
+}
+.switch input:checked + .switch-track { background: var(--green-600); }
+.switch input:checked + .switch-track .switch-thumb { transform: translateX(18px); }
+.switch input:focus-visible + .switch-track { outline: 2px solid var(--navy-600); outline-offset: 2px; }
+.switch-label { font-weight: 600; font-size: var(--fs-nav); }
+
+/* Settings: danger zone accent */
+.danger-card { border-color: var(--red-600); }
+.danger-card .card-head h2, .danger-card .card-head h3 { color: var(--red-700); }
+.settings-card { max-width: 580px; }

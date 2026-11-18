@@ -1,0 +1,110 @@
+/* Auth pages: login, register, forgot/reset/resend password, activation. */
+
+/* Small text link used next to a field label or under a form */
+.sub-link { font-size: var(--fs-sm); font-weight: 600; color: var(--navy-700); }
+.sub-link:hover { color: var(--navy-900); }
+
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-1);
+}
+.field-label-row .label { margin-bottom: 0; }
+
+.back-link {
+  display: inline-block;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--gray-500);
+  margin-bottom: var(--sp-5);
+}
+.back-link:hover { color: var(--navy-800); }
+
+/* Role chips in the login left panel */
+.role-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--fs-sm);
+  color: #c9d4e2;
+}
+.role-list-item strong { color: var(--white); }
+
+/* The "KRK Polytechnic, Lagos" name line is white text on the navy auth
+   panel; app.css only brightens the amber subtitle, leaving the strong
+   line in its default navy (invisible on navy). */
+.auth-split-panel .brand-text strong { color: var(--white); }
+
+/* Registration: normal public page, wide form card + a narrow sidebar */
+.auth-register-page .steps-row {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: var(--sp-1);
+}
+.auth-register-page .steps-row-item { flex: none; }
+
+.auth-register-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: var(--sp-5);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .auth-register-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+.auth-aside { display: flex; flex-direction: column; gap: var(--sp-4); }
+.ready-list { list-style: disc; padding-left: 1.1em; font-size: var(--fs-sm); color: var(--gray-700); }
+.ready-list li { margin-bottom: var(--sp-1); }
+.ready-list li:last-child { margin-bottom: 0; }
+
+/* Simple centered card for forgot/reset/resend password (no navy side panel) */
+.auth-plain {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-5);
+  background: var(--bg);
+  padding: var(--sp-6) var(--sp-4);
+}
+.auth-plain-card { width: 100%; max-width: 440px; }
+.auth-plain .brand-text small { color: var(--gray-500); }
+
+.auth-card-page { max-width: 560px; margin-inline: auto; padding-block: var(--sp-7); }
+
+/* Vertical rhythm for stacked blocks inside an auth card, instead of inline margins */
+.stack > * + * { margin-top: var(--sp-4); }
+
+.auth-foot-note { color: #8ea0b8; font-size: var(--fs-xs); }
+.text-center { text-align: center; }
+
+/* Auth inputs read at the body size (16px) regardless of viewport, so
+   fields never shrink below the mobile zoom-prevention floor. */
+.auth-split-card .input,
+.auth-plain-card .input,
+.auth-register-grid .input,
+.auth-register-grid .select {
+  font-size: var(--fs-base);
+}
+
+/* Split-panel heading scales up a touch past --fs-h1 on roomy desktops */
+.auth-split-panel h1 { font-size: clamp(var(--fs-h1), 1.6rem + 1vw, 2.25rem); }
+
+/* Mobile: collapse the navy panel to a compact header (logo + short title)
+   so the form card is reachable without scrolling. */
+@media (max-width: 860px) {
+  .auth-split-panel {
+    flex-direction: row;
+    align-items: center;
+    padding: var(--sp-4) var(--sp-5);
+  }
+  .auth-split-panel > div,
+  .auth-split-panel > .auth-foot-note {
+    display: none;
+  }
+  .auth-split-main { padding: var(--sp-5) var(--sp-4); }
+}

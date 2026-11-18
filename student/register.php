@@ -72,174 +72,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-$noHeader = true;
+$pageCss  = ['auth.css'];
 include '../includes/header.php';
 ?>
 
-<div class="auth-screen auth-screen-register">
+<div class="container section auth-register-page">
 
-  <!-- ══ LEFT PANEL ══ -->
-  <div class="auth-left">
-    <div class="auth-left-bg"></div>
-    <div class="auth-left-noise"></div>
-    <div class="auth-orb auth-orb-1"></div>
-    <div class="auth-orb auth-orb-2"></div>
-    <div class="auth-orb auth-orb-3"></div>
-
-    <div class="auth-left-inner">
-      <div class="auth-brand">
-        <div class="auth-brand-logo">
-          <img src="<?= BASE_URL ?>/assets/images/logo.png" alt="KRK Polytechnic">
-        </div>
-        <div class="auth-brand-text">
-          <strong>KRK Polytechnic</strong>
-          <span>Hostel Portal</span>
-        </div>
-      </div>
-
-      <div class="auth-left-content">
-        <div class="auth-eyebrow">
-          <i class="fa fa-graduation-cap"></i> <?= htmlspecialchars($currentSession) ?> Session
-        </div>
-        <h1 class="auth-left-title">
-          Join the<br><em>Hostel</em><br>Community
-        </h1>
-        <p class="auth-left-sub">
-          Register your account to apply for hostel accommodation this academic session.
-        </p>
-
-        <ul class="auth-features">
-          <li><span class="af-icon"><i class="fa fa-check"></i></span> Free account registration</li>
-          <li><span class="af-icon"><i class="fa fa-check"></i></span> Email activation for security</li>
-          <li><span class="af-icon"><i class="fa fa-check"></i></span> Gender-matched room options</li>
-          <li><span class="af-icon"><i class="fa fa-check"></i></span> Real-time application tracking</li>
-        </ul>
-      </div>
-
-      <div class="auth-stats">
-        <div class="auth-stat-chip"><i class="fa fa-bed"></i> 200 Rooms</div>
-        <div class="auth-stat-chip"><i class="fa fa-bolt"></i> Instant Email</div>
-        <div class="auth-stat-chip"><i class="fa fa-lock"></i> Secure</div>
-      </div>
-    </div>
+  <div class="page-head">
+    <span class="eyebrow">KRK HALL &middot; <?= htmlspecialchars($currentSession) ?> SESSION</span>
+    <h1>Hostel registration</h1>
+    <p class="sub">Fill in your details, choose an available room, then click <strong>Register for the hostel</strong>. We will send an activation alert to your email once you submit the form.</p>
   </div>
 
-  <!-- ══ RIGHT PANEL — Registration Form ══ -->
-  <div class="auth-right auth-right-wide">
-    <div class="auth-right-inner auth-right-inner-wide">
+  <div class="steps-row">
+    <div class="steps-row-item is-current"><span class="dot">1</span> Register</div>
+    <div class="steps-row-item"><span class="dot">2</span> Activate email</div>
+    <div class="steps-row-item"><span class="dot">3</span> Pay school fees</div>
+    <div class="steps-row-item"><span class="dot">4</span> Room granted</div>
+    <div class="steps-row-item"><span class="dot">5</span> Pay hostel fee</div>
+  </div>
 
-      <div class="auth-top-nav">
-        <span>Already registered?</span>
-        <a href="login.php">Sign In <i class="fa fa-arrow-right"></i></a>
-      </div>
+  <div class="auth-register-grid">
 
-      <div class="auth-reg-header">
-        <div class="auth-card-icon">
-          <i class="fa fa-user-plus"></i>
+      <div class="card stack">
+
+        <?php if ($error): ?>
+        <div class="alert alert-danger"><span><?= $error ?></span></div>
+        <?php endif; ?>
+
+        <?php if ($success): ?>
+        <div class="alert alert-success"><span><?= $success ?></span></div>
+
+        <div class="kv">
+          <div class="kv-row"><span class="kv-label">Matric / application number</span><span class="kv-value"><?= htmlspecialchars($matric) ?></span></div>
+          <div class="kv-row"><span class="kv-label">Name</span><span class="kv-value"><?= htmlspecialchars($fname . ' ' . $surname) ?></span></div>
+          <div class="kv-row"><span class="kv-label">Status</span><span class="badge badge-warning">Waiting for activation</span></div>
         </div>
-        <div>
-          <h2 class="auth-title">Create Your Account</h2>
-          <p class="auth-subtitle">Hostel Registration &mdash; <?= htmlspecialchars($currentSession) ?></p>
-        </div>
-      </div>
 
-      <?php if ($error): ?>
-      <div class="auth-alert auth-alert-error">
-        <i class="fa fa-exclamation-circle"></i>
-        <span><?= $error ?></span>
-      </div>
-      <?php endif; ?>
+        <a href="login.php" class="btn btn-dark btn-block">Go to login</a>
 
-      <?php if ($success): ?>
-      <div class="auth-success-state">
-        <div class="auth-success-icon"><i class="fa fa-check-circle"></i></div>
-        <h3>Registration Complete!</h3>
-        <p><?= $success ?></p>
-        <a href="login.php" class="auth-btn-submit" style="display:inline-flex;text-decoration:none;margin-top:8px;">
-          <span>Go to Login</span>
-          <i class="fa fa-arrow-right"></i>
-        </a>
-      </div>
+        <?php elseif ($regOpen !== '1'): ?>
+        <div class="alert alert-warning"><span>Registration is currently closed. Contact the Student Affairs office.</span></div>
 
-      <?php elseif ($regOpen !== '1'): ?>
-      <div class="auth-alert auth-alert-warning">
-        <i class="fa fa-lock"></i>
-        <span>Registration is currently closed. Contact the Student Affairs office.</span>
-      </div>
+        <?php else: ?>
+        <form method="POST" id="registerForm" class="stack">
 
-      <?php else: ?>
-      <form method="POST" id="registerForm" class="auth-reg-form">
-
-        <!-- Section: Identity -->
-        <div class="auth-form-section">
-          <div class="auth-form-section-label">Personal Details</div>
-          <div class="auth-reg-grid">
-            <div class="auth-field">
-              <label>Matric / App. Number <span class="req">*</span></label>
-              <div class="auth-input-wrap">
-                <i class="fa fa-id-card auth-field-icon"></i>
-                <input type="text" name="matric_number"
-                       value="<?= htmlspecialchars($_POST['matric_number'] ?? '') ?>"
-                       placeholder="KRK/2021/CS/001" required>
+          <fieldset class="field-group">
+            <legend>Personal details</legend>
+            <div class="field">
+              <label class="label" for="matric_number">Matric / application number <span class="req">*</span></label>
+              <input class="input" type="text" id="matric_number" name="matric_number"
+                     value="<?= htmlspecialchars($_POST['matric_number'] ?? '') ?>"
+                     placeholder="KRK/ND/24/COM/015" required>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label class="label" for="surname">Surname <span class="req">*</span></label>
+                <input class="input" type="text" id="surname" name="surname" value="<?= htmlspecialchars($_POST['surname']??'') ?>" placeholder="e.g. Adeyemi" required>
+              </div>
+              <div class="field">
+                <label class="label" for="firstname">First name <span class="req">*</span></label>
+                <input class="input" type="text" id="firstname" name="firstname" value="<?= htmlspecialchars($_POST['firstname']??'') ?>" placeholder="e.g. Taiwo" required>
               </div>
             </div>
-            <div class="auth-field">
-              <label>Gender <span class="req">*</span></label>
-              <div class="auth-input-wrap auth-select-wrap">
-                <i class="fa fa-venus-mars auth-field-icon"></i>
-                <select name="gender" required>
+            <div class="field-row">
+              <div class="field">
+                <label class="label" for="othername">Other name</label>
+                <input class="input" type="text" id="othername" name="othername" value="<?= htmlspecialchars($_POST['othername']??'') ?>" placeholder="Optional">
+              </div>
+              <div class="field">
+                <label class="label" for="gender">Gender <span class="req">*</span></label>
+                <select class="select" id="gender" name="gender" required>
                   <option value="">Select gender</option>
                   <option value="male"   <?= (($_POST['gender']??'')==='male')  ?'selected':'' ?>>Male</option>
                   <option value="female" <?= (($_POST['gender']??'')==='female')?'selected':'' ?>>Female</option>
                 </select>
+                <p class="hint">Decides which rooms you can choose.</p>
               </div>
             </div>
-            <div class="auth-field">
-              <label>Surname <span class="req">*</span></label>
-              <div class="auth-input-wrap">
-                <i class="fa fa-user auth-field-icon"></i>
-                <input type="text" name="surname" value="<?= htmlspecialchars($_POST['surname']??'') ?>" placeholder="e.g. Adeyemi" required>
-              </div>
-            </div>
-            <div class="auth-field">
-              <label>First Name <span class="req">*</span></label>
-              <div class="auth-input-wrap">
-                <i class="fa fa-user auth-field-icon"></i>
-                <input type="text" name="firstname" value="<?= htmlspecialchars($_POST['firstname']??'') ?>" placeholder="e.g. Taiwo" required>
-              </div>
-            </div>
-            <div class="auth-field">
-              <label>Other Name</label>
-              <div class="auth-input-wrap">
-                <i class="fa fa-user auth-field-icon"></i>
-                <input type="text" name="othername" value="<?= htmlspecialchars($_POST['othername']??'') ?>" placeholder="Optional">
-              </div>
-            </div>
-            <div class="auth-field">
-              <label>Level <span class="req">*</span></label>
-              <div class="auth-input-wrap auth-select-wrap">
-                <i class="fa fa-layer-group auth-field-icon"></i>
-                <select name="level" required>
-                  <option value="">Select level</option>
-                  <?php foreach(['ND1','ND2','HND1','HND2'] as $l): ?>
-                  <option value="<?= $l ?>" <?= (($_POST['level']??'')===$l)?'selected':'' ?>><?= $l ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
+          </fieldset>
 
-        <!-- Section: Academic -->
-        <div class="auth-form-section">
-          <div class="auth-form-section-label">Academic Information</div>
-          <div class="auth-reg-grid">
-            <div class="auth-field">
-              <label>Faculty <span class="req">*</span></label>
-              <div class="auth-input-wrap auth-select-wrap">
-                <i class="fa fa-university auth-field-icon"></i>
-                <select name="faculty_id" id="faculty_id" required>
-                  <option value="">Select Faculty</option>
+          <fieldset class="field-group">
+            <legend>Academic details</legend>
+            <div class="field-row">
+              <div class="field">
+                <label class="label" for="faculty_id">Faculty <span class="req">*</span></label>
+                <select class="select" name="faculty_id" id="faculty_id" required>
+                  <option value="">Select faculty</option>
                   <?php while($fac=$faculties->fetch_assoc()): ?>
                   <option value="<?= $fac['id'] ?>" <?= (($_POST['faculty_id']??'')==$fac['id'])?'selected':'' ?>>
                     <?= htmlspecialchars($fac['name']) ?>
@@ -247,86 +166,122 @@ include '../includes/header.php';
                   <?php endwhile; ?>
                 </select>
               </div>
-            </div>
-            <div class="auth-field">
-              <label>Department <span class="req">*</span></label>
-              <div class="auth-input-wrap auth-select-wrap">
-                <i class="fa fa-book auth-field-icon"></i>
-                <select name="department_id" id="department_id" required>
-                  <option value="">Select Faculty first</option>
+              <div class="field">
+                <label class="label" for="department_id">Department <span class="req">*</span></label>
+                <select class="select" name="department_id" id="department_id" required>
+                  <option value="">Select faculty first</option>
                 </select>
               </div>
             </div>
-            <div class="auth-field">
-              <label>Academic Session</label>
-              <div class="auth-input-wrap">
-                <i class="fa fa-calendar auth-field-icon"></i>
-                <input type="text" value="<?= htmlspecialchars($currentSession) ?>" readonly class="auth-readonly">
-              </div>
-            </div>
-            <div class="auth-field">
-              <label>Semester <span class="req">*</span></label>
-              <div class="auth-input-wrap auth-select-wrap">
-                <i class="fa fa-clock auth-field-icon"></i>
-                <select name="semester" required>
-                  <option value="">Select Semester</option>
-                  <option value="first"  <?= (($_POST['semester']??'')==='first') ?'selected':'' ?>>First Semester</option>
-                  <option value="second" <?= (($_POST['semester']??'')==='second')?'selected':'' ?>>Second Semester</option>
+            <div class="field-row cols-3">
+              <div class="field">
+                <label class="label" for="level">Level <span class="req">*</span></label>
+                <select class="select" id="level" name="level" required>
+                  <option value="">Select level</option>
+                  <?php foreach(['ND1','ND2','HND1','HND2'] as $l): ?>
+                  <option value="<?= $l ?>" <?= (($_POST['level']??'')===$l)?'selected':'' ?>><?= $l ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
+              <div class="field">
+                <label class="label" for="academic_session">Academic session</label>
+                <input class="input" type="text" id="academic_session" value="<?= htmlspecialchars($currentSession) ?>" readonly>
+              </div>
+              <div class="field">
+                <label class="label" for="semester">Semester <span class="req">*</span></label>
+                <select class="select" id="semester" name="semester" required>
+                  <option value="">Select semester</option>
+                  <option value="first"  <?= (($_POST['semester']??'')==='first') ?'selected':'' ?>>First semester</option>
+                  <option value="second" <?= (($_POST['semester']??'')==='second')?'selected':'' ?>>Second semester</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="field-group">
+            <legend>Contact and password</legend>
+            <div class="field-row">
+              <div class="field">
+                <label class="label" for="phone">Phone number <span class="req">*</span></label>
+                <input class="input" type="tel" id="phone" name="phone" value="<?= htmlspecialchars($_POST['phone']??'') ?>" placeholder="08012345678" required>
+              </div>
+              <div class="field">
+                <label class="label" for="email">Email address <span class="req">*</span></label>
+                <input class="input" type="email" id="email" name="email" value="<?= htmlspecialchars($_POST['email']??'') ?>" placeholder="you@example.com" required>
+                <p class="hint">Your activation link and room notices go here.</p>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label class="label" for="password">Password <span class="req">*</span></label>
+                <div class="pwd-field">
+                  <input class="input" type="password" name="password" id="password" placeholder="At least 6 characters" required minlength="6" autocomplete="new-password">
+                  <button type="button" class="pwd-toggle" onclick="togglePwd('password',this)" aria-label="Show password">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label" for="confirm_password">Confirm password <span class="req">*</span></label>
+                <div class="pwd-field">
+                  <input class="input" type="password" name="confirm_password" id="confirm_password" placeholder="Repeat password" required autocomplete="new-password">
+                  <button type="button" class="pwd-toggle" onclick="togglePwd('confirm_password',this)" aria-label="Show password">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <button type="submit" class="btn btn-primary btn-block">Register for the hostel</button>
+          <p class="text-sm muted text-center">Already registered? <a href="login.php" class="sub-link">Log in</a></p>
+        </form>
+        <?php endif; ?>
+
+      </div>
+
+      <div class="auth-aside">
+        <div class="card">
+          <div class="card-head"><h3>What happens next</h3></div>
+          <div class="timeline">
+            <div class="timeline-item is-current">
+              <div class="timeline-dot">1</div>
+              <h4>Register</h4>
+              <p>Submit this form.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot">2</div>
+              <h4>Activate</h4>
+              <p>Click the link in your email.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot">3</div>
+              <h4>Pay school fees</h4>
+              <p>At least 50% in first semester.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot">4</div>
+              <h4>Room granted</h4>
+              <p>By the DSA, by email.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot">5</div>
+              <h4>Pay hostel fee</h4>
+              <p>&#8358;45,000, then print your slip.</p>
             </div>
           </div>
         </div>
 
-        <!-- Section: Contact & Security -->
-        <div class="auth-form-section">
-          <div class="auth-form-section-label">Contact &amp; Security</div>
-          <div class="auth-reg-grid">
-            <div class="auth-field">
-              <label>Phone Number <span class="req">*</span></label>
-              <div class="auth-input-wrap">
-                <i class="fa fa-phone auth-field-icon"></i>
-                <input type="tel" name="phone" value="<?= htmlspecialchars($_POST['phone']??'') ?>" placeholder="08012345678" required>
-              </div>
-            </div>
-            <div class="auth-field">
-              <label>Email Address <span class="req">*</span></label>
-              <div class="auth-input-wrap">
-                <i class="fa fa-envelope auth-field-icon"></i>
-                <input type="email" name="email" value="<?= htmlspecialchars($_POST['email']??'') ?>" placeholder="student@email.com" required>
-              </div>
-            </div>
-            <div class="auth-field">
-              <label>Password <span class="req">*</span></label>
-              <div class="auth-input-wrap">
-                <i class="fa fa-lock auth-field-icon"></i>
-                <input type="password" name="password" id="password" placeholder="Min. 6 characters" required autocomplete="new-password">
-                <button type="button" class="auth-pwd-toggle" onclick="togglePwd('password',this)" aria-label="Toggle"><i class="fa fa-eye"></i></button>
-              </div>
-            </div>
-            <div class="auth-field">
-              <label>Confirm Password <span class="req">*</span></label>
-              <div class="auth-input-wrap">
-                <i class="fa fa-lock auth-field-icon"></i>
-                <input type="password" name="confirm_password" id="confirm_password" placeholder="Repeat password" required autocomplete="new-password">
-                <button type="button" class="auth-pwd-toggle" onclick="togglePwd('confirm_password',this)" aria-label="Toggle"><i class="fa fa-eye"></i></button>
-              </div>
-            </div>
-          </div>
+        <div class="card">
+          <div class="card-head"><h3>Have these ready</h3></div>
+          <ul class="ready-list">
+            <li>Matric or application number</li>
+            <li>An email address you can open now</li>
+            <li>Your faculty, department and level</li>
+          </ul>
         </div>
+      </div>
 
-        <button type="submit" class="auth-btn-submit">
-          <span>Create My Account</span>
-          <i class="fa fa-arrow-right"></i>
-        </button>
-      </form>
-      <?php endif; ?>
-
-      <p class="auth-trust">
-        <i class="fa fa-shield-alt"></i>
-        Your data is protected &middot; &copy; <?= date('Y') ?> KRK Polytechnic
-      </p>
-    </div>
   </div>
 
 </div>

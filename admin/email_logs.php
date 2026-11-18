@@ -28,39 +28,44 @@ $stmt = $conn->query("
     LIMIT $perPage OFFSET $offset
 ");
 
+$roleLabel = ['dsa'=>'Dean of Student Affairs','registrar'=>'Registrar Office','ict'=>'ICT Department'][$_SESSION['admin_role'] ?? ''] ?? strtoupper($_SESSION['admin_role'] ?? '');
+
+$pageCss = ['admin.css','admin-extra.css'];
 include '../includes/header.php';
 ?>
 
-<div class="dashboard-layout">
-    <?php include 'sidebar.php'; ?>
+<?php include 'sidebar.php'; ?>
 
-    <main class="main-content">
-        <h2 class="page-title"><i class="fa fa-envelope-open-text"></i> Email Notification Logs</h2>
-
-        <!-- Search -->
-        <form method="GET" style="margin-bottom:20px; display:flex; gap:10px;">
-            <input type="text" name="q" class="form-control" style="max-width:340px;"
-                   placeholder="Search by recipient or subject..." value="<?= htmlspecialchars($search) ?>">
-            <button type="submit" class="btn btn-primary">Search</button>
-            <?php if ($search): ?><a href="email_logs.php" class="btn btn-light">Clear</a><?php endif; ?>
-        </form>
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title"><i class="fa fa-envelope"></i> Email Logs</div>
-                <span style="font-size:13px; color:var(--n500);">
-                    <?= $totalRows ?> email<?= $totalRows !== 1 ? 's' : '' ?> total
-                </span>
+<div class="page-head">
+                <span class="eyebrow">Analytics</span>
+                <h1>Email notification logs</h1>
+                <p class="sub">Every automated email the portal has sent to students and staff.</p>
             </div>
-            <div class="card-body" style="padding:0;">
+
+            <form method="GET" class="filter-row">
+                <input type="text" name="q" class="input"
+                       placeholder="Search by recipient or subject" value="<?= htmlspecialchars($search) ?>">
+                <button type="submit" class="btn btn-dark btn-sm">Search</button>
+                <?php if ($search): ?><a href="email_logs.php" class="btn btn-outline btn-sm">Clear</a><?php endif; ?>
+                <span class="filter-spacer text-sm muted"><?= $totalRows ?> email<?= $totalRows !== 1 ? 's' : '' ?></span>
+            </form>
+
+            <div class="card">
+                <?php if ($totalRows === 0): ?>
+                    <div class="empty">
+                        <svg class="icon empty-icon"><use href="#icon-list"></use></svg>
+                        <p class="empty-title">No emails found</p>
+                        <p>Try a different search term.</p>
+                    </div>
+                <?php else: ?>
                 <div class="table-wrap">
-                    <table>
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Recipient</th>
                                 <th>Subject</th>
-                                <th>Date Sent</th>
+                                <th>Date sent</th>
                                 <th>View</th>
                             </tr>
                         </thead>
@@ -72,23 +77,19 @@ include '../includes/header.php';
                                 <td><?= htmlspecialchars($log['subject']) ?></td>
                                 <td><?= date('d M Y H:i', strtotime($log['sent_at'])) ?></td>
                                 <td>
-                                    <button class="btn btn-light btn-sm"
-                                            onclick="showEmailBody(<?= $log['id'] ?>)">
-                                        <i class="fa fa-eye"></i> View
-                                    </button>
+                                    <button class="btn btn-outline btn-sm"
+                                            onclick="showEmailBody(<?= $log['id'] ?>)">View</button>
                                 </td>
                             </tr>
                             <!-- Hidden row with message body -->
-                            <tr id="body-<?= $log['id'] ?>" style="display:none;">
-                                <td colspan="5" style="background:#f8f9fa; padding:16px;">
-                                    <div style="border:1px solid var(--border); border-radius:6px; overflow:hidden;">
-                                        <div style="background:var(--primary); color:#fff; padding:8px 14px; font-size:13px;">
-                                            <strong>To:</strong> <?= htmlspecialchars($log['recipient_email']) ?>
-                                            &nbsp;&nbsp; <strong>Subject:</strong> <?= htmlspecialchars($log['subject']) ?>
-                                        </div>
-                                        <div style="padding:16px; background:#fff;">
-                                            <?= $log['message'] /* safe: HTML stored by our own mailer */ ?>
-                                        </div>
+                            <tr id="body-<?= $log['id'] ?>" class="is-hidden">
+                                <td colspan="5" class="log-preview">
+                                    <div class="log-preview-head">
+                                        <strong>To:</strong> <?= htmlspecialchars($log['recipient_email']) ?>
+                                        &nbsp;&nbsp; <strong>Subject:</strong> <?= htmlspecialchars($log['subject']) ?>
+                                    </div>
+                                    <div class="log-preview-body">
+                                        <?= $log['message'] /* safe: HTML stored by our own mailer */ ?>
                                     </div>
                                 </td>
                             </tr>
@@ -96,34 +97,34 @@ include '../includes/header.php';
                         </tbody>
                     </table>
                 </div>
+                <?php endif; ?>
             </div>
-        </div>
 
-        <!-- Pagination -->
-        <?php if ($totalPages > 1): ?>
-        <div class="pagination" style="margin-top:20px;">
-            <?php if ($page > 1): ?>
-                <a href="?q=<?= urlencode($search) ?>&page=<?= $page-1 ?>" class="btn btn-light btn-sm">&laquo; Prev</a>
+            <!-- Pagination -->
+            <?php if ($totalPages > 1): ?>
+            <div class="pager">
+                <?php if ($page > 1): ?>
+                    <a href="?q=<?= urlencode($search) ?>&page=<?= $page-1 ?>" class="btn btn-outline btn-sm">&laquo; Prev</a>
+                <?php endif; ?>
+                <?php for ($p = 1; $p <= $totalPages; $p++): ?>
+                    <a href="?q=<?= urlencode($search) ?>&page=<?= $p ?>"
+                       class="btn btn-sm <?= $p === $page ? 'btn-dark' : 'btn-outline' ?>"><?= $p ?></a>
+                <?php endfor; ?>
+                <?php if ($page < $totalPages): ?>
+                    <a href="?q=<?= urlencode($search) ?>&page=<?= $page+1 ?>" class="btn btn-outline btn-sm">Next &raquo;</a>
+                <?php endif; ?>
+            </div>
             <?php endif; ?>
-            <?php for ($p = 1; $p <= $totalPages; $p++): ?>
-                <a href="?q=<?= urlencode($search) ?>&page=<?= $p ?>"
-                   class="btn btn-sm <?= $p === $page ? 'btn-primary' : 'btn-light' ?>"><?= $p ?></a>
-            <?php endfor; ?>
-            <?php if ($page < $totalPages): ?>
-                <a href="?q=<?= urlencode($search) ?>&page=<?= $page+1 ?>" class="btn btn-light btn-sm">Next &raquo;</a>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
 
-    </main>
-</div>
+    </div><!-- portal-content -->
+  </div><!-- portal-main -->
+</div><!-- portal -->
 
 <script>
 function showEmailBody(id) {
     const row = document.getElementById('body-' + id);
     if (!row) return;
-    const isVisible = row.style.display !== 'none';
-    row.style.display = isVisible ? 'none' : 'table-row';
+    row.classList.toggle('is-hidden');
 }
 </script>
 

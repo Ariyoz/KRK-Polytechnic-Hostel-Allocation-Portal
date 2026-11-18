@@ -69,51 +69,51 @@ $sql = "
 ";
 $students = $conn->query($sql);
 
+$roleLabel = ['dsa'=>'Dean of Student Affairs','registrar'=>'Registrar Office','ict'=>'ICT Department'][$_SESSION['admin_role'] ?? ''] ?? strtoupper($_SESSION['admin_role'] ?? '');
+
+$pageCss = ['admin.css','admin-extra.css'];
 include '../includes/header.php';
 ?>
 
-<div class="dashboard-layout">
-    <?php include 'sidebar.php'; ?>
+<?php include 'sidebar.php'; ?>
 
-    <main class="main-content">
-        <h2 class="page-title"><i class="fa fa-money-bill-wave"></i> School Fee Verification</h2>
-        <p style="color:var(--n500); margin-bottom:20px; font-size:14px;">
-            Only students verified as having paid minimum school fees can apply for hostel accommodation.
-        </p>
-
-        <?php if ($message): ?>
-            <div class="alert alert-<?= $msgType ?>"><?= htmlspecialchars($message) ?></div>
-        <?php endif; ?>
-
-        <form method="GET" class="search-bar" style="margin-bottom:20px;">
-            <div class="search-input-wrap">
-                <i class="fa fa-search"></i>
-                <input type="text" name="q" class="form-control"
-                       placeholder="Search by name, matric, email..." value="<?= htmlspecialchars($search) ?>">
+<div class="page-head">
+                <span class="eyebrow">Finance</span>
+                <h1>School fee verification</h1>
+                <p class="sub">Only students verified as having paid minimum school fees can apply for hostel accommodation.</p>
             </div>
-            <button type="submit" class="btn btn-primary">Search</button>
-            <?php if ($search): ?><a href="fees.php" class="btn btn-light">Clear</a><?php endif; ?>
-        </form>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title"><i class="fa fa-list"></i> Students &mdash; Fee Status</div>
-                <span style="font-size:13px; color:var(--n500);">
-                    <?= $totalRows ?> student<?= $totalRows !== 1 ? 's' : '' ?>
-                </span>
-            </div>
-            <div class="card-body" style="padding:0;">
+            <?php if ($message): ?>
+                <div class="alert alert-<?= $msgType ?>"><?= htmlspecialchars($message) ?></div>
+            <?php endif; ?>
+
+            <form method="GET" class="filter-row">
+                <input type="text" name="q" class="input"
+                       placeholder="Search by name, matric, email" value="<?= htmlspecialchars($search) ?>">
+                <button type="submit" class="btn btn-dark btn-sm">Search</button>
+                <?php if ($search): ?><a href="fees.php" class="btn btn-outline btn-sm">Clear</a><?php endif; ?>
+                <span class="filter-spacer text-sm muted"><?= $totalRows ?> student<?= $totalRows !== 1 ? 's' : '' ?></span>
+            </form>
+
+            <div class="card">
+                <?php if ($totalRows === 0): ?>
+                    <div class="empty">
+                        <svg class="icon empty-icon"><use href="#icon-card"></use></svg>
+                        <p class="empty-title">No students found</p>
+                        <p>Try a different search term.</p>
+                    </div>
+                <?php else: ?>
                 <div class="table-wrap">
-                    <table>
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Matric No.</th>
+                                <th>Matric no.</th>
                                 <th>Name</th>
                                 <th>Faculty</th>
                                 <th>Level</th>
                                 <th>Email</th>
-                                <th>Fee Status</th>
+                                <th>Fee status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -123,24 +123,24 @@ include '../includes/header.php';
                                 <td><?= $i++ ?></td>
                                 <td><strong><?= htmlspecialchars($row['matric_number']) ?></strong></td>
                                 <td><?= htmlspecialchars($row['surname'] . ', ' . $row['firstname']) ?></td>
-                                <td style="font-size:12px;"><?= htmlspecialchars($row['faculty_name']) ?></td>
+                                <td><?= htmlspecialchars($row['faculty_name']) ?></td>
                                 <td><?= htmlspecialchars($row['level']) ?></td>
-                                <td style="font-size:12px;"><?= htmlspecialchars($row['email']) ?></td>
+                                <td><?= htmlspecialchars($row['email']) ?></td>
                                 <td><?= $row['school_fees_paid']
                                     ? '<span class="badge badge-success">Paid</span>'
                                     : '<span class="badge badge-warning">Unpaid</span>' ?></td>
                                 <td>
                                     <?php $newStatus = $row['school_fees_paid'] ? 0 : 1; ?>
-                                    <form method="POST" style="display:inline;"
+                                    <form method="POST" class="inline-form"
                                           onsubmit="return confirm('<?= $row['school_fees_paid'] ? 'Mark fees as UNPAID?' : 'Verify fees as PAID?' ?>');">
                                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
                                         <input type="hidden" name="sid" value="<?= $row['id'] ?>">
                                         <input type="hidden" name="toggle" value="<?= $newStatus ?>">
                                         <input type="hidden" name="q_keep" value="<?= htmlspecialchars($search) ?>">
                                         <?php if ($row['school_fees_paid']): ?>
-                                            <button type="submit" class="btn btn-danger btn-sm">Mark Unpaid</button>
+                                            <button type="submit" class="btn btn-outline btn-sm">Mark unpaid</button>
                                         <?php else: ?>
-                                            <button type="submit" class="btn btn-success btn-sm">Verify Paid</button>
+                                            <button type="submit" class="btn btn-primary btn-sm">Verify paid</button>
                                         <?php endif; ?>
                                     </form>
                                 </td>
@@ -149,26 +149,27 @@ include '../includes/header.php';
                         </tbody>
                     </table>
                 </div>
+                <?php endif; ?>
             </div>
-        </div>
 
-        <!-- Pagination -->
-        <?php if ($totalPages > 1): ?>
-        <div class="pagination" style="margin-top:20px;">
-            <?php if ($page > 1): ?>
-                <a href="?q=<?= urlencode($search) ?>&page=<?= $page-1 ?>" class="btn btn-light btn-sm">&laquo; Prev</a>
+            <!-- Pagination -->
+            <?php if ($totalPages > 1): ?>
+            <div class="pager">
+                <?php if ($page > 1): ?>
+                    <a href="?q=<?= urlencode($search) ?>&page=<?= $page-1 ?>" class="btn btn-outline btn-sm">&laquo; Prev</a>
+                <?php endif; ?>
+                <?php for ($p = 1; $p <= $totalPages; $p++): ?>
+                    <a href="?q=<?= urlencode($search) ?>&page=<?= $p ?>"
+                       class="btn btn-sm <?= $p === $page ? 'btn-dark' : 'btn-outline' ?>"><?= $p ?></a>
+                <?php endfor; ?>
+                <?php if ($page < $totalPages): ?>
+                    <a href="?q=<?= urlencode($search) ?>&page=<?= $page+1 ?>" class="btn btn-outline btn-sm">Next &raquo;</a>
+                <?php endif; ?>
+            </div>
             <?php endif; ?>
-            <?php for ($p = 1; $p <= $totalPages; $p++): ?>
-                <a href="?q=<?= urlencode($search) ?>&page=<?= $p ?>"
-                   class="btn btn-sm <?= $p === $page ? 'btn-primary' : 'btn-light' ?>"><?= $p ?></a>
-            <?php endfor; ?>
-            <?php if ($page < $totalPages): ?>
-                <a href="?q=<?= urlencode($search) ?>&page=<?= $page+1 ?>" class="btn btn-light btn-sm">Next &raquo;</a>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
 
-    </main>
-</div>
+    </div><!-- portal-content -->
+  </div><!-- portal-main -->
+</div><!-- portal -->
 
 <?php include '../includes/footer.php'; ?>

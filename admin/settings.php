@@ -65,91 +65,83 @@ $regOpen         = setting($conn, 'registration_open', '1');
 $maxBeds         = setting($conn, 'max_bed_spaces',    '200');
 $portalName      = setting($conn, 'portal_name',       'KRK Polytechnic Hostel Portal');
 
+$roleLabel = ['dsa'=>'Dean of Student Affairs','registrar'=>'Registrar Office','ict'=>'ICT Department'][$_SESSION['admin_role'] ?? ''] ?? strtoupper($_SESSION['admin_role'] ?? '');
+
+$pageCss = ['admin.css','admin-extra.css'];
 include '../includes/header.php';
 ?>
 
-<div class="dashboard-layout">
-    <?php include 'sidebar.php'; ?>
+<?php include 'sidebar.php'; ?>
 
-    <main class="main-content">
-        <h2 class="page-title"><i class="fa fa-cog"></i> Portal Settings</h2>
+<div class="page-head">
+                <span class="eyebrow">System</span>
+                <h1>Portal settings</h1>
+                <p class="sub">These values control the current session, hostel fee and registration window for every student.</p>
+            </div>
 
-        <?php if ($message): ?>
-            <div class="alert alert-<?= $msgType ?>"><?= htmlspecialchars($message) ?></div>
-        <?php endif; ?>
+            <?php if ($message): ?>
+                <div class="alert alert-<?= $msgType ?> mb-4"><?= htmlspecialchars($message) ?></div>
+            <?php endif; ?>
 
-        <div class="card" style="max-width:580px;">
-            <div class="card-header"><i class="fa fa-sliders-h"></i> General Settings</div>
-            <div class="card-body">
+            <div class="card settings-card">
+                <div class="card-head"><h3>General settings</h3></div>
                 <form method="POST">
                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
 
-                    <div class="form-group">
-                        <label>Portal Name</label>
-                        <input type="text" name="portal_name" class="form-control"
+                    <div class="field">
+                        <label class="label req">Portal name</label>
+                        <input type="text" name="portal_name" class="input"
                                value="<?= htmlspecialchars($portalName) ?>" required>
                     </div>
 
-                    <div class="form-group">
-                        <label>Current Academic Session</label>
-                        <input type="text" name="academic_session" class="form-control"
+                    <div class="field">
+                        <label class="label req">Current academic session</label>
+                        <input type="text" name="academic_session" class="input"
                                placeholder="e.g. 2025/2026"
                                value="<?= htmlspecialchars($currentSession) ?>" required>
-                        <small style="color:var(--gray);">This appears on allocation letters and registration forms.</small>
+                        <p class="hint">This appears on allocation letters and registration forms.</p>
                     </div>
 
-                    <div class="form-group">
-                        <label>Hostel Fee Amount (₦)</label>
-                        <input type="number" name="hostel_fee_amount" class="form-control"
+                    <div class="field">
+                        <label class="label req">Hostel fee amount (&#8358;)</label>
+                        <input type="number" name="hostel_fee_amount" class="input"
                                min="1000" step="500"
                                value="<?= htmlspecialchars($currentFee) ?>" required>
                     </div>
 
-                    <div class="form-group">
-                        <label>Maximum Bed Spaces</label>
-                        <input type="number" name="max_bed_spaces" class="form-control"
+                    <div class="field">
+                        <label class="label req">Maximum bed spaces</label>
+                        <input type="number" name="max_bed_spaces" class="input"
                                min="1" max="1000"
                                value="<?= htmlspecialchars($maxBeds) ?>" required>
                     </div>
 
-                    <div class="form-group">
-                        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:600;">
+                    <div class="field">
+                        <label class="switch">
                             <input type="checkbox" name="registration_open" value="1"
-                                   <?= $regOpen === '1' ? 'checked' : '' ?>
-                                   style="width:18px; height:18px; cursor:pointer;">
-                            Student Registration Open
+                                   <?= $regOpen === '1' ? 'checked' : '' ?>>
+                            <span class="switch-track"><span class="switch-thumb"></span></span>
+                            <span class="switch-label">Student registration open</span>
                         </label>
-                        <small style="color:var(--gray);">
-                            When unchecked, new students cannot register — existing students can still log in.
-                        </small>
+                        <p class="hint">When off, new students cannot register — existing students can still log in.</p>
                     </div>
 
-                    <hr style="margin:20px 0;">
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-save"></i> Save Settings
-                    </button>
+                    <button type="submit" class="btn btn-primary">Save settings</button>
                 </form>
             </div>
-        </div>
 
-        <!-- Danger zone -->
-        <div class="card" style="max-width:580px; margin-top:24px; border:2px solid var(--danger);">
-            <div class="card-header" style="background:var(--danger);">
-                <i class="fa fa-exclamation-triangle"></i> Danger Zone
-            </div>
-            <div class="card-body">
-                <p style="font-size:14px; color:var(--gray); margin-bottom:16px;">
-                    These actions are irreversible. Use with extreme caution.
-                </p>
-                <p style="font-size:13px;">
+            <!-- Danger zone -->
+            <div class="card danger-card settings-card mt-5">
+                <div class="card-head"><h3>Danger zone</h3></div>
+                <p class="text-sm muted mb-3">These actions are irreversible. Use with extreme caution.</p>
+                <p class="text-sm">
                     To reset the portal or manage admin passwords, use the
                     <code>setup.php</code> script directly on the server (do not expose it publicly).
                 </p>
             </div>
-        </div>
 
-    </main>
-</div>
+    </div><!-- portal-content -->
+  </div><!-- portal-main -->
+</div><!-- portal -->
 
 <?php include '../includes/footer.php'; ?>

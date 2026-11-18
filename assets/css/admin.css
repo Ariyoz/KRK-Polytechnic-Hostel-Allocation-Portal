@@ -1,0 +1,39 @@
+/*
+  Admin shell contract — admin/sidebar.php owns this markup, every admin/*.php
+  page just does: <?php include 'sidebar.php'; ?> <...page content...> then,
+  right before `include '../includes/footer.php'`, closes the three divs
+  sidebar.php opened: </div><!-- portal-content --></div><!-- portal-main -->
+  </div><!-- portal -->. Do not add a <main> wrapper or re-open .portal.
+*/
+
+/* ---------- Dashboard overview ---------- */
+.kv-grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 860px) { .kv-grid.cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.progress-row { margin-bottom: var(--sp-5); }
+.progress-row:last-child { margin-bottom: 0; }
+.progress-row-label { display: flex; justify-content: space-between; font-size: var(--fs-sm); color: var(--gray-700); }
+.progress-row-label strong { color: var(--navy-900); }
+
+/* ---------- Filters / search (single row) ---------- */
+/* .filter-row is shared in app.css (used across admin.css and admin-extra.css pages) */
+
+.search-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: var(--sp-5); }
+.search-row .input { min-width: 260px; flex: 1; max-width: 360px; }
+.search-row .count { font-size: var(--fs-xs); color: var(--gray-500); margin-left: auto; }
+
+/* ---------- Card header count (right side of card-head) ---------- */
+.card-head .count { font-size: var(--fs-xs); color: var(--gray-500); }
+
+/* ---------- Table action buttons ---------- */
+/* .btn-success / .btn-danger are shared in app.css */
+.row-actions { display: flex; gap: 6px; flex-wrap: nowrap; }
+.muted-note { font-size: var(--fs-xs); color: var(--gray-500); }
+
+/* .pager is shared in app.css (used across admin.css and admin-extra.css pages) */
+
+/* ---------- Student detail ---------- */
+.detail-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-5); margin-bottom: var(--sp-5); }
+@media (max-width: 860px) { .detail-grid { grid-template-columns: minmax(0, 1fr); } }
+.back-link { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-sm); font-weight: 600; color: var(--navy-700); margin-bottom: var(--sp-4); }
+.back-link .icon { width: 14px; height: 14px; }

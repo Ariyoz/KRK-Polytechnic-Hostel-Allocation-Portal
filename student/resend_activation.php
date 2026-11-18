@@ -37,85 +37,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$pageCss  = ['auth.css'];
 $noHeader = true;
 include '../includes/header.php';
 ?>
 
-<div class="funaab-auth">
+<div class="auth-plain">
 
-  <!-- LEFT panel -->
-  <div class="funaab-left">
-    <div class="funaab-left-bg"></div>
-    <div class="funaab-left-overlay"></div>
-    <div class="funaab-left-inner">
-      <div class="funaab-school-id">
-        <div class="funaab-school-abbr">KRK</div>
-        <div class="funaab-school-name">KRK Polytechnic</div>
-        <div class="funaab-school-loc">Lagos, Nigeria</div>
-      </div>
-      <div class="funaab-portal-title">
-        <h1>Resend<br>Activation Email</h1>
-        <p>Quick &middot; Secure &middot; Instant</p>
-      </div>
-      <ul class="funaab-features">
-        <li><i class="fa fa-check-circle"></i> Enter your registered email address</li>
-        <li><i class="fa fa-check-circle"></i> A new activation link will be sent</li>
-        <li><i class="fa fa-check-circle"></i> Click the link in your email to activate</li>
-        <li><i class="fa fa-check-circle"></i> Then log in to apply for a room</li>
-      </ul>
-      <div class="funaab-left-footer">&copy; <?= date('Y') ?> KRK Polytechnic &mdash; All rights reserved</div>
+  <a href="<?= BASE_URL ?>/index.php" class="brand">
+    <svg class="brand-mark" viewBox="0 0 40 46" aria-hidden="true">
+      <path d="M20 2 4 8v14c0 12 7 19 16 22 9-3 16-10 16-22V8Z" fill="#102a4a" stroke="#e8a317" stroke-width="2"/>
+      <path d="M13 24l7-6 7 6M15 22v8h10v-8" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>
+    </svg>
+    <span class="brand-text">
+      <strong>KRK Polytechnic</strong>
+      <small>Hostel Allocation Portal</small>
+    </span>
+  </a>
+
+  <div class="card auth-plain-card stack">
+
+    <a href="login.php" class="back-link">&larr; Back to login</a>
+
+    <div>
+      <h1>Resend activation</h1>
+      <p class="muted">Didn't get your activation email? We'll send a fresh one.</p>
     </div>
+
+    <?php if ($error): ?>
+    <div class="alert alert-danger"><span><?= htmlspecialchars($error) ?></span></div>
+    <?php endif; ?>
+
+    <?php if ($success): ?>
+    <div class="alert alert-success"><span><?= htmlspecialchars($success) ?></span></div>
+    <a href="login.php" class="btn btn-dark btn-block">Back to login</a>
+
+    <?php else: ?>
+    <form method="POST" class="stack">
+      <div class="field">
+        <label class="label" for="email">Registered email address</label>
+        <input class="input" type="email" id="email" name="email"
+               value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
+               placeholder="your@email.com" required autofocus autocomplete="email">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Resend activation email</button>
+    </form>
+    <p class="text-sm muted text-center">Already activated? <a href="login.php" class="sub-link">Log in</a></p>
+    <?php endif; ?>
+
   </div>
-
-  <!-- RIGHT panel -->
-  <div class="funaab-right">
-    <div class="funaab-form-wrap">
-
-      <a href="login.php" class="funaab-back-btn">
-        <i class="fa fa-arrow-left"></i> Back to Login
-      </a>
-
-      <div class="funaab-form-header">
-        <h2>Resend Activation</h2>
-        <p>Didn't receive your activation email? We'll send a fresh one.</p>
-      </div>
-
-      <?php if ($error): ?>
-      <div class="funaab-alert funaab-alert-error">
-        <i class="fa fa-exclamation-circle"></i> <?= htmlspecialchars($error) ?>
-      </div>
-      <?php endif; ?>
-
-      <?php if ($success): ?>
-      <div style="text-align:center;padding:32px 20px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;margin-bottom:20px;">
-        <div style="width:60px;height:60px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px;">
-          <i class="fa fa-envelope"></i>
-        </div>
-        <h3 style="font-size:18px;color:#15803d;margin-bottom:8px;">Email Sent!</h3>
-        <p style="font-size:14px;color:#166534;"><?= htmlspecialchars($success) ?></p>
-      </div>
-      <a href="login.php" class="funaab-submit-btn" style="text-decoration:none;">
-        <i class="fa fa-sign-in-alt"></i> <span>Go to Login</span>
-      </a>
-      <?php else: ?>
-      <form method="POST" class="funaab-form">
-        <div class="funaab-field">
-          <label for="email"><i class="fa fa-envelope"></i> Registered Email Address</label>
-          <input type="email" id="email" name="email"
-                 value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
-                 placeholder="your@email.com" required autofocus autocomplete="email">
-        </div>
-        <button type="submit" class="funaab-submit-btn">
-          <i class="fa fa-paper-plane"></i> <span>Resend Activation Email</span>
-        </button>
-      </form>
-      <?php endif; ?>
-
-      <p class="funaab-register-link">
-        Already activated? <a href="login.php">Sign in here</a>
-      </p>
-    </div>
-  </div>
-
 </div>
+
 <?php include '../includes/footer.php'; ?>
